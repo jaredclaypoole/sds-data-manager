@@ -2,6 +2,7 @@
 
 import logging
 import os
+from copy import deepcopy
 from pathlib import Path
 
 import requests
@@ -23,9 +24,15 @@ class DependencyConfigReader:
     configurations, including loading from YAML files, validating nodes.
     """
 
+    _cached_instance: "DependencyConfigReader|None" = None
+
     def __init__(self):
         """Initialize DependencyConfig by loading all dependencies."""
-        self._config = self._load_all_dependencies()
+        if self._cached_instance is not None:
+            self._config = deepcopy(self._cached_instance.config)
+        else:
+            self._config = self._load_all_dependencies()
+            DependencyConfigReader._cached_instance = self
 
     @property
     def config(self) -> dict[tuple[str, str, str], list[DependencyNode]]:
