@@ -57,9 +57,9 @@ def partitions_def_name_for(asset_name: str) -> str:
             partitions_def = getattr(assets_def, "partitions_def", None)
             name = getattr(partitions_def, "name", None)
             if name is None:
-                raise SystemExit(f"{asset_name!r} is not dynamically partitioned")
+                raise RuntimeError(f"{asset_name!r} is not dynamically partitioned")
             return name
-    raise SystemExit(f"no asset named {asset_name!r}")
+    raise RuntimeError(f"no asset named {asset_name!r}")
 
 
 def partition_key_for_date(
@@ -81,7 +81,7 @@ def partition_key_for_date(
     def_name = partitions_def_name_for(asset_name)
     keys = instance.get_dynamic_partitions(def_name)
     if not keys:
-        raise SystemExit(
+        raise RuntimeError(
             f"no {def_name} keys registered - run the {def_name} sensor in "
             f"`dagster dev` first (see custom_partitions.py)"
         )
@@ -97,13 +97,13 @@ def partition_key_for_date(
     if len(matches) == 1:
         return matches[0]
     if len(matches) > 1:
-        raise SystemExit(f"{date} matches several {def_name} keys: {matches}")
+        raise RuntimeError(f"{date} matches several {def_name} keys: {matches}")
 
     # Nothing on that date - show the surrounding keys rather than just failing,
     # since the usual cause is asking for a date outside the loaded range.
     ordered = [key for _, key in dated]
     nearby = [*ordered[:2], "...", *ordered[-2:]]
-    raise SystemExit(
+    raise RuntimeError(
         f"no {def_name} key starts on {date}.\n  Registered range:\n    "
         + "\n    ".join(nearby)
     )
@@ -124,7 +124,7 @@ def selection_for(asset_name: str) -> list[str]:
         names = [key.to_user_string() for key in keys]
         if asset_name in names:
             return names
-    raise SystemExit(f"no asset named {asset_name!r}")
+    raise RuntimeError(f"no asset named {asset_name!r}")
 
 
 if __name__ == "__main__":
