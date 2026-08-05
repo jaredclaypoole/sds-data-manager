@@ -62,7 +62,11 @@ def partitions_def_name_for(asset_name: str) -> str:
     raise SystemExit(f"no asset named {asset_name!r}")
 
 
-def partition_key_for_date(instance, asset_name: str, date: str) -> str:
+def partition_key_for_date(
+    instance: DagsterInstance,
+    asset_name: str,
+    date: str,
+) -> str:
     """Find the partition key of `asset_name` whose window starts on `date`.
 
     Partition keys look like 'repoint250_2026-05-16T10:03:28_to_2026-05-17T10:03:12'
