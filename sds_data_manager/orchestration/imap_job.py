@@ -47,11 +47,12 @@ from sds_data_manager.orchestration import (
 )
 from sds_data_manager.orchestration.dagster_utilities import get_materialization_result
 from sds_data_manager.orchestration.dependency import DependencyConfigReader
+from sds_data_manager.orchestration.lazy_client import LazyClient
 from sds_data_manager.orchestration.types import DependencyNode, ProcessingJobNode
 
-BATCH_CLIENT = boto3.client("batch", region_name="us-west-2")
+BATCH_CLIENT = LazyClient(boto3.client, "batch", region_name="us-west-2")
 # Create an ECR client for getting container image digests
-ECR_CLIENT = boto3.client("ecr", region_name="us-west-2")
+ECR_CLIENT = LazyClient(boto3.client, "ecr", region_name="us-west-2")
 # Define the retry strategy for batch jobs
 BATCH_JOB_RETRY_STRATEGY = {
     "attempts": 10,
@@ -64,7 +65,7 @@ BATCH_JOB_RETRY_STRATEGY = {
     ],
 }
 # Create an sqs client
-SQS_CLIENT = boto3.client("sqs", region_name="us-west-2")
+SQS_CLIENT = LazyClient(boto3.client, "sqs", region_name="us-west-2")
 
 # Logger setup
 logger = logging.getLogger(__name__)

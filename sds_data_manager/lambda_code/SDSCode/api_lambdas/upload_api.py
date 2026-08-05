@@ -13,6 +13,8 @@ import boto3
 import botocore
 import imap_data_access
 
+from sds_data_manager.orchestration.lazy_client import LazyClient
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -22,7 +24,8 @@ REGION = os.getenv("REGION")
 # within the signature and we should be hitting the actual s3 region endpoint
 # to avoid any 307 redirects. (Generally only an issue on newly created buckets
 # where the DNS records haven't propagated yet)
-S3_CLIENT = boto3.client(
+S3_CLIENT = LazyClient(
+    boto3.client,
     "s3",
     region_name=REGION,
     config=botocore.client.Config(signature_version="s3v4"),

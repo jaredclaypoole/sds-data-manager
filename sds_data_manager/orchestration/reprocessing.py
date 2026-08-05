@@ -15,9 +15,10 @@ from sds_data_manager.orchestration.dependency import (
     get_kickoff_jobs,
 )
 from sds_data_manager.orchestration.imap_job import partition_map
+from sds_data_manager.orchestration.lazy_client import LazyClient
 from sds_data_manager.orchestration.types import Node
 
-SQS_CLIENT = boto3.client("sqs", "us-west-2")
+SQS_CLIENT = LazyClient(boto3.client, "sqs", "us-west-2")
 
 
 def read_sqs_messages(sqs_queue_url=None):
