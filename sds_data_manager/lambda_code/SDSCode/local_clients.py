@@ -155,6 +155,36 @@ class LocalBatchClient:
             ]
         }
 
+    def describe_jobs(self, jobs):
+        """Return submitted local jobs using the boto3 Batch response shape.
+
+        Unknown job IDs are omitted, matching AWS Batch. Jobs that were only
+        recorded are reported as ``SUBMITTED``; executed jobs are reported as
+        ``SUCCEEDED`` or ``FAILED`` according to their return code.
+        """
+        requested_job_ids = set(jobs)
+        described_jobs = []
+        for record in self.submitted:
+            if record["jobId"] not in requested_job_ids:
+                continue
+            if "returncode" not in record:
+                status = "SUBMITTED"
+            elif record["returncode"] == 0:
+                status = "SUCCEEDED"
+            else:
+                status = "FAILED"
+            described_jobs.append(
+                {
+                    "jobId": record["jobId"],
+                    "jobName": record["jobName"],
+                    "jobQueue": record["jobQueue"],
+                    "jobDefinition": record["jobDefinition"],
+                    "status": status,
+                    "container": {"command": record["command"]},
+                }
+            )
+        return {"jobs": described_jobs}
+
     def submit_job(
         self,
         jobName,  # noqa: N803
@@ -170,6 +200,7 @@ class LocalBatchClient:
         so it is handed to ``python -m imap_processing.cli`` unchanged.
         """
         self._counter += 1
+        job_id = f"local-{self._counter}"
         command = list(containerOverrides["command"])
         if not self.allow_upload and "--upload-to-sdc" in command:
             command.remove("--upload-to-sdc")
@@ -179,6 +210,7 @@ class LocalBatchClient:
                 jobName,
             )
         record = {
+            "jobId": job_id,
             "jobName": jobName,
             "jobQueue": jobQueue,
             "jobDefinition": jobDefinition,
@@ -193,7 +225,7 @@ class LocalBatchClient:
                 jobName,
                 " ".join(argv),
             )
-            return {"jobId": f"local-{self._counter}", "jobName": jobName}
+            return {"jobId": job_id, "jobName": jobName}
 
         if self.run_in_process:
             self._execute_in_process(jobName, command, record)
@@ -219,7 +251,7 @@ class LocalBatchClient:
             except Exception:
                 logger.exception("[local batch] on_complete failed for %s", jobName)
 
-        return {"jobId": f"local-{self._counter}", "jobName": jobName}
+        return {"jobId": job_id, "jobName": jobName}
 
     def _execute_subprocess(self, jobName, argv, record):  # noqa: N803
         """Run the CLI in a child process and capture its output."""
