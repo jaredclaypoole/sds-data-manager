@@ -270,6 +270,77 @@ def test_invalid_query(session):
     assert param_not_valid_in_response(returned_query["body"], "size", "science")
 
 
+def test_query_pagination(session):
+    """Offset and limit return the requested slice in filename order."""
+    _populate_versioned_science_data(session)
+    event = {
+        "queryStringParameters": {
+            "instrument": "hit",
+            "offset": "1",
+            "limit": "1",
+        }
+    }
+
+    returned_query = query_api.lambda_handler(event=event, context={})
+
+    assert returned_query["statusCode"] == 200
+    assert _returned_versions(returned_query) == {(2, 3)}
+
+
+def test_query_limit_without_offset(session):
+    """Limit can be used without specifying an offset."""
+    _populate_versioned_science_data(session)
+    event = {
+        "queryStringParameters": {
+            "instrument": "hit",
+            "major_version": "2",
+            "limit": "1",
+        }
+    }
+
+    returned_query = query_api.lambda_handler(event=event, context={})
+
+    assert returned_query["statusCode"] == 200
+    assert _returned_versions(returned_query) == {(2, 1)}
+
+
+def test_query_offset_without_limit(session):
+    """Offset can be used without specifying a limit."""
+    _populate_versioned_science_data(session)
+    event = {
+        "queryStringParameters": {
+            "instrument": "hit",
+            "major_version": "2",
+            "offset": "1",
+        }
+    }
+
+    returned_query = query_api.lambda_handler(event=event, context={})
+
+    assert returned_query["statusCode"] == 200
+    assert _returned_versions(returned_query) == {(2, 3)}
+
+
+@pytest.mark.parametrize(
+    ("params", "message"),
+    [
+        ({"offset": "invalid"}, "'offset' and 'limit' must be integers."),
+        ({"limit": "1.5"}, "'offset' and 'limit' must be integers."),
+        ({"offset": "-1"}, "'offset' must be greater than or equal to 0."),
+        ({"limit": "0"}, "'limit' must be greater than 0."),
+        ({"limit": "-1"}, "'limit' must be greater than 0."),
+    ],
+)
+def test_invalid_pagination_returns_400(session, params, message):
+    """Invalid pagination values return a clear client error."""
+    returned_query = query_api.lambda_handler(
+        event={"queryStringParameters": params}, context={}
+    )
+
+    assert returned_query["statusCode"] == 400
+    assert json.loads(returned_query["body"]) == message
+
+
 def test_end_date_not_valid_for_spice(session):
     """Spice has no start_date, so the synthetic end_date param is rejected (400).
 

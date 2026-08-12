@@ -4,8 +4,9 @@ import datetime
 import json
 import logging
 from enum import StrEnum
+from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import Select, func, select
 
 from ..api_lambdas.utils import build_latest_version_query, is_authenticated_user
 from ..database import database as db
@@ -41,6 +42,54 @@ _VALID_PARAMETERS = {
     ]
     for table, model in _TABLE_MODELS.items()
 }
+
+
+def _parse_pagination_params(
+    query_params: dict[str, Any],
+) -> tuple[int | None, int | None]:
+    """Remove and validate optional `offset` and `limit` parameters.
+
+    Parameters
+    ----------
+    query_params : dict[str, Any]
+        Mutable query parameters. Pagination parameters are removed in place.
+
+    Returns
+    -------
+    tuple[int or None, int or None]
+        The parsed `(offset, limit)` values.
+
+    Raises
+    ------
+    ValueError
+        If either value is not an integer, offset is negative, or limit is not
+        positive.
+
+    """
+    offset_value = query_params.pop("offset", None)
+    limit_value = query_params.pop("limit", None)
+
+    try:
+        offset = int(offset_value) if offset_value is not None else None
+        limit = int(limit_value) if limit_value is not None else None
+    except (TypeError, ValueError) as error:
+        raise ValueError("'offset' and 'limit' must be integers.") from error
+
+    if offset is not None and offset < 0:
+        raise ValueError("'offset' must be greater than or equal to 0.")
+    if limit is not None and limit <= 0:
+        raise ValueError("'limit' must be greater than 0.")
+
+    return offset, limit
+
+
+def _apply_pagination(query: Select, offset: int | None, limit: int | None) -> Select:
+    """Apply optional offset and limit values to a SQLAlchemy query."""
+    if offset is not None:
+        query = query.offset(offset)
+    if limit is not None:
+        query = query.limit(limit)
+    return query
 
 
 class LatestVersionMode(StrEnum):
@@ -226,6 +275,11 @@ def lambda_handler(event, context):
     model = _TABLE_MODELS[query_table]
     table_columns = model.__table__.c
 
+    try:
+        offset, limit = _parse_pagination_params(query_params)
+    except ValueError as error:
+        return {"statusCode": 400, "body": json.dumps(str(error))}
+
     version_mode = None
     if query_table == "science":
         try:
@@ -278,7 +332,7 @@ def lambda_handler(event, context):
     # This will implicitly sort by: instrument, data level, descriptor, start_date, ...
     # Default for the table is by the ascending id so by insertion order
     # This fails for the SPICE table because it uses 'file_name'
-    query = query.order_by(cols.file_path)
+    query = _apply_pagination(query.order_by(cols.file_path), offset, limit)
 
     with db.Session() as session:
         search_results = session.execute(query).all()
