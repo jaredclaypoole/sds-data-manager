@@ -12,6 +12,7 @@ from tests.lambda_endpoints.ssr_refactor.behavior_agnostic.utils import (
     Inputs,
     discover,
     external_bindings,
+    readable_runs,
 )
 from tests.lambda_endpoints.ssr_refactor.utils import format_trace
 
@@ -48,10 +49,10 @@ def test_lambda_dependency_contract(instrument):
             Inputs(recorder, "event"), Inputs(recorder, "context")
         )
 
-    actual = discover(invoke, MOCKS)
+    actual = readable_runs(discover(invoke, MOCKS), (processing, ssr_utils))
     baseline = TRACE_DIR / f"{instrument}.json"
     if os.environ.get("SSR_UPDATE_TRACES") == "1":
         TRACE_DIR.mkdir(exist_ok=True)
-        baseline.write_text(format_trace(actual) + "\n")
+        baseline.write_text(format_trace(actual, sort_keys=False) + "\n")
     assert baseline.exists(), f"Missing reviewed baseline: {baseline}"
     assert actual == json.loads(baseline.read_text())

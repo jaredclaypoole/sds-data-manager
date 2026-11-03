@@ -8,10 +8,11 @@ with real dependencies. No wrapped dependency is ever executed.
 from __future__ import annotations
 
 import inspect
+import json
 from collections import deque
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from types import CodeType, ModuleType, TracebackType
-from typing import Literal, TypeAlias, TypedDict
+from typing import Literal, TypeAlias, TypedDict, cast
 
 import pytest
 
@@ -38,6 +39,15 @@ class PackedRun(Run):
     """An execution whose steps omit the shared prefix [parent, length]."""
 
     prefix: list[int]
+
+
+class ReadableRun(TypedDict):
+    """A self-contained execution with named operation fields."""
+
+    choices: list[bool]
+    steps: list[dict[str, JSONValue]]
+    result: JSONValue
+    error: JSONValue
 
 
 class ExplorationLimitError(RuntimeError):
@@ -326,6 +336,200 @@ def pack_runs(runs: Sequence[Run]) -> list[PackedRun]:
             {**run, "prefix": [best_parent, best_length], "steps": steps[best_length:]}
         )
     return packed
+
+
+def expand_runs(runs: Sequence[PackedRun]) -> list[Run]:
+    """Restore each execution's complete steps without changing any records."""
+    expanded: list[Run] = []
+    for run in runs:
+        parent, length = run["prefix"]
+        prefix = expanded[parent]["steps"][:length] if length else []
+        expanded.append(
+            {
+                "choices": run["choices"],
+                "steps": prefix + run["steps"],
+                "result": run["result"],
+                "error": run["error"],
+            }
+        )
+    return expanded
+
+
+def _describe(value: JSONValue, names: Mapping[str, str]) -> str:
+    """Resolve a display name while leaving the underlying reference intact."""
+    if isinstance(value, dict) and "ref" in value:
+        reference = cast(str, value["ref"])
+        return names.get(reference, reference.rsplit(".", 1)[-1])
+    return json.dumps(value, sort_keys=True)
+
+
+# Non-call operands receive names in their original order. Optional trailing
+# operands (for example a seeded getitem value) remain optional in the JSON.
+OPERATION_FIELDS: dict[str, tuple[str, ...]] = {
+    "getattr": ("object", "getattr"),
+    "getitem": ("getitem", "key", "value"),
+    "setitem": ("setitem", "key", "value"),
+    "iter": ("iter", "index"),
+    "format": ("format", "spec"),
+    "bool": ("bool", "value"),
+    "len": ("len", "value"),
+    "int": ("int", "value"),
+    "float": ("float", "value"),
+    "enter": ("enter",),
+    "exit": ("exit", "exception_type", "exception"),
+}
+
+
+def _references(value: JSONValue) -> Iterator[str]:
+    """Find explicit symbolic references in nested operands and outcomes."""
+    if isinstance(value, dict):
+        if isinstance(value.get("ref"), str):
+            yield cast(str, value["ref"])
+        for item in value.values():
+            yield from _references(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _references(item)
+
+
+def _omit_callable_lookups(
+    steps: list[dict[str, JSONValue]], run: Run
+) -> list[dict[str, JSONValue]]:
+    """Omit lookup definitions used exclusively as named call targets."""
+    targets = {
+        cast(dict[str, str], cast(list[JSONValue], args)[0])["ref"]
+        for operation, args, _, _ in run["steps"]
+        if operation == "call"
+    }
+    used = set(_references(run["result"])) | set(_references(run["error"]))
+    for step in steps:
+        for field, value in step.items():
+            if field != "result":
+                used.update(_references(value))
+    redundant = targets - used
+    return [
+        step
+        for step in steps
+        if not (
+            "getattr" in step
+            and cast(dict[str, str], step["result"])["ref"] in redundant
+        )
+    ]
+
+
+def _rename_references(
+    value: JSONValue, aliases: Mapping[str, str], local_types: Mapping[str, str]
+) -> JSONValue:
+    """Shorten references and local types without changing literal strings."""
+    if isinstance(value, dict):
+        return {
+            key: aliases[item]
+            if key == "ref" and isinstance(item, str)
+            else local_types.get(item, item)
+            if key == "type" and isinstance(item, str)
+            else _rename_references(item, aliases, local_types)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [_rename_references(item, aliases, local_types) for item in value]
+    return value
+
+
+def _shorten_roots(
+    runs: list[ReadableRun], local_types: Mapping[str, str]
+) -> list[ReadableRun]:
+    """Use the shortest unique suffix for each reference across executions."""
+    value = cast(JSONValue, runs)
+    references = set(_references(value))
+    depths = dict.fromkeys(references, 1)
+    while True:
+        aliases = {
+            reference: ".".join(reference.split(".")[-depths[reference] :])
+            for reference in references
+        }
+        counts: dict[str, int] = {}
+        for alias in aliases.values():
+            counts[alias] = counts.get(alias, 0) + 1
+        collisions = {
+            reference for reference, alias in aliases.items() if counts[alias] > 1
+        }
+        if not collisions:
+            return cast(
+                list[ReadableRun], _rename_references(value, aliases, local_types)
+            )
+        for reference in collisions:
+            depths[reference] += 1
+
+
+def readable_runs(  # noqa: PLR0912
+    runs: Sequence[PackedRun], local_modules: Sequence[ModuleType] = ()
+) -> list[ReadableRun]:
+    """Expand executions and display names, arguments, and results directly."""
+    readable: list[ReadableRun] = []
+    for run in expand_runs(runs):
+        names: dict[str, str] = {}
+        steps: list[dict[str, JSONValue]] = []
+        for operation_value, arguments, keywords, result in run["steps"]:
+            operation = cast(str, operation_value)
+            args = cast(list[JSONValue], arguments)
+            reference = cast(dict[str, str], result)["ref"]
+            owner = _describe(args[0], names)
+            if operation == "getattr":
+                names[reference] = f"{owner}.{args[1]}"
+            elif operation == "getitem":
+                names[reference] = f"{owner}[{_describe(args[1], names)}]"
+            elif operation == "iter":
+                names[reference] = owner
+            elif operation == "call":
+                # The result keeps the callable's path, without parentheses.
+                # Object identity is represented separately by its result ref.
+                names[reference] = owner
+            elif operation == "enter":
+                names[reference] = f"{owner}.__enter__"
+
+            if operation == "call":
+                step: dict[str, JSONValue] = {
+                    "call": owner,
+                    "args": args[1:],
+                    "kwargs": keywords,
+                    "result": result,
+                }
+            elif operation in OPERATION_FIELDS:
+                fields = OPERATION_FIELDS[operation]
+                step = dict(zip(fields, args, strict=False))
+                if len(args) > len(fields):
+                    raise ValueError(f"Unexpected operands for {operation}")
+                step = {operation: step[operation], **step}
+                step["result"] = result
+                if keywords:
+                    step["kwargs"] = keywords
+            else:
+                step = {
+                    "op": operation,
+                    "left": args[0],
+                    "right": args[1],
+                    "result": result,
+                }
+                if len(args) != 2:
+                    raise ValueError(f"Unexpected operands for {operation}")
+                if keywords:
+                    step["kwargs"] = keywords
+            steps.append(step)
+        readable.append(
+            {
+                "choices": run["choices"],
+                "result": run["result"],
+                "error": run["error"],
+                "steps": _omit_callable_lookups(steps, run),
+            }
+        )
+    local_types = {
+        f"{value.__module__}.{value.__qualname__}": value.__qualname__
+        for module in local_modules
+        for value in vars(module).values()
+        if isinstance(value, type) and value.__module__ == module.__name__
+    }
+    return _shorten_roots(readable, local_types)
 
 
 def discover(

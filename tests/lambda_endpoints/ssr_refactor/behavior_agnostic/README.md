@@ -56,17 +56,62 @@ rules or downloaded file paths are needed.
 
 ## Trace format
 
-Each JSON file contains the explored runs for one instrument. A run stores its
-boolean `choices`, ordered `steps`, and returned `result` or propagated `error`.
-A step is `[operation, positional_arguments, keyword_arguments, result_reference]`.
-`{"ref": "v42"}` refers to the result produced by an earlier step. External roots
-use qualified names; references do not depend on object addresses.
+Each JSON file contains the explored runs for one instrument. Every execution
+is self-contained, with `choices`, its `result` or propagated `error`, and the
+complete ordered `steps`. There is no call index or shared-prefix indirection.
 
-To avoid repeating common setup, `prefix: [parent_run, step_count]` means prepend
-the first `step_count` fully expanded steps of that earlier run to the stored
-`steps`. A zero count means no prefix. This is lossless: call order, arguments,
-operations, and outcomes are retained. The shared formatter keeps containers
-inline when the entire line fits within 100 columns.
+Steps have named fields. For example:
+
+```json
+{
+  "call": "boto3.client.get_parameter",
+  "args": [],
+  "kwargs": {"Name": {"ref": "v18"}, "WithDecryption": true},
+  "result": {"ref": "v19"}
+}
+```
+
+The call name is a display path, with no receiver or callable-object metadata.
+It may include a synthetic reference, such as `v32.strftime`, when the originating
+class is unknown. `args` and `kwargs` contain only explicitly passed arguments.
+Calls contain exactly `call`, `args`, `kwargs`, and `result`.
+
+Attribute lookups used only as call targets are omitted; their names are shown
+in the calls themselves. Lookups used as arguments, as operands of other
+operations, or as returned values remain, as do unused lookups. Invocation no
+longer records its exact callable reference, and the count and timing of omitted
+attribute lookups are not compared. Thus the raw discovery records cannot always
+be reconstructed unambiguously from the readable format.
+
+Other operations also name their operands:
+
+```json
+{"getattr": "get_parameter", "object": {"ref": "v16"}, "result": {"ref": "v17"}}
+{"getitem": {"ref": "v19"}, "key": "Parameter", "result": {"ref": "v20"}}
+{"setitem": {"ref": "v22"}, "key": "API_KEY", "value": {"ref": "v21"}, "result": {"ref": "v23"}}
+{"bool": {"ref": "v40"}, "value": true, "result": {"ref": "v41"}}
+{"op": "add", "left": {"ref": "v10"}, "right": 1, "result": {"ref": "v11"}}
+```
+
+Iteration names its `index`, formatting its `spec`, and scalar conversions their
+chosen `value`. Context entry uses `enter`; exit uses `exit`, `exception_type`,
+and `exception`. Seeded lookups include a `value` as well as the key. Every result
+reference remains attached to its operation; `{"ref": "v42"}` points to an earlier
+result in the same execution. External imports and module variables use their
+local names in root references, such as `imap_data_access` and `DOWNLOAD_DIR`.
+Only ambiguous names retain enough module qualification to distinguish them;
+generated references such as `v22` remain unchanged. Literal argument strings
+are not shortened.
+Types defined in the target modules also use local names, such as
+`IalirtDataGapError`. Imported types retain their qualification, such as
+`builtins.FileNotFoundError`.
+
+Discovery still compresses prefixes internally. `readable_runs()` expands them
+and replaces positional records with named fields only for comparison and baseline
+generation. Operation order, explicit arguments, result references, and outcomes are
+preserved; callable and receiver metadata are omitted from calls. The formatter
+preserves field order so the operation appears first, keeping containers inline
+when the full line fits within 100 columns.
 
 ## Limits
 

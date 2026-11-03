@@ -1,18 +1,22 @@
 """Check discovery independently of SSR's implementation and expected behavior."""
 
+import json
 from types import ModuleType
 
 import pytest
 
 from tests.lambda_endpoints.ssr_refactor.behavior_agnostic.utils import (
+    OPERATION_FIELDS,
     ExplorationLimitError,
     Inputs,
     Recorder,
     Symbol,
     UnsupportedValueError,
     discover,
+    expand_runs,
     external_bindings,
     pack_runs,
+    readable_runs,
 )
 
 
@@ -148,3 +152,144 @@ def test_only_seeded_inputs_are_concrete():
     inputs = Inputs(recorder, "environment", {"instrument": "example"})
     assert inputs["instrument"] == "example"
     assert isinstance(inputs["unknown"], Symbol)
+
+
+def retained_operands(runs):
+    """Project retained operands, excluding the deliberately omitted callable ref."""
+    raw = []
+    for run in runs:
+        steps = []
+        for step in run["steps"]:
+            if "call" in step:
+                operation, args = "call", step["args"]
+            elif "op" in step:
+                operation, args = step["op"], [step["left"], step["right"]]
+            else:
+                operation = next(name for name in OPERATION_FIELDS if name in step)
+                args = [
+                    step[field]
+                    for field in OPERATION_FIELDS[operation]
+                    if field in step
+                ]
+            steps.append([operation, args, step.get("kwargs", {}), step["result"]])
+        raw.append({**run, "steps": steps})
+    return raw
+
+
+def test_readable_runs_preserve_records_and_resolve_chained_calls():
+    """Call records retain display names, explicit arguments, and results."""
+    module = ModuleType("example")
+    module.service = ModuleType("service")
+    bindings = [(module, "service")]
+
+    def invoke(recorder):
+        client = module.service.client("db")
+        for path in client.paths():
+            path.stat()
+        if client.ready():
+            with client.session() as session:
+                session.write(value=client.read())
+
+    packed = discover(invoke, bindings)
+    original = json.dumps(packed)
+    readable = readable_runs(packed)
+    assert json.dumps(packed) == original
+    steps = [step for run in readable for step in run["steps"]]
+    calls = [step for step in steps if "call" in step]
+    assert all(set(step) == {"call", "args", "kwargs", "result"} for step in calls)
+    assert any(step["call"] == "service.client.ready" for step in calls)
+    assert any(step["call"] == "service.client.paths.stat" for step in calls)
+    assert any(
+        step["call"] == "service.client.session.__enter__.write" for step in calls
+    )
+    assert all("prefix" not in run and "calls" not in run for run in readable)
+    expected = expand_runs(packed)
+    for run, rendered in zip(expected, readable, strict=True):
+        retained = {step["result"]["ref"] for step in rendered["steps"]}
+        run["steps"] = [
+            [operation, args[1:] if operation == "call" else args, kwargs, result]
+            for operation, args, kwargs, result in run["steps"]
+            if operation != "getattr" or result["ref"] in retained
+        ]
+    assert retained_operands(readable) == expected
+
+
+def test_callable_lookups_are_omitted_only_when_no_other_use_exists():
+    """Keep references passed as arguments, used as objects, or returned."""
+
+    def invoke(recorder):
+        dependency = Symbol(recorder, "dependency")
+        dependency.only_called()
+        shared = dependency.shared
+        shared()
+        dependency.accept(shared, nested={"callback": shared})
+        _ = shared.attribute
+        returned = dependency.returned
+        returned()
+        _ = dependency.unused
+        return returned
+
+    run = readable_runs(discover(invoke, []))[0]
+    attributes = [step["getattr"] for step in run["steps"] if "getattr" in step]
+    assert attributes == ["shared", "attribute", "returned", "unused"]
+    assert any(step.get("call") == "dependency.only_called" for step in run["steps"])
+    defined = {step["result"]["ref"] for step in run["steps"]}
+    assert run["result"]["ref"] in defined
+
+
+def test_root_references_use_local_names_without_changing_literals():
+    """External imports and module variables need no target-module prefix."""
+    prefix = "example.processing."
+
+    def invoke(recorder):
+        data_access = Symbol(recorder, prefix + "imap_data_access")
+        data_access.config["API_KEY"] = "key"
+        Symbol(recorder, "shutil").rmtree(
+            Symbol(recorder, prefix + "DOWNLOAD_DIR"), prefix + "DOWNLOAD_DIR"
+        )
+
+    run = readable_runs(discover(invoke, []))[0]
+    config = next(step for step in run["steps"] if step.get("getattr") == "config")
+    assert config["object"] == {"ref": "imap_data_access"}
+    cleanup = next(step for step in run["steps"] if step.get("call") == "shutil.rmtree")
+    assert cleanup["args"] == [{"ref": "DOWNLOAD_DIR"}, prefix + "DOWNLOAD_DIR"]
+
+
+def test_shortened_roots_remain_distinct_and_do_not_collide_with_results():
+    """Matching names in different modules retain enough scope to distinguish them."""
+
+    def invoke(recorder):
+        return Symbol(recorder, "consume")(
+            Symbol(recorder, "example.first.value"),
+            Symbol(recorder, "example.second.value"),
+            Symbol(recorder, "example.v0"),
+        )
+
+    call = readable_runs(discover(invoke, []))[0]["steps"][0]
+    assert call["args"] == [
+        {"ref": "first.value"},
+        {"ref": "second.value"},
+        {"ref": "example.v0"},
+    ]
+    assert call["result"] == {"ref": "v0"}
+
+
+def test_only_module_local_exception_types_are_unqualified():
+    """Local classes lose their module prefix; imported classes retain theirs."""
+    module = ModuleType("example.processing")
+    module.LocalError = type(
+        "LocalError", (Exception,), {"__module__": module.__name__}
+    )
+    module.ImportedError = ValueError
+    for exception, expected in (
+        (module.LocalError, "LocalError"),
+        (ValueError, "builtins.ValueError"),
+    ):
+
+        def invoke(recorder, exception=exception):
+            with Symbol(recorder, "context"):
+                raise exception("failed")
+
+        run = readable_runs(discover(invoke, []), (module,))[0]
+        exit_step = next(step for step in run["steps"] if "exit" in step)
+        assert exit_step["exception_type"] == {"type": expected}

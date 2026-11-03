@@ -10,26 +10,36 @@ import numpy as np
 import xarray as xr
 
 
-def format_trace(value, indent=0, width=100):
+def format_trace(value, indent=0, width=100, *, sort_keys=True):
     """Render JSON with two-space indentation and short containers inline."""
-    compact = json.dumps(value, sort_keys=True)
+    compact = json.dumps(value, sort_keys=sort_keys)
     if indent + len(compact) <= width:
         return compact
     if isinstance(value, dict) and value:
         entries = []
-        for index, key in enumerate(sorted(value)):
+        for index, key in enumerate(sorted(value) if sort_keys else value):
             prefix = json.dumps(key) + ": "
             comma = int(index < len(value) - 1)
             entries.append(
                 " " * (indent + 2)
                 + prefix
-                + format_trace(value[key], indent + 2, 100 - len(prefix) - comma)
+                + format_trace(
+                    value[key],
+                    indent + 2,
+                    100 - len(prefix) - comma,
+                    sort_keys=sort_keys,
+                )
             )
         return "{\n" + ",\n".join(entries) + "\n" + " " * indent + "}"
     if isinstance(value, list) and value:
         entries = [
             " " * (indent + 2)
-            + format_trace(item, indent + 2, 100 - int(index < len(value) - 1))
+            + format_trace(
+                item,
+                indent + 2,
+                100 - int(index < len(value) - 1),
+                sort_keys=sort_keys,
+            )
             for index, item in enumerate(value)
         ]
         return "[\n" + ",\n".join(entries) + "\n" + " " * indent + "]"
