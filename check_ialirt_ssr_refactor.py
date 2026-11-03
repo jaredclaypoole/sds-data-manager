@@ -1,6 +1,6 @@
 """Run isolated pre-commit checks and the I-ALiRT refactoring test suite.
 
-Usage: poetry run python check_ialirt_refactor.py
+Usage: poetry run python check_ialirt_ssr_refactor.py
 """
 
 # ruff: noqa: S603
@@ -46,10 +46,13 @@ def run(command, cwd, env, *, capture=False):
     )
 
 
-def regular_test_paths(root: Path):
-    """List regular I-ALiRT tests and related API tests relative to the repo root."""
-    tests = sorted(root.glob("tests/lambda_endpoints/test_ialirt*.py"))
-    tests += sorted(root.glob("tests/infrastructure/test_ialirt*.py"))
+def regular_test_paths(root: Path, *, ssr_only=False):
+    """List SSR-only or all regular I-ALiRT tests relative to the repo root."""
+    pattern = "test_ialirt_ssr*.py" if ssr_only else "test_ialirt*.py"
+    tests = sorted(root.glob(f"tests/lambda_endpoints/{pattern}"))
+    tests += sorted(root.glob(f"tests/infrastructure/{pattern}"))
+    if ssr_only:
+        return [str(path.relative_to(root)) for path in tests]
     return [str(path.relative_to(root)) for path in tests] + [
         "tests/infrastructure/test_api_key_dynamodb.py",
         "tests/lambda_endpoints/test_dependency_api.py",
@@ -57,12 +60,18 @@ def regular_test_paths(root: Path):
 
 
 def parse_args():
-    """Parse options for skipping regular tests or isolated pre-commit checks."""
+    """Parse test-scope options and the option to skip isolated pre-commit checks."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument(
         "--no-regular-tests",
         action="store_true",
         help="Skip regular I-ALiRT tests; retain pre-commit and refactoring harnesses.",
+    )
+    scope.add_argument(
+        "--ssr-only",
+        action="store_true",
+        help="Run only SSR tests and refactoring harnesses, retaining pre-commit.",
     )
     parser.add_argument(
         "--no-precommit",
@@ -70,6 +79,20 @@ def parse_args():
         help="Skip pre-commit and its temporary working-tree copy.",
     )
     return parser.parse_args()
+
+
+def selected_test_paths(root, args, status):
+    """Report the selected test scope and return its regular test paths."""
+    tests = []
+    if args.no_regular_tests:
+        status("Skipping regular I-ALiRT tests; running refactoring harnesses")
+    elif args.ssr_only:
+        status("Running SSR-specific tests and both refactoring harnesses")
+        tests = regular_test_paths(root, ssr_only=True)
+    else:
+        status("Running all I-ALiRT tests and both refactoring harnesses")
+        tests = regular_test_paths(root)
+    return tests
 
 
 def main():
@@ -164,14 +187,7 @@ def main():
                 )
                 status("Behavior-aware harness and coverage passed")
 
-                tests = []
-                if args.no_regular_tests:
-                    status(
-                        "Skipping regular I-ALiRT tests; running refactoring harnesses"
-                    )
-                else:
-                    status("Running all I-ALiRT tests and both refactoring harnesses")
-                    tests = regular_test_paths(root)
+                tests = selected_test_paths(root, args, status)
                 run(
                     [
                         sys.executable,
