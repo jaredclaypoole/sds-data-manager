@@ -577,7 +577,7 @@ def process_algorithms(
 
 
 def reformat_data(
-    result: list[dict],
+    data: list[dict],
     instrument: str,
     version: str,
     kernel_set_key: str,
@@ -586,7 +586,7 @@ def reformat_data(
 
     Parameters
     ----------
-    result : list[dict]
+    data : list[dict]
         Data products from processing.
     instrument : str
         The instrument name.
@@ -612,12 +612,12 @@ def reformat_data(
             **{k: v for k, v in item.items() if k not in exclude_keys},
             "kernel_set_key": kernel_set_key,
         }
-        for item in result
+        for item in data
     ]
 
 
 def insert_formatted_data(
-    result: list[dict],
+    data: list[dict],
     items: list[dict],
     instrument: str,
     version: str,
@@ -628,17 +628,19 @@ def insert_formatted_data(
     Unlike realtime's immediate inserts, SSR defers database writes until
     the handler exits the SPICE kernel pool successfully.
     """
-    items += reformat_data(result, instrument, version, kernel_set_key)
+    science_data = reformat_data(data, instrument, version, kernel_set_key)
+    items += science_data
     if instrument == "mag":
-        items += mag_hk_items(result, version, kernel_set_key)
+        hk_data = mag_hk_items(data, version, kernel_set_key)
+        items += hk_data
 
 
-def mag_hk_items(result: list[dict], version: str, kernel_set_key: str) -> list[dict]:
+def mag_hk_items(data: list[dict], version: str, kernel_set_key: str) -> list[dict]:
     """Convert MAG data products into MAG housekeeping items.
 
     Parameters
     ----------
-    result : list[dict]
+    data : list[dict]
         MAG data products from processing.
     version : str
         The data version, e.g. "v001".
@@ -662,7 +664,7 @@ def mag_hk_items(result: list[dict], version: str, kernel_set_key: str) -> list[
             "mag_hk_status": item["mag_hk_status"],
             "kernel_set_key": kernel_set_key,
         }
-        for item in result
+        for item in data
     ]
 
 
@@ -760,13 +762,14 @@ def spice_item(
         if kernel_type not in spice_kernels:
             spice_kernels[kernel_type] = []
         spice_kernels[kernel_type].append(filename)
-    return {
+    kernel_item = {
         "instrument_version": f"spice#{version}",
         "time_utc": kernel_set_key,
         "instrument": "spice",
         "spice_kernels": spice_kernels,
         "ttj2000ns": kernel_set_key_ttj2000ns,
     }
+    return kernel_item
 
 
 def ancillary_item(
