@@ -8,7 +8,7 @@ import xarray as xr
 from imap_data_access.processing_input import ProcessingInputCollection, SPICEInput
 
 from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
-    download_spice_files,
+    download_spice_file,
     get_ancillary,
     get_latest_spice_kernels,
     parse_packets,
@@ -96,8 +96,8 @@ def test_get_latest_spice_kernels_types(mock_get):
 @patch(
     "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.ProcessingInputCollection.download_all_files"
 )
-def test_download_spice_files(mock_download, tmp_path):
-    """Test download_spice_files function."""
+def test_download_spice_file(mock_download, tmp_path):
+    """Test download_spice_file function."""
     mock_files = [
         "imap_sclk_0000.tsc",
         "naif0012.tls",
@@ -106,7 +106,7 @@ def test_download_spice_files(mock_download, tmp_path):
     collection = ProcessingInputCollection()
     collection.add(SPICEInput(*mock_files))
 
-    result = download_spice_files(collection, tmp_path)
+    result = download_spice_file(collection, tmp_path)
 
     assert [file.name for file in result] == [
         "imap_sclk_0000.tsc",

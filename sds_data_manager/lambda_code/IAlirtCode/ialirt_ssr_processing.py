@@ -245,14 +245,14 @@ def get_latest_spice_kernels(
     return dependency_inputs
 
 
-def download_spice_files(
-    dependencies: ProcessingInputCollection, download_dir: Path
+def download_spice_file(
+    dependency_inputs: ProcessingInputCollection, download_dir: Path
 ) -> list[Path]:
     """Download SPICE kernel files from the IMAP data archive.
 
     Parameters
     ----------
-    dependencies : ProcessingInputCollection
+    dependency_inputs : ProcessingInputCollection
         A collection containing a SPICEInput object with the list of kernel
         filenames returned from the metakernel API.
     download_dir : Path
@@ -271,9 +271,9 @@ def download_spice_files(
     to /tmp and loads them later in lambda_handler.
     """
     imap_data_access.config["DATA_DIR"] = download_dir
-    dependencies.download_all_files()
+    dependency_inputs.download_all_files()
 
-    spice_files = dependencies.get_file_paths(data_type=SPICESource.SPICE.value)
+    spice_files = dependency_inputs.get_file_paths(data_type=SPICESource.SPICE.value)
     logger.info(f"Downloaded SPICE files: {spice_files}")
 
     return spice_files
@@ -627,7 +627,7 @@ def spacecraft_items(day: datetime, version: str, kernel_set_key: str) -> list[d
 
 
 def spice_item(
-    dependencies: ProcessingInputCollection,
+    dependency_inputs: ProcessingInputCollection,
     version: str,
     kernel_set_key: str,
     kernel_set_key_ttj2000ns: int,
@@ -636,7 +636,7 @@ def spice_item(
 
     Parameters
     ----------
-    dependencies : ProcessingInputCollection
+    dependency_inputs : ProcessingInputCollection
         A collection containing a SPICEInput object with the kernels used.
     version : str
         The data version, e.g. "v001".
@@ -655,7 +655,7 @@ def spice_item(
     Same as realtime, but kernel_set_key is passed in instead of
     created here.
     """
-    spice_input = dependencies.processing_input[0]
+    spice_input = dependency_inputs.processing_input[0]
     # All kernels are loaded, and more than one of a type can be returned
     # (e.g. two ephemeris files each covering part of the window), so keep
     # every filename per type, in load order.
@@ -806,7 +806,7 @@ def lambda_handler(event, context):
 
     instrument = os.environ["INSTRUMENT"]
     url = os.environ["IMAP_DATA_ACCESS_URL"]
-    table = boto3.resource("dynamodb").Table(os.environ["SSR_TABLE"])
+    data_table = boto3.resource("dynamodb").Table(os.environ["SSR_TABLE"])
 
     day = datetime.strptime(event["day"], "%Y%m%d")
     version = event["version"]
@@ -824,8 +824,8 @@ def lambda_handler(event, context):
 
         start = time.perf_counter()
         kernel_types = KERNELS if instrument in GEOMETRY_INSTRUMENTS else TIME_KERNELS
-        dependencies = get_latest_spice_kernels(url, day, kernel_types)
-        spice_files = download_spice_files(dependencies, DOWNLOAD_DIR)
+        dependency_inputs = get_latest_spice_kernels(url, day, kernel_types)
+        spice_files = download_spice_file(dependency_inputs, DOWNLOAD_DIR)
         size_mb = sum(path.stat().st_size for path in spice_files) / 1e6
         logger.info(
             "Downloaded %d SPICE files (%.1f MB) in %.1f s",
@@ -843,7 +843,7 @@ def lambda_handler(event, context):
             kernel_set_key_ttj2000ns = int(et_to_ttj2000ns(str_to_et(kernel_set_key)))
             items = [
                 spice_item(
-                    dependencies, version, kernel_set_key, kernel_set_key_ttj2000ns
+                    dependency_inputs, version, kernel_set_key, kernel_set_key_ttj2000ns
                 )
             ]
             if instrument == "spacecraft":
@@ -869,7 +869,7 @@ def lambda_handler(event, context):
                 )
             )
 
-        with table.batch_writer(
+        with data_table.batch_writer(
             overwrite_by_pkeys=["instrument_version", "time_utc"]
         ) as batch:
             for item in items:

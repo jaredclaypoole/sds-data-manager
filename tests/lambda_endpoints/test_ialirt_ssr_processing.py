@@ -200,7 +200,7 @@ def test_spacecraft_items(mock_imap_state, mock_str_to_et, mock_et_to_ttj2000ns)
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.query_filenames")
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.spiceypy")
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.download_spice_files"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.download_spice_file"
 )
 @patch(
     "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.get_latest_spice_kernels"
@@ -254,7 +254,7 @@ def test_lambda_handler_empty_product(
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.query_filenames")
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.spiceypy")
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.download_spice_files"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.download_spice_file"
 )
 @patch(
     "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.get_latest_spice_kernels"
