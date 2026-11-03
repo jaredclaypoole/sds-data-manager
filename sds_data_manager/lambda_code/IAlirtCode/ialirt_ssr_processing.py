@@ -331,7 +331,7 @@ def parse_packets(
         imap_module_directory / "ialirt" / "packet_definitions" / "ialirt.xml"
     )
 
-    xarray_data = tuple(
+    datasets = tuple(
         packet_file_to_datasets(
             imap_data_access.download(filename),
             xtce_ialirt_path,
@@ -340,18 +340,18 @@ def parse_packets(
         for filename in filenames
     )
 
-    combined = xr.concat(xarray_data, dim="epoch").sortby("epoch")
+    combined = xr.concat(datasets, dim="epoch").sortby("epoch")
 
     # The same packet may be in both files. Drop packets where epoch and
     # src_seq_ctr are the same, as is done within packet_file_to_datasets.
-    unique_indices = (
+    unique_idx = (
         combined[["src_seq_ctr"]]
         .to_dataframe()
         .reset_index()
         .drop_duplicates()
         .index.values
     )
-    combined = combined.isel(epoch=unique_indices)
+    combined = combined.isel(epoch=unique_idx)
 
     return combined
 
@@ -538,7 +538,9 @@ def process_algorithms(
                 l1b_calibration_data = load_cdf(l1b_cal_path)
                 ialirt_calibration_data = load_cdf(ialirt_cal_path)
                 result = process_func(
-                    combined, l1b_calibration_data, ialirt_calibration_data
+                    combined,
+                    l1b_calibration_data,
+                    ialirt_calibration_data,
                 )
                 ancillary_files = {
                     "mag_ialirt-calibration": ialirt_cal_path.name,
