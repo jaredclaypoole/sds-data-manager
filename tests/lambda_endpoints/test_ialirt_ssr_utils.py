@@ -7,7 +7,7 @@ import pytest
 import xarray as xr
 from imap_data_access.processing_input import ProcessingInputCollection, SPICEInput
 
-from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils import (
+from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     download_spice_files,
     get_ancillary,
     get_latest_spice_kernels,
@@ -42,7 +42,7 @@ def test_query_filenames_missing_file(mock_query):
 
 
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.packet_file_to_datasets"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.packet_file_to_datasets"
 )
 @patch("imap_data_access.download")
 def test_parse_packets(mock_download, mock_packet_file_to_datasets, tmp_path):
@@ -57,7 +57,7 @@ def test_parse_packets(mock_download, mock_packet_file_to_datasets, tmp_path):
     assert list(combined["epoch"].values) == [100, 200, 300]
 
 
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.requests.get")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.requests.get")
 def test_get_latest_spice_kernels(mock_get):
     """Test get_latest_spice_kernels function."""
     mock_files = [
@@ -79,7 +79,7 @@ def test_get_latest_spice_kernels(mock_get):
     assert result.processing_input[0].filename_list == mock_files
 
 
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.requests.get")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.requests.get")
 def test_get_latest_spice_kernels_types(mock_get):
     """Test that only the requested kernel types are queried."""
     mock_response = MagicMock()
@@ -94,7 +94,7 @@ def test_get_latest_spice_kernels_types(mock_get):
 
 
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.ProcessingInputCollection.download_all_files"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.ProcessingInputCollection.download_all_files"
 )
 def test_download_spice_files(mock_download, tmp_path):
     """Test download_spice_files function."""
@@ -149,10 +149,10 @@ def test_download_spice_files(mock_download, tmp_path):
     ],
 )
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.imap_data_access.download"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_data_access.download"
 )
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.imap_data_access.query"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_data_access.query"
 )
 def test_get_ancillary(mock_query, mock_download, files, expected, tmp_path):
     """Test that get_ancillary picks the file valid for the day."""
