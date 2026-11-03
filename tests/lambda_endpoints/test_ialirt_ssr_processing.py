@@ -9,6 +9,7 @@ import pytest
 import xarray as xr
 from imap_data_access.processing_input import ProcessingInputCollection, SPICEInput
 
+from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_processing as processing
 from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     KERNELS,
     SOFTWARE_VERSIONS,
@@ -302,3 +303,126 @@ def test_lambda_handler(
     ]:
         key = {"instrument_version": instrument_version, "time_utc": time_utc}
         assert "Item" in table.get_item(Key=key)
+
+
+@pytest.mark.parametrize(
+    ("instrument", "processor_name", "has_ancillary"),
+    [
+        ("mag", "process_mag", True),
+        ("hit", "process_hit", False),
+        ("swe", "process_swe_ssr", True),
+        ("codice_lo", "process_codice_lo", True),
+        ("codice_hi", "process_codice_hi", True),
+        ("swapi", "process_swapi", True),
+        ("spacecraft_status", "process_spacecraft_status", False),
+    ],
+)
+@pytest.mark.parametrize(
+    "scenario", ["success", "empty", "mixed", "outside_day", "error"]
+)
+def test_process_algorithms(
+    monkeypatch, tmp_path, instrument, processor_name, has_ancillary, scenario
+):
+    """Check dispatch, trimming, pending items, provenance, and failure behavior."""
+    day = datetime(2026, 10, 8)
+    combined = xr.Dataset()
+    kernel_set_key = "2026-11-01T00:00:00.000000"
+    product = {
+        "instrument": instrument,
+        "met_in_utc": "2026-10-08T00:00:00",
+        "apid": 478,
+        "met": 1,
+        "value": 5,
+        "mag_hk_status": {"hk": 1},
+    }
+    outside = [
+        dict(product, met_in_utc="2026-10-07T23:59:59"),
+        dict(product, met_in_utc="2026-10-09T00:00:00"),
+    ]
+    results = {
+        "success": [outside[0], product, outside[1]],
+        "empty": [],
+        "mixed": [product, {}],
+        "outside_day": outside,
+        "error": [product],
+    }
+    ancillary = {"calibration": "fixture.cdf"} if has_ancillary else {}
+    processors = {}
+    for name in (
+        "process_mag",
+        "process_hit",
+        "process_swe_ssr",
+        "process_codice_lo",
+        "process_codice_hi",
+        "process_swapi",
+        "process_spacecraft_status",
+    ):
+        processors[name] = MagicMock()
+        monkeypatch.setattr(processing, name, processors[name])
+    selected = processors[processor_name]
+    selected.return_value = (
+        (results[scenario], ancillary) if has_ancillary else results[scenario]
+    )
+    monkeypatch.setattr(processing, "DOWNLOAD_DIR", tmp_path)
+    existing = {"instrument_version": "spice#v001", "time_utc": kernel_set_key}
+    items = [existing]
+
+    if scenario == "error":
+        failure = RuntimeError("processor failed")
+        selected.side_effect = failure
+        with pytest.raises(RuntimeError, match="processor failed") as caught:
+            processing.process_algorithms(
+                combined, items, instrument, day, "v001", kernel_set_key
+            )
+        assert caught.value is failure
+        assert items == [existing]
+    else:
+        provenance = processing.process_algorithms(
+            combined, items, instrument, day, "v001", kernel_set_key
+        )
+        if scenario in {"empty", "mixed"}:
+            assert provenance is None
+            assert items == [existing]
+        else:
+            assert provenance == ancillary
+            expected = [existing]
+            if scenario == "success":
+                expected.append(
+                    {
+                        "instrument_version": f"{instrument}#v001",
+                        "time_utc": product["met_in_utc"],
+                        "instrument": instrument,
+                        "value": 5,
+                        "kernel_set_key": kernel_set_key,
+                    }
+                )
+                if instrument == "mag":
+                    expected.append(
+                        {
+                            "instrument_version": "mag_hk#v001",
+                            "time_utc": product["met_in_utc"],
+                            "instrument": "mag_hk",
+                            "mag_hk_status": {"hk": 1},
+                            "kernel_set_key": kernel_set_key,
+                        }
+                    )
+            assert items == expected
+    assert items[0] is existing
+    assert selected.call_count == 1
+    assert selected.call_args.args[0] is combined
+    assert selected.call_args.args[1:] == ((day, tmp_path) if has_ancillary else ())
+    assert selected.call_args.kwargs == {}
+    for name, processor in processors.items():
+        if name != processor_name:
+            processor.assert_not_called()
+
+
+@pytest.mark.parametrize("instrument", ["unknown", "spacecraft"])
+def test_process_algorithms_unknown_instrument(instrument):
+    """Reject unsupported instruments without modifying pending items."""
+    items = [{"instrument_version": "spice#v001"}]
+    with pytest.raises(ValueError, match=f"^Unknown instrument: {instrument}$"):
+        processing.process_algorithms(
+            xr.Dataset(), items, instrument, datetime(2026, 10, 8), "v001", "kernels"
+        )
+    assert items == [{"instrument_version": "spice#v001"}]
