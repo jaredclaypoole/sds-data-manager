@@ -65,7 +65,7 @@
       "packet_file_to_datasets",
       [
         "/ssr-fixture/20261007.pkts",
-        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+        "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
       {
         "use_derived_value": false
@@ -76,7 +76,7 @@
       "packet_file_to_datasets",
       [
         "/ssr-fixture/20261008.pkts",
-        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+        "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
       {
         "use_derived_value": false
@@ -87,7 +87,7 @@
       "packet_file_to_datasets",
       [
         "/ssr-fixture/20261009.pkts",
-        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+        "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
       {
         "use_derived_value": false

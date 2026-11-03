@@ -155,6 +155,9 @@ def boundary(monkeypatch):  # noqa: PLR0915
     }.items():
         monkeypatch.setenv(name, value)
     monkeypatch.setattr(imap_data_access, "config", {})
+    monkeypatch.setattr(
+        utils, "imap_module_directory", Path("/imap-processing-fixture")
+    )
     # Stable provenance, clock, and path; no actual /tmp/ssr files are touched.
     monkeypatch.setattr(
         processing,
