@@ -878,7 +878,50 @@ def ancillary_item(
     }
 
 
-def lambda_handler(event, context):  # noqa: PLR0912, PLR0915
+def process_algorithms(
+    combined: xr.Dataset,
+    items: list[dict],
+    instrument: str,
+    day: datetime,
+    version: str,
+    kernel_set_key: str,
+) -> dict | None:
+    """Process one instrument and append its products to the pending SSR items.
+
+    Return ancillary filenames, or None for empty or partially empty products
+    so the handler can return before writing any items. Items are written only
+    after the handler exits the SPICE kernel pool successfully.
+    """
+    if instrument == "mag":
+        result, ancillary_files = process_mag(combined, day, DOWNLOAD_DIR)
+    elif instrument == "hit":
+        # HIT has no ancillary files.
+        result, ancillary_files = process_hit(combined), {}
+    elif instrument == "swe":
+        result, ancillary_files = process_swe_ssr(combined, day, DOWNLOAD_DIR)
+    elif instrument == "codice_lo":
+        result, ancillary_files = process_codice_lo(combined, day, DOWNLOAD_DIR)
+    elif instrument == "codice_hi":
+        result, ancillary_files = process_codice_hi(combined, day, DOWNLOAD_DIR)
+    elif instrument == "swapi":
+        result, ancillary_files = process_swapi(combined, day, DOWNLOAD_DIR)
+    elif instrument == "spacecraft_status":
+        # Spacecraft status has no ancillary files.
+        result, ancillary_files = process_spacecraft_status(combined), {}
+    else:
+        raise ValueError(f"Unknown instrument: {instrument}")
+    if not (any(result) and all(result)):
+        logger.info("No %s products for %s %s", instrument, day, version)
+        return
+    result = trim_to_day(result, day)
+    logger.info("[%s] results populated for [%s]", len(result), instrument)
+    items += format_items(result, instrument, version, kernel_set_key)
+    if instrument == "mag":
+        items += mag_hk_items(result, version, kernel_set_key)
+    return ancillary_files
+
+
+def lambda_handler(event, context):
     """Process one day of I-ALiRT SSR data for one instrument.
 
     Parameters
@@ -942,38 +985,11 @@ def lambda_handler(event, context):  # noqa: PLR0912, PLR0915
                 combined = parse_packets(query_filenames(day), DOWNLOAD_DIR)
                 check_day_coverage(combined, day)
                 combined = trim_packets(combined, day)
-                if instrument == "mag":
-                    result, ancillary_files = process_mag(combined, day, DOWNLOAD_DIR)
-                elif instrument == "hit":
-                    # HIT has no ancillary files.
-                    result, ancillary_files = process_hit(combined), {}
-                elif instrument == "swe":
-                    result, ancillary_files = process_swe_ssr(
-                        combined, day, DOWNLOAD_DIR
-                    )
-                elif instrument == "codice_lo":
-                    result, ancillary_files = process_codice_lo(
-                        combined, day, DOWNLOAD_DIR
-                    )
-                elif instrument == "codice_hi":
-                    result, ancillary_files = process_codice_hi(
-                        combined, day, DOWNLOAD_DIR
-                    )
-                elif instrument == "swapi":
-                    result, ancillary_files = process_swapi(combined, day, DOWNLOAD_DIR)
-                elif instrument == "spacecraft_status":
-                    # Spacecraft status has no ancillary files.
-                    result, ancillary_files = process_spacecraft_status(combined), {}
-                else:
-                    raise ValueError(f"Unknown instrument: {instrument}")
-                if not (any(result) and all(result)):
-                    logger.info("No %s products for %s %s", instrument, day, version)
+                ancillary_files = process_algorithms(
+                    combined, items, instrument, day, version, kernel_set_key
+                )
+                if ancillary_files is None:
                     return
-                result = trim_to_day(result, day)
-                logger.info("[%s] results populated for [%s]", len(result), instrument)
-                items += format_items(result, instrument, version, kernel_set_key)
-                if instrument == "mag":
-                    items += mag_hk_items(result, version, kernel_set_key)
             # Always add the ancillary item so every run records its software versions.
             items.append(
                 ancillary_item(
