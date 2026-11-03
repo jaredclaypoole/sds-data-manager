@@ -92,6 +92,158 @@ SOFTWARE_VERSIONS = {
 }
 
 
+def get_ancillary(
+    instrument: str, descriptor: str, day: datetime, download_dir: Path
+) -> Path:
+    """Query and download the ancillary file valid for a given day.
+
+    This is consistent with how ancillary files are selected for processing
+    (ImapJob.get_ancillary_files_inputs in orchestration/imap_job.py):
+
+    - A file is valid for the day if its start_date is on or before the day and
+      its end_date is on or after the day. Files without an end_date
+      (e.g. imap_swe_l1b-in-flight-cal_20260406_v001.csv) are valid from their
+      start_date onward. Files with an end_date
+      (e.g. imap_swe_l1b-in-flight-cal_20240510_20260716_v020.csv) are only
+      valid within that range.
+    - Only the latest version for each start_date is considered.
+    - Of the valid files, the one with the latest start_date is selected.
+
+    Parameters
+    ----------
+    instrument : str
+        The name of the instrument.
+    descriptor : str
+        The name of the descriptor.
+    day : datetime
+        The day being processed.
+    download_dir : Path
+        The directory where the file will be downloaded.
+
+    Returns
+    -------
+    download_path : Path
+        Download path of the ancillary file.
+
+    Notes
+    -----
+    Realtime uses the newest file. SSR uses the file that was valid on
+    the day being processed.
+    """
+    imap_data_access.config["DATA_DIR"] = download_dir
+    date_str = day.strftime("%Y%m%d")
+    # end_date filters on the file start_date, so this returns files that
+    # start on or before the day.
+    ancillary_files = imap_data_access.query(
+        table="ancillary",
+        instrument=instrument,
+        descriptor=descriptor,
+        end_date=date_str,
+        version="latest",
+    )
+
+    # Drop files whose end_date is before the day.
+    valid_files = [
+        f for f in ancillary_files if not f.get("end_date") or f["end_date"] >= date_str
+    ]
+    if not valid_files:
+        raise FileNotFoundError(
+            f"No ancillary file found for {instrument=}, {descriptor=}, {date_str=}"
+        )
+
+    ancillary_file = sorted(
+        valid_files, key=lambda x: (x["start_date"], x["version"]), reverse=True
+    )[0]
+    download_path = imap_data_access.download(ancillary_file["file_path"])
+    logger.info(f"Downloaded ancillary file: {download_path}")
+
+    return download_path
+
+
+def get_latest_spice_kernels(
+    url: str, day: datetime, kernel_types: set[str] = KERNELS
+) -> ProcessingInputCollection:
+    """Query the SPICE metakernel API for the latest kernels for a day.
+
+    The time range covers the day before, the day and the day after, to match
+    the packet files.
+
+    Parameters
+    ----------
+    url : str
+        The IMAP data access API URL.
+    day : datetime
+        The day to query.
+    kernel_types : set[str]
+        The kernel types to query. Defaults to all of KERNELS.
+
+    Returns
+    -------
+    dependency_inputs : ProcessingInputCollection
+        A collection containing a SPICEInput object with the list of kernel
+        filenames returned from the metakernel API, in priority order.
+
+    Notes
+    -----
+    Realtime asks for kernels covering the last week. SSR asks for
+    kernels covering the day being processed, plus one day on each side.
+    """
+    # The end date is exclusive (midnight), so day - 1 to day + 2 covers
+    # day - 1, day and day + 1.
+    metakernel_url = url + "/metakernel"
+    params = {
+        "start_time": (day - timedelta(days=1)).strftime("%Y%m%d"),
+        "end_time": (day + timedelta(days=2)).strftime("%Y%m%d"),
+        "list_files": "True",
+        "file_types": ",".join(kernel_types),
+    }
+
+    logger.info(f"Sending request to {metakernel_url} with params: {params}")
+    response = requests.get(metakernel_url, params=params, timeout=10)
+    response.raise_for_status()
+    metakernel_files = response.json()
+
+    logger.info(f"Found metakernel files: {metakernel_files}. Adding to collection.")
+    dependency_inputs = ProcessingInputCollection()
+    dependency_inputs.add(SPICEInput(*metakernel_files))
+
+    return dependency_inputs
+
+
+def download_spice_file(
+    dependency_inputs: ProcessingInputCollection, download_dir: Path
+) -> list[Path]:
+    """Download SPICE kernel files from the IMAP data archive.
+
+    Parameters
+    ----------
+    dependency_inputs : ProcessingInputCollection
+        A collection containing a SPICEInput object with the list of kernel
+        filenames returned from the metakernel API.
+    download_dir : Path
+        The directory where the files will be downloaded.
+
+    Returns
+    -------
+    spice_files : list[Path]
+        The downloaded SPICE files.
+
+    Notes
+    -----
+    List is priority ordered so furnishing in order results in correct SPICE priority.
+
+    Realtime saves kernels to EFS and loads them here. SSR saves them
+    to /tmp and loads them later in lambda_handler.
+    """
+    imap_data_access.config["DATA_DIR"] = download_dir
+    dependency_inputs.download_all_files()
+
+    spice_files = dependency_inputs.get_file_paths(data_type=SPICESource.SPICE.value)
+    logger.info(f"Downloaded SPICE files: {spice_files}")
+
+    return spice_files
+
+
 def query_filenames(day: datetime) -> list[str]:
     """Query the latest I-ALiRT L0 files for the day before, the day and the day after.
 
@@ -193,158 +345,6 @@ def parse_packets(
     combined = combined.isel(epoch=unique_indices)
 
     return combined
-
-
-def get_latest_spice_kernels(
-    url: str, day: datetime, kernel_types: set[str] = KERNELS
-) -> ProcessingInputCollection:
-    """Query the SPICE metakernel API for the latest kernels for a day.
-
-    The time range covers the day before, the day and the day after, to match
-    the packet files.
-
-    Parameters
-    ----------
-    url : str
-        The IMAP data access API URL.
-    day : datetime
-        The day to query.
-    kernel_types : set[str]
-        The kernel types to query. Defaults to all of KERNELS.
-
-    Returns
-    -------
-    dependency_inputs : ProcessingInputCollection
-        A collection containing a SPICEInput object with the list of kernel
-        filenames returned from the metakernel API, in priority order.
-
-    Notes
-    -----
-    Realtime asks for kernels covering the last week. SSR asks for
-    kernels covering the day being processed, plus one day on each side.
-    """
-    # The end date is exclusive (midnight), so day - 1 to day + 2 covers
-    # day - 1, day and day + 1.
-    metakernel_url = url + "/metakernel"
-    params = {
-        "start_time": (day - timedelta(days=1)).strftime("%Y%m%d"),
-        "end_time": (day + timedelta(days=2)).strftime("%Y%m%d"),
-        "list_files": "True",
-        "file_types": ",".join(kernel_types),
-    }
-
-    logger.info(f"Sending request to {metakernel_url} with params: {params}")
-    response = requests.get(metakernel_url, params=params, timeout=10)
-    response.raise_for_status()
-    metakernel_files = response.json()
-
-    logger.info(f"Found metakernel files: {metakernel_files}. Adding to collection.")
-    dependency_inputs = ProcessingInputCollection()
-    dependency_inputs.add(SPICEInput(*metakernel_files))
-
-    return dependency_inputs
-
-
-def download_spice_file(
-    dependency_inputs: ProcessingInputCollection, download_dir: Path
-) -> list[Path]:
-    """Download SPICE kernel files from the IMAP data archive.
-
-    Parameters
-    ----------
-    dependency_inputs : ProcessingInputCollection
-        A collection containing a SPICEInput object with the list of kernel
-        filenames returned from the metakernel API.
-    download_dir : Path
-        The directory where the files will be downloaded.
-
-    Returns
-    -------
-    spice_files : list[Path]
-        The downloaded SPICE files.
-
-    Notes
-    -----
-    List is priority ordered so furnishing in order results in correct SPICE priority.
-
-    Realtime saves kernels to EFS and loads them here. SSR saves them
-    to /tmp and loads them later in lambda_handler.
-    """
-    imap_data_access.config["DATA_DIR"] = download_dir
-    dependency_inputs.download_all_files()
-
-    spice_files = dependency_inputs.get_file_paths(data_type=SPICESource.SPICE.value)
-    logger.info(f"Downloaded SPICE files: {spice_files}")
-
-    return spice_files
-
-
-def get_ancillary(
-    instrument: str, descriptor: str, day: datetime, download_dir: Path
-) -> Path:
-    """Query and download the ancillary file valid for a given day.
-
-    This is consistent with how ancillary files are selected for processing
-    (ImapJob.get_ancillary_files_inputs in orchestration/imap_job.py):
-
-    - A file is valid for the day if its start_date is on or before the day and
-      its end_date is on or after the day. Files without an end_date
-      (e.g. imap_swe_l1b-in-flight-cal_20260406_v001.csv) are valid from their
-      start_date onward. Files with an end_date
-      (e.g. imap_swe_l1b-in-flight-cal_20240510_20260716_v020.csv) are only
-      valid within that range.
-    - Only the latest version for each start_date is considered.
-    - Of the valid files, the one with the latest start_date is selected.
-
-    Parameters
-    ----------
-    instrument : str
-        The name of the instrument.
-    descriptor : str
-        The name of the descriptor.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where the file will be downloaded.
-
-    Returns
-    -------
-    download_path : Path
-        Download path of the ancillary file.
-
-    Notes
-    -----
-    Realtime uses the newest file. SSR uses the file that was valid on
-    the day being processed.
-    """
-    imap_data_access.config["DATA_DIR"] = download_dir
-    date_str = day.strftime("%Y%m%d")
-    # end_date filters on the file start_date, so this returns files that
-    # start on or before the day.
-    ancillary_files = imap_data_access.query(
-        table="ancillary",
-        instrument=instrument,
-        descriptor=descriptor,
-        end_date=date_str,
-        version="latest",
-    )
-
-    # Drop files whose end_date is before the day.
-    valid_files = [
-        f for f in ancillary_files if not f.get("end_date") or f["end_date"] >= date_str
-    ]
-    if not valid_files:
-        raise FileNotFoundError(
-            f"No ancillary file found for {instrument=}, {descriptor=}, {date_str=}"
-        )
-
-    ancillary_file = sorted(
-        valid_files, key=lambda x: (x["start_date"], x["version"]), reverse=True
-    )[0]
-    download_path = imap_data_access.download(ancillary_file["file_path"])
-    logger.info(f"Downloaded ancillary file: {download_path}")
-
-    return download_path
 
 
 class IalirtDataGapError(Exception):
@@ -481,6 +481,82 @@ def trim_to_day(result: list[dict], day: datetime) -> list[dict]:
     start = day.strftime("%Y-%m-%dT%H:%M:%S")
     end = (day + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
     return [item for item in result if start <= item["met_in_utc"] < end]
+
+
+def process_algorithms(
+    combined: xr.Dataset,
+    items: list[dict],
+    instrument: str,
+    day: datetime,
+    version: str,
+    kernel_set_key: str,
+) -> dict | None:
+    """Process one instrument and append its products to the pending SSR items.
+
+    Return ancillary filenames, or None for empty or partially empty products
+    so the handler can return before writing any items. Items are written only
+    after the handler exits the SPICE kernel pool successfully.
+
+    Ancillary files are chosen for the day being processed.
+    """
+    if instrument == "mag":
+        ialirt_cal_path = get_ancillary("mag", "ialirt-calibration", day, DOWNLOAD_DIR)
+        l1b_cal_path = get_ancillary("mag", "l1b-calibration", day, DOWNLOAD_DIR)
+        result = process_packet(
+            combined, load_cdf(l1b_cal_path), load_cdf(ialirt_cal_path)
+        )
+        ancillary_files = {
+            "mag_ialirt-calibration": ialirt_cal_path.name,
+            "mag_l1b-calibration": l1b_cal_path.name,
+        }
+    elif instrument == "hit":
+        # HIT has no ancillary files.
+        result, ancillary_files = process_hit(combined), {}
+    elif instrument == "swe":
+        cal_path = get_ancillary("swe", "l1b-in-flight-cal", day, DOWNLOAD_DIR)
+        result = process_swe(combined, [cal_path])
+        ancillary_files = {"swe_l1b-in-flight-cal": cal_path.name}
+    elif instrument == "codice_lo":
+        # CoDICE-Lo uses the same efficiency and geometric factor tables as
+        # regular processing.
+        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
+        efficiency_path = get_ancillary("codice", "l2-lo-efficiency", day, DOWNLOAD_DIR)
+        gfactor_path = get_ancillary("codice", "l2-lo-gfactor", day, DOWNLOAD_DIR)
+        result, _ = process_codice(
+            combined, lut_path, efficiency_path, "codice_lo", gfactor_path
+        )
+        ancillary_files = {
+            "codice_l1a-sci-lut": lut_path.name,
+            "codice_l2-lo-efficiency": efficiency_path.name,
+            "codice_l2-lo-gfactor": gfactor_path.name,
+        }
+    elif instrument == "codice_hi":
+        # CoDICE-Hi uses its own I-ALiRT efficiency table and no geometric factor.
+        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
+        efficiency_path = get_ancillary(
+            "codice", "l2-hi-ialirt-efficiency", day, DOWNLOAD_DIR
+        )
+        _, result = process_codice(combined, lut_path, efficiency_path, "codice_hi")
+        ancillary_files = {
+            "codice_l1a-sci-lut": lut_path.name,
+            "codice_l2-hi-ialirt-efficiency": efficiency_path.name,
+        }
+    elif instrument == "swapi":
+        cal_path = get_ancillary("swapi", "esa-unit-conversion", day, DOWNLOAD_DIR)
+        result = process_swapi_ialirt(combined, pd.read_csv(cal_path))
+        ancillary_files = {"swapi_esa-unit-conversion": cal_path.name}
+    elif instrument == "spacecraft_status":
+        # Spacecraft status has no ancillary files.
+        result, ancillary_files = process_spacecraft_status(combined), {}
+    else:
+        raise ValueError(f"Unknown instrument: {instrument}")
+    if not (any(result) and all(result)):
+        logger.info("No %s products for %s %s", instrument, day, version)
+        return
+    result = trim_to_day(result, day)
+    logger.info("[%s] results populated for [%s]", len(result), instrument)
+    insert_formatted_data(result, items, instrument, version, kernel_set_key)
+    return ancillary_files
 
 
 def reformat_data(
@@ -712,82 +788,6 @@ def ancillary_item(
         "software_versions": SOFTWARE_VERSIONS,
         "ttj2000ns": kernel_set_key_ttj2000ns,
     }
-
-
-def process_algorithms(
-    combined: xr.Dataset,
-    items: list[dict],
-    instrument: str,
-    day: datetime,
-    version: str,
-    kernel_set_key: str,
-) -> dict | None:
-    """Process one instrument and append its products to the pending SSR items.
-
-    Return ancillary filenames, or None for empty or partially empty products
-    so the handler can return before writing any items. Items are written only
-    after the handler exits the SPICE kernel pool successfully.
-
-    Ancillary files are chosen for the day being processed.
-    """
-    if instrument == "mag":
-        ialirt_cal_path = get_ancillary("mag", "ialirt-calibration", day, DOWNLOAD_DIR)
-        l1b_cal_path = get_ancillary("mag", "l1b-calibration", day, DOWNLOAD_DIR)
-        result = process_packet(
-            combined, load_cdf(l1b_cal_path), load_cdf(ialirt_cal_path)
-        )
-        ancillary_files = {
-            "mag_ialirt-calibration": ialirt_cal_path.name,
-            "mag_l1b-calibration": l1b_cal_path.name,
-        }
-    elif instrument == "hit":
-        # HIT has no ancillary files.
-        result, ancillary_files = process_hit(combined), {}
-    elif instrument == "swe":
-        cal_path = get_ancillary("swe", "l1b-in-flight-cal", day, DOWNLOAD_DIR)
-        result = process_swe(combined, [cal_path])
-        ancillary_files = {"swe_l1b-in-flight-cal": cal_path.name}
-    elif instrument == "codice_lo":
-        # CoDICE-Lo uses the same efficiency and geometric factor tables as
-        # regular processing.
-        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
-        efficiency_path = get_ancillary("codice", "l2-lo-efficiency", day, DOWNLOAD_DIR)
-        gfactor_path = get_ancillary("codice", "l2-lo-gfactor", day, DOWNLOAD_DIR)
-        result, _ = process_codice(
-            combined, lut_path, efficiency_path, "codice_lo", gfactor_path
-        )
-        ancillary_files = {
-            "codice_l1a-sci-lut": lut_path.name,
-            "codice_l2-lo-efficiency": efficiency_path.name,
-            "codice_l2-lo-gfactor": gfactor_path.name,
-        }
-    elif instrument == "codice_hi":
-        # CoDICE-Hi uses its own I-ALiRT efficiency table and no geometric factor.
-        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
-        efficiency_path = get_ancillary(
-            "codice", "l2-hi-ialirt-efficiency", day, DOWNLOAD_DIR
-        )
-        _, result = process_codice(combined, lut_path, efficiency_path, "codice_hi")
-        ancillary_files = {
-            "codice_l1a-sci-lut": lut_path.name,
-            "codice_l2-hi-ialirt-efficiency": efficiency_path.name,
-        }
-    elif instrument == "swapi":
-        cal_path = get_ancillary("swapi", "esa-unit-conversion", day, DOWNLOAD_DIR)
-        result = process_swapi_ialirt(combined, pd.read_csv(cal_path))
-        ancillary_files = {"swapi_esa-unit-conversion": cal_path.name}
-    elif instrument == "spacecraft_status":
-        # Spacecraft status has no ancillary files.
-        result, ancillary_files = process_spacecraft_status(combined), {}
-    else:
-        raise ValueError(f"Unknown instrument: {instrument}")
-    if not (any(result) and all(result)):
-        logger.info("No %s products for %s %s", instrument, day, version)
-        return
-    result = trim_to_day(result, day)
-    logger.info("[%s] results populated for [%s]", len(result), instrument)
-    insert_formatted_data(result, items, instrument, version, kernel_set_key)
-    return ancillary_files
 
 
 def lambda_handler(event, context):
