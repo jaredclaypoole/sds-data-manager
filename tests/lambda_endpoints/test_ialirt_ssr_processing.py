@@ -18,7 +18,6 @@ from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     format_items,
     lambda_handler,
     mag_hk_items,
-    process_day,
     process_spacecraft_status,
     spacecraft_items,
     spice_item,
@@ -204,7 +203,9 @@ def test_spacecraft_items(mock_imap_state, mock_str_to_et, mock_et_to_ttj2000ns)
 @patch(
     "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.get_latest_spice_kernels"
 )
-def test_process_day_empty_product(
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.boto3")
+def test_lambda_handler_empty_product(
+    mock_boto3,
     mock_get_kernels,
     mock_download_spice,
     mock_spiceypy,
@@ -215,12 +216,24 @@ def test_process_day_empty_product(
     mock_process_hit,
     mock_str_to_et,
     mock_et_to_ttj2000ns,
+    monkeypatch,
+    tmp_path,
 ):
     """Test that nothing is written if a product is empty."""
     mock_process_hit.return_value = [{"met_in_utc": "2026-10-08T12:00:00"}, {}]
     table = MagicMock()
 
-    process_day("hit", datetime(2026, 10, 8), "v001", "https://url", table)
+    monkeypatch.setenv("INSTRUMENT", "hit")
+    monkeypatch.setenv("SSR_TABLE", "ssr-table")
+    monkeypatch.setenv("IMAP_DATA_ACCESS_URL", "https://url")
+    monkeypatch.setenv("SSM_API_KEY_PARAMETER", "/ssr/api-key")
+    monkeypatch.setattr(
+        "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.DOWNLOAD_DIR",
+        tmp_path / "ssr",
+    )
+    monkeypatch.setitem(imap_data_access.config, "API_KEY", None)
+    mock_boto3.resource.return_value.Table.return_value = table
+    lambda_handler({"day": "20261008", "version": "v001"}, {})
 
     table.batch_writer.assert_not_called()
 
