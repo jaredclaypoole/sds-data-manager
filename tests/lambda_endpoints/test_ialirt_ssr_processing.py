@@ -1,7 +1,8 @@
 """Test the I-ALiRT SSR processing lambda."""
 
 from datetime import datetime
-from unittest.mock import MagicMock, patch
+from pathlib import Path
+from unittest.mock import MagicMock, call, patch
 
 import imap_data_access
 import numpy as np
@@ -242,7 +243,9 @@ def test_lambda_handler_empty_product(
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns")
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et")
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.boto3.client")
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.process_mag")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.load_cdf")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.get_ancillary")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.process_packet")
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.trim_packets")
 @patch(
     "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.check_day_coverage"
@@ -264,7 +267,9 @@ def test_lambda_handler(
     mock_parse,
     mock_check,
     mock_trim,
-    mock_process_mag,
+    mock_process_packet,
+    mock_get_ancillary,
+    mock_load_cdf,
     mock_ssm_client,
     mock_str_to_et,
     mock_et_to_ttj2000ns,
@@ -279,10 +284,13 @@ def test_lambda_handler(
     mock_ssm_client.return_value.get_parameter.return_value = {
         "Parameter": {"Value": "test-api-key"}
     }
-    mock_process_mag.return_value = (
-        [{"met_in_utc": "2026-10-08T12:00:00", "mag_hk_status": {"hk": 1}}],
-        {"mag_l1b-calibration": "imap_mag_l1b-calibration.cdf"},
-    )
+    mock_process_packet.return_value = [
+        {"met_in_utc": "2026-10-08T12:00:00", "mag_hk_status": {"hk": 1}}
+    ]
+    mock_get_ancillary.side_effect = [
+        Path("imap_mag_ialirt-calibration.cdf"),
+        Path("imap_mag_l1b-calibration.cdf"),
+    ]
 
     lambda_handler({"day": "20261008", "version": "v001"}, {})
 
@@ -308,19 +316,19 @@ def test_lambda_handler(
 @pytest.mark.parametrize(
     ("instrument", "processor_name", "has_ancillary"),
     [
-        ("mag", "process_mag", True),
+        ("mag", "process_packet", True),
         ("hit", "process_hit", False),
-        ("swe", "process_swe_ssr", True),
-        ("codice_lo", "process_codice_lo", True),
-        ("codice_hi", "process_codice_hi", True),
-        ("swapi", "process_swapi", True),
+        ("swe", "process_swe", True),
+        ("codice_lo", "process_codice", True),
+        ("codice_hi", "process_codice", True),
+        ("swapi", "process_swapi_ialirt", True),
         ("spacecraft_status", "process_spacecraft_status", False),
     ],
 )
 @pytest.mark.parametrize(
     "scenario", ["success", "empty", "mixed", "outside_day", "error"]
 )
-def test_process_algorithms(
+def test_process_algorithms(  # noqa: PLR0912, PLR0915
     monkeypatch, tmp_path, instrument, processor_name, has_ancillary, scenario
 ):
     """Check dispatch, trimming, pending items, provenance, and failure behavior."""
@@ -346,23 +354,44 @@ def test_process_algorithms(
         "outside_day": outside,
         "error": [product],
     }
-    ancillary = {"calibration": "fixture.cdf"} if has_ancillary else {}
+    descriptors = {
+        "mag": [("mag", "ialirt-calibration"), ("mag", "l1b-calibration")],
+        "swe": [("swe", "l1b-in-flight-cal")],
+        "codice_lo": [
+            ("codice", "l1a-sci-lut"),
+            ("codice", "l2-lo-efficiency"),
+            ("codice", "l2-lo-gfactor"),
+        ],
+        "codice_hi": [("codice", "l1a-sci-lut"), ("codice", "l2-hi-ialirt-efficiency")],
+        "swapi": [("swapi", "esa-unit-conversion")],
+    }.get(instrument, [])
+    ancillary = {f"{inst}_{desc}": f"{inst}_{desc}.cdf" for inst, desc in descriptors}
+    assert bool(ancillary) == has_ancillary
+    get_ancillary = MagicMock(
+        side_effect=lambda inst, desc, day, directory: directory / f"{inst}_{desc}.cdf"
+    )
+    load_cdf = MagicMock(side_effect=lambda path: f"cdf:{path.name}")
+    read_csv = MagicMock(return_value={"calibration": "swapi"})
+    monkeypatch.setattr(processing, "get_ancillary", get_ancillary)
+    monkeypatch.setattr(processing, "load_cdf", load_cdf)
+    monkeypatch.setattr(processing.pd, "read_csv", read_csv)
     processors = {}
     for name in (
-        "process_mag",
+        "process_packet",
         "process_hit",
-        "process_swe_ssr",
-        "process_codice_lo",
-        "process_codice_hi",
-        "process_swapi",
+        "process_swe",
+        "process_codice",
+        "process_swapi_ialirt",
         "process_spacecraft_status",
     ):
         processors[name] = MagicMock()
         monkeypatch.setattr(processing, name, processors[name])
     selected = processors[processor_name]
-    selected.return_value = (
-        (results[scenario], ancillary) if has_ancillary else results[scenario]
-    )
+    selected.return_value = results[scenario]
+    if instrument == "codice_lo":
+        selected.return_value = (results[scenario], [{"wrong_output": True}])
+    elif instrument == "codice_hi":
+        selected.return_value = ([{"wrong_output": True}], results[scenario])
     monkeypatch.setattr(processing, "DOWNLOAD_DIR", tmp_path)
     existing = {"instrument_version": "spice#v001", "time_utc": kernel_set_key}
     items = [existing]
@@ -410,7 +439,37 @@ def test_process_algorithms(
     assert items[0] is existing
     assert selected.call_count == 1
     assert selected.call_args.args[0] is combined
-    assert selected.call_args.args[1:] == ((day, tmp_path) if has_ancillary else ())
+    expected_args = {
+        "mag": ("cdf:mag_l1b-calibration.cdf", "cdf:mag_ialirt-calibration.cdf"),
+        "swe": ([tmp_path / "swe_l1b-in-flight-cal.cdf"],),
+        "codice_lo": (
+            tmp_path / "codice_l1a-sci-lut.cdf",
+            tmp_path / "codice_l2-lo-efficiency.cdf",
+            "codice_lo",
+            tmp_path / "codice_l2-lo-gfactor.cdf",
+        ),
+        "codice_hi": (
+            tmp_path / "codice_l1a-sci-lut.cdf",
+            tmp_path / "codice_l2-hi-ialirt-efficiency.cdf",
+            "codice_hi",
+        ),
+        "swapi": ({"calibration": "swapi"},),
+    }.get(instrument, ())
+    assert selected.call_args.args[1:] == expected_args
+    assert get_ancillary.call_args_list == [
+        call(inst, desc, day, tmp_path) for inst, desc in descriptors
+    ]
+    if instrument == "mag":
+        assert load_cdf.call_args_list == [
+            call(tmp_path / "mag_l1b-calibration.cdf"),
+            call(tmp_path / "mag_ialirt-calibration.cdf"),
+        ]
+    else:
+        load_cdf.assert_not_called()
+    if instrument == "swapi":
+        read_csv.assert_called_once_with(tmp_path / "swapi_esa-unit-conversion.cdf")
+    else:
+        read_csv.assert_not_called()
     assert selected.call_args.kwargs == {}
     for name, processor in processors.items():
         if name != processor_name:
