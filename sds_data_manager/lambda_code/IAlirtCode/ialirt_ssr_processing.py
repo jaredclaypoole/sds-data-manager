@@ -160,6 +160,15 @@ def get_ancillary(
     return download_path
 
 
+def get_ancillary_ssr(*args, **kwargs):
+    """Define a convenience alias for get_ancillary.
+
+    Needed to `process_algorithms` can locally define `get_ancillary`
+    while still calling the original implementation.
+    """
+    return get_ancillary(*args, **kwargs)
+
+
 def get_latest_spice_kernels(
     url: str, day: datetime, kernel_types: set[str] = KERNELS
 ) -> ProcessingInputCollection:
@@ -497,83 +506,99 @@ def process_algorithms(
     so the handler can return before writing any items. Items are written only
     after the handler exits the SPICE kernel pool successfully.
 
+    Only the requested instrument is selected from the processors list.
     Ancillary files are chosen for the day being processed.
     """
-    if instrument == "mag":
-        ialirt_cal_path = get_ancillary(
-            instrument, "ialirt-calibration", day, DOWNLOAD_DIR
-        )
-        l1b_cal_path = get_ancillary(instrument, "l1b-calibration", day, DOWNLOAD_DIR)
-        l1b_calibration_data = load_cdf(l1b_cal_path)
-        ialirt_calibration_data = load_cdf(ialirt_cal_path)
-        result = process_packet(combined, l1b_calibration_data, ialirt_calibration_data)
-        ancillary_files = {
-            "mag_ialirt-calibration": ialirt_cal_path.name,
-            "mag_l1b-calibration": l1b_cal_path.name,
-        }
-    elif instrument == "hit":
-        # HIT has no ancillary files.
-        result, ancillary_files = process_hit(combined), {}
-    elif instrument == "swe":
-        download_path = get_ancillary(
-            instrument, "l1b-in-flight-cal", day, DOWNLOAD_DIR
-        )
-        result = process_swe(combined, [download_path])
-        ancillary_files = {"swe_l1b-in-flight-cal": download_path.name}
-    elif instrument == "codice_lo":
-        # CoDICE-Lo uses the same efficiency and geometric factor tables as
-        # regular processing.
-        l1a_download_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
-        l2_efficiency_download_path = get_ancillary(
-            "codice", "l2-lo-efficiency", day, DOWNLOAD_DIR
-        )
-        l2_geometric_download_path = get_ancillary(
-            "codice", "l2-lo-gfactor", day, DOWNLOAD_DIR
-        )
-        result, _ = process_codice(
-            combined,
-            l1a_download_path,
-            l2_efficiency_download_path,
-            "codice_lo",
-            l2_geometric_download_path,
-        )
-        ancillary_files = {
-            "codice_l1a-sci-lut": l1a_download_path.name,
-            "codice_l2-lo-efficiency": l2_efficiency_download_path.name,
-            "codice_l2-lo-gfactor": l2_geometric_download_path.name,
-        }
-    elif instrument == "codice_hi":
-        # CoDICE-Hi uses its own I-ALiRT efficiency table and no geometric factor.
-        l1a_download_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
-        l2_efficiency_download_path = get_ancillary(
-            "codice", "l2-hi-ialirt-efficiency", day, DOWNLOAD_DIR
-        )
-        _, result = process_codice(
-            combined, l1a_download_path, l2_efficiency_download_path, "codice_hi"
-        )
-        ancillary_files = {
-            "codice_l1a-sci-lut": l1a_download_path.name,
-            "codice_l2-hi-ialirt-efficiency": l2_efficiency_download_path.name,
-        }
-    elif instrument == "swapi":
-        download_path = get_ancillary(
-            instrument, "esa-unit-conversion", day, DOWNLOAD_DIR
-        )
-        calibration_data = pd.read_csv(download_path)
-        result = process_swapi_ialirt(combined, calibration_data)
-        ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
-    elif instrument == "spacecraft_status":
-        # Spacecraft status has no ancillary files.
-        result, ancillary_files = process_spacecraft_status(combined), {}
-    else:
+    processors = [
+        ("mag", process_packet),
+        ("hit", process_hit),
+        ("swe", process_swe),
+        ("codice_lo", process_codice),
+        ("codice_hi", process_codice),
+        ("swapi", process_swapi_ialirt),
+        ("spacecraft_status", process_spacecraft_status),
+    ]
+    process_func = dict(processors).get(instrument)
+
+    if process_func is None:
         raise ValueError(f"Unknown instrument: {instrument}")
-    if not (any(result) and all(result)):
-        logger.info("No %s products for %s %s", instrument, day, version)
-        return
-    result = trim_to_day(result, day)
-    logger.info("[%s] results populated for [%s]", len(result), instrument)
-    insert_formatted_data(result, items, instrument, version, kernel_set_key)
-    return ancillary_files
+
+    def get_ancillary(the_instrument, name):
+        return get_ancillary_ssr(the_instrument, name, day, DOWNLOAD_DIR)
+
+    if True:
+        if True:
+            if instrument == "swe":
+                download_path = get_ancillary(instrument, "l1b-in-flight-cal")
+                result = process_func(combined, [download_path])
+                ancillary_files = {"swe_l1b-in-flight-cal": download_path.name}
+            elif instrument == "mag":
+                ialirt_cal_path = get_ancillary(instrument, "ialirt-calibration")
+                l1b_cal_path = get_ancillary(instrument, "l1b-calibration")
+                l1b_calibration_data = load_cdf(l1b_cal_path)
+                ialirt_calibration_data = load_cdf(ialirt_cal_path)
+                result = process_func(
+                    combined, l1b_calibration_data, ialirt_calibration_data
+                )
+                ancillary_files = {
+                    "mag_ialirt-calibration": ialirt_cal_path.name,
+                    "mag_l1b-calibration": l1b_cal_path.name,
+                }
+            elif instrument == "codice_lo":
+                # CoDICE-Lo uses the same efficiency and geometric factor tables as
+                # regular processing.
+                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
+                l2_efficiency_download_path = get_ancillary(
+                    "codice", "l2-lo-efficiency"
+                )
+                l2_geometric_download_path = get_ancillary("codice", "l2-lo-gfactor")
+                result, _ = process_func(
+                    combined,
+                    l1a_download_path,
+                    l2_efficiency_download_path,
+                    "codice_lo",
+                    l2_geometric_download_path,
+                )
+                ancillary_files = {
+                    "codice_l1a-sci-lut": l1a_download_path.name,
+                    "codice_l2-lo-efficiency": l2_efficiency_download_path.name,
+                    "codice_l2-lo-gfactor": l2_geometric_download_path.name,
+                }
+            elif instrument == "codice_hi":
+                # CoDICE-Hi uses its own I-ALiRT efficiency table
+                # and no geometric factor.
+                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
+                l2_efficiency_download_path = get_ancillary(
+                    "codice", "l2-hi-ialirt-efficiency"
+                )
+                _, result = process_func(
+                    combined,
+                    l1a_download_path,
+                    l2_efficiency_download_path,
+                    "codice_hi",
+                )
+                ancillary_files = {
+                    "codice_l1a-sci-lut": l1a_download_path.name,
+                    "codice_l2-hi-ialirt-efficiency": l2_efficiency_download_path.name,
+                }
+            elif instrument == "swapi":
+                download_path = get_ancillary(instrument, "esa-unit-conversion")
+                calibration_data = pd.read_csv(download_path)
+                result = process_func(combined, calibration_data)
+                ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
+            elif instrument == "hit":
+                # HIT has no ancillary files.
+                result, ancillary_files = process_func(combined), {}
+            else:
+                # Spacecraft status has no ancillary files.
+                result, ancillary_files = process_func(combined), {}
+            if not (any(result) and all(result)):
+                logger.info("No %s products for %s %s", instrument, day, version)
+                return
+        result = trim_to_day(result, day)
+        logger.info("[%s] results populated for [%s]", len(result), instrument)
+        insert_formatted_data(result, items, instrument, version, kernel_set_key)
+        return ancillary_files
 
 
 def reformat_data(
