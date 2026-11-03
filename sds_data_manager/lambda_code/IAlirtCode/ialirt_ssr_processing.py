@@ -483,7 +483,7 @@ def trim_to_day(result: list[dict], day: datetime) -> list[dict]:
     return [item for item in result if start <= item["met_in_utc"] < end]
 
 
-def format_items(
+def reformat_data(
     result: list[dict],
     instrument: str,
     version: str,
@@ -521,6 +521,23 @@ def format_items(
         }
         for item in result
     ]
+
+
+def insert_formatted_data(
+    result: list[dict],
+    items: list[dict],
+    instrument: str,
+    version: str,
+    kernel_set_key: str,
+) -> None:
+    """Append science and MAG housekeeping records to the pending SSR items.
+
+    Unlike realtime's immediate inserts, SSR defers database writes until
+    the handler exits the SPICE kernel pool successfully.
+    """
+    items += reformat_data(result, instrument, version, kernel_set_key)
+    if instrument == "mag":
+        items += mag_hk_items(result, version, kernel_set_key)
 
 
 def mag_hk_items(result: list[dict], version: str, kernel_set_key: str) -> list[dict]:
@@ -769,9 +786,7 @@ def process_algorithms(
         return
     result = trim_to_day(result, day)
     logger.info("[%s] results populated for [%s]", len(result), instrument)
-    items += format_items(result, instrument, version, kernel_set_key)
-    if instrument == "mag":
-        items += mag_hk_items(result, version, kernel_set_key)
+    insert_formatted_data(result, items, instrument, version, kernel_set_key)
     return ancillary_files
 
 

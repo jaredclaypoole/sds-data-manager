@@ -17,10 +17,10 @@ from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     IalirtDataGapError,
     ancillary_item,
     check_day_coverage,
-    format_items,
     lambda_handler,
     mag_hk_items,
     process_spacecraft_status,
+    reformat_data,
     spacecraft_items,
     spice_item,
     trim_to_day,
@@ -75,7 +75,7 @@ def test_trim_to_day():
     ]
 
 
-def test_format_items():
+def test_reformat_data():
     """Test the DynamoDB item for a data product."""
     result = [
         {
@@ -88,7 +88,7 @@ def test_format_items():
         }
     ]
 
-    items = format_items(result, "mag", "v001", "2026-10-19T12:00:00.000001")
+    items = reformat_data(result, "mag", "v001", "2026-10-19T12:00:00.000001")
 
     assert items == [
         {
