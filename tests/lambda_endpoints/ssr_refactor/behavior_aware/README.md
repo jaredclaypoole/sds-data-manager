@@ -1,9 +1,9 @@
 # I-ALiRT SSR refactoring tests
 
-`tests/lambda_endpoints/test_ialirt_ssr_contract.py` runs `lambda_handler` through
+`tests/lambda_endpoints/ssr_refactor/behavior_aware/test_ialirt_ssr_contract.py` runs `lambda_handler` through
 both `ialirt_ssr_processing.py` and `ialirt_ssr_utils.py`. Neither module's
 functions are mocked. The committed JSON files in
-`tests/lambda_endpoints/ssr_traces/` record the original implementation's ordered
+`tests/lambda_endpoints/ssr_refactor/behavior_aware/ssr_traces/` record the original implementation's ordered
 external calls, positional and keyword arguments, return/exception outcome, and
 final data-access configuration. Arrays and dictionaries that fit within 100
 columns are formatted on one line, including short call records. The width check
@@ -14,7 +14,7 @@ characterization tests: existing behavior is the baseline, including any existin
 ## Running during a refactor
 
 ```bash
-poetry run pytest tests/lambda_endpoints/test_ialirt_ssr_contract.py \
+poetry run pytest tests/lambda_endpoints/ssr_refactor/behavior_aware/test_ialirt_ssr_contract.py \
   --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing \
   --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils \
   --cov-branch --cov-report=term-missing --cov-fail-under=100
@@ -75,10 +75,14 @@ Only regenerate against a trusted implementation, before refactoring or after
 reviewing an intentional behavior change:
 
 ```bash
-SSR_UPDATE_TRACES=1 poetry run pytest tests/lambda_endpoints/test_ialirt_ssr_contract.py
+SSR_UPDATE_TRACES=1 poetry run pytest tests/lambda_endpoints/ssr_refactor/behavior_aware/test_ialirt_ssr_contract.py
 ```
 
 Review the JSON diff and commit the test, fixture, and baseline changes together.
 Do not regenerate simply to make a refactor pass: that would replace the evidence
 of the old behavior with the new behavior. To add a scenario during a refactor,
 first capture its baseline using the original two modules in a separate checkout.
+
+The shared formatter, argument snapshots, and recording mocks live in
+`../utils.py`. The sibling `../behavior_agnostic/` harness discovers synthetic
+execution paths without the scenario-specific fixtures used here.

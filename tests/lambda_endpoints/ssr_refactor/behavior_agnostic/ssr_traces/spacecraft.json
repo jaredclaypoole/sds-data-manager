@@ -1,0 +1,1679 @@
+[
+  {
+    "choices": [true, true],
+    "error": null,
+    "prefix": [0, 0],
+    "result": null,
+    "steps": [
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "info"],
+        {},
+        {"ref": "v0"}
+      ],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.json"}, "dumps"],
+        {},
+        {"ref": "v1"}
+      ],
+      ["call", [{"ref": "v1"}, {"ref": "event"}], {}, {"ref": "v2"}],
+      ["call", [{"ref": "v0"}, "Received event: %s", {"ref": "v2"}], {}, {"ref": "v3"}],
+      ["getitem", [{"ref": "environment"}, "INSTRUMENT", "spacecraft"], {}, {"ref": "v4"}],
+      ["getitem", [{"ref": "environment"}, "IMAP_DATA_ACCESS_URL"], {}, {"ref": "v5"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.boto3"},
+          "resource"
+        ],
+        {},
+        {"ref": "v6"}
+      ],
+      ["call", [{"ref": "v6"}, "dynamodb"], {}, {"ref": "v7"}],
+      ["getattr", [{"ref": "v7"}, "Table"], {}, {"ref": "v8"}],
+      ["getitem", [{"ref": "environment"}, "SSR_TABLE"], {}, {"ref": "v9"}],
+      ["call", [{"ref": "v8"}, {"ref": "v9"}], {}, {"ref": "v10"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.datetime"},
+          "strptime"
+        ],
+        {},
+        {"ref": "v11"}
+      ],
+      ["getitem", [{"ref": "event"}, "day"], {}, {"ref": "v12"}],
+      ["call", [{"ref": "v11"}, {"ref": "v12"}, "%Y%m%d"], {}, {"ref": "v13"}],
+      ["getitem", [{"ref": "event"}, "version"], {}, {"ref": "v14"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.boto3"}, "client"],
+        {},
+        {"ref": "v15"}
+      ],
+      ["call", [{"ref": "v15"}, "ssm"], {}, {"ref": "v16"}],
+      ["getattr", [{"ref": "v16"}, "get_parameter"], {}, {"ref": "v17"}],
+      ["getitem", [{"ref": "environment"}, "SSM_API_KEY_PARAMETER"], {}, {"ref": "v18"}],
+      ["call", [{"ref": "v17"}], {"Name": {"ref": "v18"}, "WithDecryption": true}, {"ref": "v19"}],
+      ["getitem", [{"ref": "v19"}, "Parameter"], {}, {"ref": "v20"}],
+      ["getitem", [{"ref": "v20"}, "Value"], {}, {"ref": "v21"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_data_access"},
+          "config"
+        ],
+        {},
+        {"ref": "v22"}
+      ],
+      ["setitem", [{"ref": "v22"}, "API_KEY", {"ref": "v21"}], {}, {"ref": "v23"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.shutil"}, "rmtree"],
+        {},
+        {"ref": "v24"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "v24"},
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.DOWNLOAD_DIR"}
+        ],
+        {"ignore_errors": true},
+        {"ref": "v25"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.DOWNLOAD_DIR"},
+          "mkdir"
+        ],
+        {},
+        {"ref": "v26"}
+      ],
+      ["call", [{"ref": "v26"}], {"parents": true}, {"ref": "v27"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.time"},
+          "perf_counter"
+        ],
+        {},
+        {"ref": "v28"}
+      ],
+      ["call", [{"ref": "v28"}], {}, {"ref": "v29"}],
+      ["add", [{"ref": "v5"}, "/metakernel"], {}, {"ref": "v30"}],
+      [
+        "call",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timedelta"}],
+        {"days": 1},
+        {"ref": "v31"}
+      ],
+      ["sub", [{"ref": "v13"}, {"ref": "v31"}], {}, {"ref": "v32"}],
+      ["getattr", [{"ref": "v32"}, "strftime"], {}, {"ref": "v33"}],
+      ["call", [{"ref": "v33"}, "%Y%m%d"], {}, {"ref": "v34"}],
+      [
+        "call",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timedelta"}],
+        {"days": 2},
+        {"ref": "v35"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v35"}], {}, {"ref": "v36"}],
+      ["getattr", [{"ref": "v36"}, "strftime"], {}, {"ref": "v37"}],
+      ["call", [{"ref": "v37"}, "%Y%m%d"], {}, {"ref": "v38"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.logger"}, "info"],
+        {},
+        {"ref": "v39"}
+      ],
+      ["format", [{"ref": "v30"}, ""], {}, {"ref": "v40"}],
+      [
+        "call",
+        [
+          {"ref": "v39"},
+          "Sending request to <v40> with params: {'start_time': <v34>, 'end_time': <v38>, 'list_files': 'True', 'file_types': 'ephemeris_90days,ephemeris_predicted,imap_frames,leapseconds,planetary_constants,planetary_ephemeris,science_frames,spacecraft_clock'}"
+        ],
+        {},
+        {"ref": "v41"}
+      ],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.requests"}, "get"],
+        {},
+        {"ref": "v42"}
+      ],
+      [
+        "call",
+        [{"ref": "v42"}, {"ref": "v30"}],
+        {
+          "params": {
+            "end_time": {"ref": "v38"},
+            "file_types": "ephemeris_90days,ephemeris_predicted,imap_frames,leapseconds,planetary_constants,planetary_ephemeris,science_frames,spacecraft_clock",
+            "list_files": "True",
+            "start_time": {"ref": "v34"}
+          },
+          "timeout": 10
+        },
+        {"ref": "v43"}
+      ],
+      ["getattr", [{"ref": "v43"}, "raise_for_status"], {}, {"ref": "v44"}],
+      ["call", [{"ref": "v44"}], {}, {"ref": "v45"}],
+      ["getattr", [{"ref": "v43"}, "json"], {}, {"ref": "v46"}],
+      ["call", [{"ref": "v46"}], {}, {"ref": "v47"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.logger"}, "info"],
+        {},
+        {"ref": "v48"}
+      ],
+      ["format", [{"ref": "v47"}, ""], {}, {"ref": "v49"}],
+      [
+        "call",
+        [{"ref": "v48"}, "Found metakernel files: <v49>. Adding to collection."],
+        {},
+        {"ref": "v50"}
+      ],
+      [
+        "call",
+        [
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.ProcessingInputCollection"
+          }
+        ],
+        {},
+        {"ref": "v51"}
+      ],
+      ["getattr", [{"ref": "v51"}, "add"], {}, {"ref": "v52"}],
+      ["len", [{"ref": "v47"}, 2], {}, {"ref": "v53"}],
+      ["iter", [{"ref": "v47"}, 0], {}, {"ref": "v54"}],
+      ["iter", [{"ref": "v47"}, 1], {}, {"ref": "v55"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.SPICEInput"},
+          {"ref": "v54"},
+          {"ref": "v55"}
+        ],
+        {},
+        {"ref": "v56"}
+      ],
+      ["call", [{"ref": "v52"}, {"ref": "v56"}], {}, {"ref": "v57"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_data_access"},
+          "config"
+        ],
+        {},
+        {"ref": "v58"}
+      ],
+      [
+        "setitem",
+        [
+          {"ref": "v58"},
+          "DATA_DIR",
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.DOWNLOAD_DIR"}
+        ],
+        {},
+        {"ref": "v59"}
+      ],
+      ["getattr", [{"ref": "v51"}, "download_all_files"], {}, {"ref": "v60"}],
+      ["call", [{"ref": "v60"}], {}, {"ref": "v61"}],
+      ["getattr", [{"ref": "v51"}, "get_file_paths"], {}, {"ref": "v62"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.SPICESource"}, "SPICE"],
+        {},
+        {"ref": "v63"}
+      ],
+      ["getattr", [{"ref": "v63"}, "value"], {}, {"ref": "v64"}],
+      ["call", [{"ref": "v62"}], {"data_type": {"ref": "v64"}}, {"ref": "v65"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.logger"}, "info"],
+        {},
+        {"ref": "v66"}
+      ],
+      ["format", [{"ref": "v65"}, ""], {}, {"ref": "v67"}],
+      ["call", [{"ref": "v66"}, "Downloaded SPICE files: <v67>"], {}, {"ref": "v68"}],
+      ["iter", [{"ref": "v65"}, 0], {}, {"ref": "v69"}],
+      ["getattr", [{"ref": "v69"}, "stat"], {}, {"ref": "v70"}],
+      ["call", [{"ref": "v70"}], {}, {"ref": "v71"}],
+      ["getattr", [{"ref": "v71"}, "st_size"], {}, {"ref": "v72"}],
+      ["add", [0, {"ref": "v72"}], {}, {"ref": "v73"}],
+      ["iter", [{"ref": "v65"}, 1], {}, {"ref": "v74"}],
+      ["getattr", [{"ref": "v74"}, "stat"], {}, {"ref": "v75"}],
+      ["call", [{"ref": "v75"}], {}, {"ref": "v76"}],
+      ["getattr", [{"ref": "v76"}, "st_size"], {}, {"ref": "v77"}],
+      ["add", [{"ref": "v73"}, {"ref": "v77"}], {}, {"ref": "v78"}],
+      ["truediv", [{"ref": "v78"}, 1000000.0], {}, {"ref": "v79"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "info"],
+        {},
+        {"ref": "v80"}
+      ],
+      ["len", [{"ref": "v65"}, 2], {}, {"ref": "v81"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.time"},
+          "perf_counter"
+        ],
+        {},
+        {"ref": "v82"}
+      ],
+      ["call", [{"ref": "v82"}], {}, {"ref": "v83"}],
+      ["sub", [{"ref": "v83"}, {"ref": "v29"}], {}, {"ref": "v84"}],
+      [
+        "call",
+        [
+          {"ref": "v80"},
+          "Downloaded %d SPICE files (%.1f MB) in %.1f s",
+          2,
+          {"ref": "v79"},
+          {"ref": "v84"}
+        ],
+        {},
+        {"ref": "v85"}
+      ],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.datetime"}, "now"],
+        {},
+        {"ref": "v86"}
+      ],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timezone"}, "utc"],
+        {},
+        {"ref": "v87"}
+      ],
+      ["call", [{"ref": "v86"}, {"ref": "v87"}], {}, {"ref": "v88"}],
+      ["getattr", [{"ref": "v88"}, "strftime"], {}, {"ref": "v89"}],
+      ["call", [{"ref": "v89"}, "%Y-%m-%dT%H:%M:%S.%f"], {}, {"ref": "v90"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.spiceypy"},
+          "KernelPool"
+        ],
+        {},
+        {"ref": "v91"}
+      ],
+      ["iter", [{"ref": "v65"}, 0], {}, {"ref": "v92"}],
+      ["iter", [{"ref": "v65"}, 1], {}, {"ref": "v93"}],
+      ["call", [{"ref": "v91"}, ["<v92>", "<v93>"]], {}, {"ref": "v94"}],
+      ["enter", [{"ref": "v94"}], {}, {"ref": "v95"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v90"}
+        ],
+        {},
+        {"ref": "v96"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v96"}
+        ],
+        {},
+        {"ref": "v97"}
+      ],
+      ["int", [{"ref": "v97"}, 2], {}, {"ref": "v98"}],
+      ["getattr", [{"ref": "v51"}, "processing_input"], {}, {"ref": "v99"}],
+      ["getitem", [{"ref": "v99"}, 0], {}, {"ref": "v100"}],
+      ["getattr", [{"ref": "v100"}, "imap_file_paths"], {}, {"ref": "v101"}],
+      ["getattr", [{"ref": "v100"}, "filename_list"], {}, {"ref": "v102"}],
+      ["iter", [{"ref": "v101"}, 0], {}, {"ref": "v103"}],
+      ["iter", [{"ref": "v102"}, 0], {}, {"ref": "v104"}],
+      ["getattr", [{"ref": "v103"}, "spice_metadata"], {}, {"ref": "v105"}],
+      ["getitem", [{"ref": "v105"}, "type"], {}, {"ref": "v106"}],
+      ["iter", [{"ref": "v101"}, 1], {}, {"ref": "v107"}],
+      ["iter", [{"ref": "v102"}, 1], {}, {"ref": "v108"}],
+      ["getattr", [{"ref": "v107"}, "spice_metadata"], {}, {"ref": "v109"}],
+      ["getitem", [{"ref": "v109"}, "type"], {}, {"ref": "v110"}],
+      ["eq", [{"ref": "v106"}, {"ref": "v110"}], {}, {"ref": "v111"}],
+      ["bool", [{"ref": "v111"}, true], {}, {"ref": "v112"}],
+      ["eq", [{"ref": "v106"}, {"ref": "v110"}], {}, {"ref": "v113"}],
+      ["bool", [{"ref": "v113"}, true], {}, {"ref": "v114"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v115"}],
+      [
+        "call",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timedelta"}],
+        {"days": 1},
+        {"ref": "v116"}
+      ],
+      [
+        "truediv",
+        [
+          {"ref": "v116"},
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v117"}
+      ],
+      ["int", [{"ref": "v117"}, 2], {}, {"ref": "v118"}],
+      [
+        "mul",
+        [
+          0,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v119"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v119"}], {}, {"ref": "v120"}],
+      [
+        "mul",
+        [
+          1,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v121"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v121"}], {}, {"ref": "v122"}],
+      ["getattr", [{"ref": "v120"}, "strftime"], {}, {"ref": "v123"}],
+      ["call", [{"ref": "v123"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v124"}],
+      ["getattr", [{"ref": "v122"}, "strftime"], {}, {"ref": "v125"}],
+      ["call", [{"ref": "v125"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v126"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.np"}, "array"],
+        {},
+        {"ref": "v127"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v124"}
+        ],
+        {},
+        {"ref": "v128"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v126"}
+        ],
+        {},
+        {"ref": "v129"}
+      ],
+      ["call", [{"ref": "v127"}, [{"ref": "v128"}, {"ref": "v129"}]], {}, {"ref": "v130"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSM"
+        ],
+        {},
+        {"ref": "v131"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v132"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v130"}
+        ],
+        {"observer": {"ref": "v132"}, "ref_frame": {"ref": "v131"}},
+        {"ref": "v133"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSE"
+        ],
+        {},
+        {"ref": "v134"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v135"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v130"}
+        ],
+        {"observer": {"ref": "v135"}, "ref_frame": {"ref": "v134"}},
+        {"ref": "v136"}
+      ],
+      ["iter", [{"ref": "v130"}, 0], {}, {"ref": "v137"}],
+      ["iter", [{"ref": "v133"}, 0], {}, {"ref": "v138"}],
+      ["iter", [{"ref": "v136"}, 0], {}, {"ref": "v139"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v140"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v137"}
+        ],
+        {},
+        {"ref": "v141"}
+      ],
+      ["int", [{"ref": "v141"}, 2], {}, {"ref": "v142"}],
+      ["getitem", [{"ref": "v138"}, {"slice": [null, 3, null]}], {}, {"ref": "v143"}],
+      ["iter", [{"ref": "v143"}, 0], {}, {"ref": "v144"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v144>"
+        ],
+        {},
+        {"ref": "v145"}
+      ],
+      ["iter", [{"ref": "v143"}, 1], {}, {"ref": "v146"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v146>"
+        ],
+        {},
+        {"ref": "v147"}
+      ],
+      ["getitem", [{"ref": "v138"}, {"slice": [3, null, null]}], {}, {"ref": "v148"}],
+      ["iter", [{"ref": "v148"}, 0], {}, {"ref": "v149"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v149>"
+        ],
+        {},
+        {"ref": "v150"}
+      ],
+      ["iter", [{"ref": "v148"}, 1], {}, {"ref": "v151"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v151>"
+        ],
+        {},
+        {"ref": "v152"}
+      ],
+      ["getitem", [{"ref": "v139"}, {"slice": [null, 3, null]}], {}, {"ref": "v153"}],
+      ["iter", [{"ref": "v153"}, 0], {}, {"ref": "v154"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v154>"
+        ],
+        {},
+        {"ref": "v155"}
+      ],
+      ["iter", [{"ref": "v153"}, 1], {}, {"ref": "v156"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v156>"
+        ],
+        {},
+        {"ref": "v157"}
+      ],
+      ["getitem", [{"ref": "v139"}, {"slice": [3, null, null]}], {}, {"ref": "v158"}],
+      ["iter", [{"ref": "v158"}, 0], {}, {"ref": "v159"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v159>"
+        ],
+        {},
+        {"ref": "v160"}
+      ],
+      ["iter", [{"ref": "v158"}, 1], {}, {"ref": "v161"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v161>"
+        ],
+        {},
+        {"ref": "v162"}
+      ],
+      ["iter", [{"ref": "v130"}, 1], {}, {"ref": "v163"}],
+      ["iter", [{"ref": "v133"}, 1], {}, {"ref": "v164"}],
+      ["iter", [{"ref": "v136"}, 1], {}, {"ref": "v165"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v166"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v163"}
+        ],
+        {},
+        {"ref": "v167"}
+      ],
+      ["int", [{"ref": "v167"}, 2], {}, {"ref": "v168"}],
+      ["getitem", [{"ref": "v164"}, {"slice": [null, 3, null]}], {}, {"ref": "v169"}],
+      ["iter", [{"ref": "v169"}, 0], {}, {"ref": "v170"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v170>"
+        ],
+        {},
+        {"ref": "v171"}
+      ],
+      ["iter", [{"ref": "v169"}, 1], {}, {"ref": "v172"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v172>"
+        ],
+        {},
+        {"ref": "v173"}
+      ],
+      ["getitem", [{"ref": "v164"}, {"slice": [3, null, null]}], {}, {"ref": "v174"}],
+      ["iter", [{"ref": "v174"}, 0], {}, {"ref": "v175"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v175>"
+        ],
+        {},
+        {"ref": "v176"}
+      ],
+      ["iter", [{"ref": "v174"}, 1], {}, {"ref": "v177"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v177>"
+        ],
+        {},
+        {"ref": "v178"}
+      ],
+      ["getitem", [{"ref": "v165"}, {"slice": [null, 3, null]}], {}, {"ref": "v179"}],
+      ["iter", [{"ref": "v179"}, 0], {}, {"ref": "v180"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v180>"
+        ],
+        {},
+        {"ref": "v181"}
+      ],
+      ["iter", [{"ref": "v179"}, 1], {}, {"ref": "v182"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v182>"
+        ],
+        {},
+        {"ref": "v183"}
+      ],
+      ["getitem", [{"ref": "v165"}, {"slice": [3, null, null]}], {}, {"ref": "v184"}],
+      ["iter", [{"ref": "v184"}, 0], {}, {"ref": "v185"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v185>"
+        ],
+        {},
+        {"ref": "v186"}
+      ],
+      ["iter", [{"ref": "v184"}, 1], {}, {"ref": "v187"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v187>"
+        ],
+        {},
+        {"ref": "v188"}
+      ],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v189"}],
+      ["exit", [{"ref": "v94"}, null, null], {}, {"ref": "v190"}],
+      ["getattr", [{"ref": "v10"}, "batch_writer"], {}, {"ref": "v191"}],
+      [
+        "call",
+        [{"ref": "v191"}],
+        {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
+        {"ref": "v192"}
+      ],
+      ["enter", [{"ref": "v192"}], {}, {"ref": "v193"}],
+      ["getattr", [{"ref": "v193"}, "put_item"], {}, {"ref": "v194"}],
+      [
+        "call",
+        [{"ref": "v194"}],
+        {
+          "Item": {
+            "instrument": "spice",
+            "instrument_version": "spice#<v115>",
+            "spice_kernels": {"mapping": [[{"ref": "v106"}, [{"ref": "v104"}, {"ref": "v108"}]]]},
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v195"}
+      ],
+      ["getattr", [{"ref": "v193"}, "put_item"], {}, {"ref": "v196"}],
+      [
+        "call",
+        [{"ref": "v196"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v140>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v155"}, {"ref": "v157"}],
+            "sc_position_GSM": [{"ref": "v145"}, {"ref": "v147"}],
+            "sc_velocity_GSE": [{"ref": "v160"}, {"ref": "v162"}],
+            "sc_velocity_GSM": [{"ref": "v150"}, {"ref": "v152"}],
+            "time_utc": {"ref": "v124"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v197"}
+      ],
+      ["getattr", [{"ref": "v193"}, "put_item"], {}, {"ref": "v198"}],
+      [
+        "call",
+        [{"ref": "v198"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v166>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v181"}, {"ref": "v183"}],
+            "sc_position_GSM": [{"ref": "v171"}, {"ref": "v173"}],
+            "sc_velocity_GSE": [{"ref": "v186"}, {"ref": "v188"}],
+            "sc_velocity_GSM": [{"ref": "v176"}, {"ref": "v178"}],
+            "time_utc": {"ref": "v126"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v199"}
+      ],
+      ["getattr", [{"ref": "v193"}, "put_item"], {}, {"ref": "v200"}],
+      [
+        "call",
+        [{"ref": "v200"}],
+        {
+          "Item": {
+            "ancillary_files": {},
+            "instrument": "ancillary",
+            "instrument_version": "ancillary#<v189>",
+            "software_versions": {"imap_data_access": "1.3.0", "imap_processing": "1.0.38"},
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v201"}
+      ],
+      ["exit", [{"ref": "v192"}, null, null], {}, {"ref": "v202"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "info"],
+        {},
+        {"ref": "v203"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "v203"},
+          "Inserted %d %s items for %s %s",
+          4,
+          "spacecraft",
+          {"ref": "v13"},
+          {"ref": "v14"}
+        ],
+        {},
+        {"ref": "v204"}
+      ]
+    ]
+  },
+  {
+    "choices": [false, true, true],
+    "error": null,
+    "prefix": [0, 112],
+    "result": null,
+    "steps": [
+      ["bool", [{"ref": "v111"}, false], {}, {"ref": "v112"}],
+      ["eq", [{"ref": "v106"}, {"ref": "v110"}], {}, {"ref": "v113"}],
+      ["bool", [{"ref": "v113"}, true], {}, {"ref": "v114"}],
+      ["eq", [{"ref": "v106"}, {"ref": "v110"}], {}, {"ref": "v115"}],
+      ["bool", [{"ref": "v115"}, true], {}, {"ref": "v116"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v117"}],
+      [
+        "call",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timedelta"}],
+        {"days": 1},
+        {"ref": "v118"}
+      ],
+      [
+        "truediv",
+        [
+          {"ref": "v118"},
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v119"}
+      ],
+      ["int", [{"ref": "v119"}, 2], {}, {"ref": "v120"}],
+      [
+        "mul",
+        [
+          0,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v121"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v121"}], {}, {"ref": "v122"}],
+      [
+        "mul",
+        [
+          1,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v123"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v123"}], {}, {"ref": "v124"}],
+      ["getattr", [{"ref": "v122"}, "strftime"], {}, {"ref": "v125"}],
+      ["call", [{"ref": "v125"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v126"}],
+      ["getattr", [{"ref": "v124"}, "strftime"], {}, {"ref": "v127"}],
+      ["call", [{"ref": "v127"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v128"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.np"}, "array"],
+        {},
+        {"ref": "v129"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v126"}
+        ],
+        {},
+        {"ref": "v130"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v128"}
+        ],
+        {},
+        {"ref": "v131"}
+      ],
+      ["call", [{"ref": "v129"}, [{"ref": "v130"}, {"ref": "v131"}]], {}, {"ref": "v132"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSM"
+        ],
+        {},
+        {"ref": "v133"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v134"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v132"}
+        ],
+        {"observer": {"ref": "v134"}, "ref_frame": {"ref": "v133"}},
+        {"ref": "v135"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSE"
+        ],
+        {},
+        {"ref": "v136"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v137"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v132"}
+        ],
+        {"observer": {"ref": "v137"}, "ref_frame": {"ref": "v136"}},
+        {"ref": "v138"}
+      ],
+      ["iter", [{"ref": "v132"}, 0], {}, {"ref": "v139"}],
+      ["iter", [{"ref": "v135"}, 0], {}, {"ref": "v140"}],
+      ["iter", [{"ref": "v138"}, 0], {}, {"ref": "v141"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v142"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v139"}
+        ],
+        {},
+        {"ref": "v143"}
+      ],
+      ["int", [{"ref": "v143"}, 2], {}, {"ref": "v144"}],
+      ["getitem", [{"ref": "v140"}, {"slice": [null, 3, null]}], {}, {"ref": "v145"}],
+      ["iter", [{"ref": "v145"}, 0], {}, {"ref": "v146"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v146>"
+        ],
+        {},
+        {"ref": "v147"}
+      ],
+      ["iter", [{"ref": "v145"}, 1], {}, {"ref": "v148"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v148>"
+        ],
+        {},
+        {"ref": "v149"}
+      ],
+      ["getitem", [{"ref": "v140"}, {"slice": [3, null, null]}], {}, {"ref": "v150"}],
+      ["iter", [{"ref": "v150"}, 0], {}, {"ref": "v151"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v151>"
+        ],
+        {},
+        {"ref": "v152"}
+      ],
+      ["iter", [{"ref": "v150"}, 1], {}, {"ref": "v153"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v153>"
+        ],
+        {},
+        {"ref": "v154"}
+      ],
+      ["getitem", [{"ref": "v141"}, {"slice": [null, 3, null]}], {}, {"ref": "v155"}],
+      ["iter", [{"ref": "v155"}, 0], {}, {"ref": "v156"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v156>"
+        ],
+        {},
+        {"ref": "v157"}
+      ],
+      ["iter", [{"ref": "v155"}, 1], {}, {"ref": "v158"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v158>"
+        ],
+        {},
+        {"ref": "v159"}
+      ],
+      ["getitem", [{"ref": "v141"}, {"slice": [3, null, null]}], {}, {"ref": "v160"}],
+      ["iter", [{"ref": "v160"}, 0], {}, {"ref": "v161"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v161>"
+        ],
+        {},
+        {"ref": "v162"}
+      ],
+      ["iter", [{"ref": "v160"}, 1], {}, {"ref": "v163"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v163>"
+        ],
+        {},
+        {"ref": "v164"}
+      ],
+      ["iter", [{"ref": "v132"}, 1], {}, {"ref": "v165"}],
+      ["iter", [{"ref": "v135"}, 1], {}, {"ref": "v166"}],
+      ["iter", [{"ref": "v138"}, 1], {}, {"ref": "v167"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v168"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v165"}
+        ],
+        {},
+        {"ref": "v169"}
+      ],
+      ["int", [{"ref": "v169"}, 2], {}, {"ref": "v170"}],
+      ["getitem", [{"ref": "v166"}, {"slice": [null, 3, null]}], {}, {"ref": "v171"}],
+      ["iter", [{"ref": "v171"}, 0], {}, {"ref": "v172"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v172>"
+        ],
+        {},
+        {"ref": "v173"}
+      ],
+      ["iter", [{"ref": "v171"}, 1], {}, {"ref": "v174"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v174>"
+        ],
+        {},
+        {"ref": "v175"}
+      ],
+      ["getitem", [{"ref": "v166"}, {"slice": [3, null, null]}], {}, {"ref": "v176"}],
+      ["iter", [{"ref": "v176"}, 0], {}, {"ref": "v177"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v177>"
+        ],
+        {},
+        {"ref": "v178"}
+      ],
+      ["iter", [{"ref": "v176"}, 1], {}, {"ref": "v179"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v179>"
+        ],
+        {},
+        {"ref": "v180"}
+      ],
+      ["getitem", [{"ref": "v167"}, {"slice": [null, 3, null]}], {}, {"ref": "v181"}],
+      ["iter", [{"ref": "v181"}, 0], {}, {"ref": "v182"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v182>"
+        ],
+        {},
+        {"ref": "v183"}
+      ],
+      ["iter", [{"ref": "v181"}, 1], {}, {"ref": "v184"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v184>"
+        ],
+        {},
+        {"ref": "v185"}
+      ],
+      ["getitem", [{"ref": "v167"}, {"slice": [3, null, null]}], {}, {"ref": "v186"}],
+      ["iter", [{"ref": "v186"}, 0], {}, {"ref": "v187"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v187>"
+        ],
+        {},
+        {"ref": "v188"}
+      ],
+      ["iter", [{"ref": "v186"}, 1], {}, {"ref": "v189"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v189>"
+        ],
+        {},
+        {"ref": "v190"}
+      ],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v191"}],
+      ["exit", [{"ref": "v94"}, null, null], {}, {"ref": "v192"}],
+      ["getattr", [{"ref": "v10"}, "batch_writer"], {}, {"ref": "v193"}],
+      [
+        "call",
+        [{"ref": "v193"}],
+        {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
+        {"ref": "v194"}
+      ],
+      ["enter", [{"ref": "v194"}], {}, {"ref": "v195"}],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v196"}],
+      [
+        "call",
+        [{"ref": "v196"}],
+        {
+          "Item": {
+            "instrument": "spice",
+            "instrument_version": "spice#<v117>",
+            "spice_kernels": {"mapping": [[{"ref": "v106"}, [{"ref": "v108"}]]]},
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v197"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v198"}],
+      [
+        "call",
+        [{"ref": "v198"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v142>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v157"}, {"ref": "v159"}],
+            "sc_position_GSM": [{"ref": "v147"}, {"ref": "v149"}],
+            "sc_velocity_GSE": [{"ref": "v162"}, {"ref": "v164"}],
+            "sc_velocity_GSM": [{"ref": "v152"}, {"ref": "v154"}],
+            "time_utc": {"ref": "v126"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v199"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v200"}],
+      [
+        "call",
+        [{"ref": "v200"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v168>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v183"}, {"ref": "v185"}],
+            "sc_position_GSM": [{"ref": "v173"}, {"ref": "v175"}],
+            "sc_velocity_GSE": [{"ref": "v188"}, {"ref": "v190"}],
+            "sc_velocity_GSM": [{"ref": "v178"}, {"ref": "v180"}],
+            "time_utc": {"ref": "v128"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v201"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v202"}],
+      [
+        "call",
+        [{"ref": "v202"}],
+        {
+          "Item": {
+            "ancillary_files": {},
+            "instrument": "ancillary",
+            "instrument_version": "ancillary#<v191>",
+            "software_versions": {"imap_data_access": "1.3.0", "imap_processing": "1.0.38"},
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v203"}
+      ],
+      ["exit", [{"ref": "v194"}, null, null], {}, {"ref": "v204"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "info"],
+        {},
+        {"ref": "v205"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "v205"},
+          "Inserted %d %s items for %s %s",
+          4,
+          "spacecraft",
+          {"ref": "v13"},
+          {"ref": "v14"}
+        ],
+        {},
+        {"ref": "v206"}
+      ]
+    ]
+  },
+  {
+    "choices": [true, false],
+    "error": {"exception": "KeyError", "message": "<v110>"},
+    "prefix": [0, 114],
+    "result": null,
+    "steps": [
+      ["bool", [{"ref": "v113"}, false], {}, {"ref": "v114"}],
+      [
+        "exit",
+        [
+          {"ref": "v94"},
+          {"type": "builtins.KeyError"},
+          {"exception": "KeyError", "message": "<v110>"}
+        ],
+        {},
+        {"ref": "v115"}
+      ],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "error"],
+        {},
+        {"ref": "v116"}
+      ],
+      ["getitem", [{"ref": "event"}, "day"], {}, {"ref": "v117"}],
+      [
+        "call",
+        [
+          {"ref": "v116"},
+          "FAILED %s %s %s: %s: %s",
+          "spacecraft",
+          {"ref": "v117"},
+          {"ref": "v14"},
+          "KeyError",
+          {"exception": "KeyError", "message": "<v110>"}
+        ],
+        {},
+        {"ref": "v118"}
+      ]
+    ]
+  },
+  {
+    "choices": [false, false, true],
+    "error": null,
+    "prefix": [1, 114],
+    "result": null,
+    "steps": [
+      ["bool", [{"ref": "v113"}, false], {}, {"ref": "v114"}],
+      ["eq", [{"ref": "v106"}, {"ref": "v110"}], {}, {"ref": "v115"}],
+      ["bool", [{"ref": "v115"}, true], {}, {"ref": "v116"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v117"}],
+      [
+        "call",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.timedelta"}],
+        {"days": 1},
+        {"ref": "v118"}
+      ],
+      [
+        "truediv",
+        [
+          {"ref": "v118"},
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v119"}
+      ],
+      ["int", [{"ref": "v119"}, 2], {}, {"ref": "v120"}],
+      [
+        "mul",
+        [
+          0,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v121"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v121"}], {}, {"ref": "v122"}],
+      [
+        "mul",
+        [
+          1,
+          {
+            "ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SPACECRAFT_CADENCE"
+          }
+        ],
+        {},
+        {"ref": "v123"}
+      ],
+      ["add", [{"ref": "v13"}, {"ref": "v123"}], {}, {"ref": "v124"}],
+      ["getattr", [{"ref": "v122"}, "strftime"], {}, {"ref": "v125"}],
+      ["call", [{"ref": "v125"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v126"}],
+      ["getattr", [{"ref": "v124"}, "strftime"], {}, {"ref": "v127"}],
+      ["call", [{"ref": "v127"}, "%Y-%m-%dT%H:%M:%S"], {}, {"ref": "v128"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.np"}, "array"],
+        {},
+        {"ref": "v129"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v126"}
+        ],
+        {},
+        {"ref": "v130"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et"},
+          {"ref": "v128"}
+        ],
+        {},
+        {"ref": "v131"}
+      ],
+      ["call", [{"ref": "v129"}, [{"ref": "v130"}, {"ref": "v131"}]], {}, {"ref": "v132"}],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSM"
+        ],
+        {},
+        {"ref": "v133"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v134"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v132"}
+        ],
+        {"observer": {"ref": "v134"}, "ref_frame": {"ref": "v133"}},
+        {"ref": "v135"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceFrame"},
+          "IMAP_GSE"
+        ],
+        {},
+        {"ref": "v136"}
+      ],
+      [
+        "getattr",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.SpiceBody"},
+          "EARTH"
+        ],
+        {},
+        {"ref": "v137"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state"},
+          {"ref": "v132"}
+        ],
+        {"observer": {"ref": "v137"}, "ref_frame": {"ref": "v136"}},
+        {"ref": "v138"}
+      ],
+      ["iter", [{"ref": "v132"}, 0], {}, {"ref": "v139"}],
+      ["iter", [{"ref": "v135"}, 0], {}, {"ref": "v140"}],
+      ["iter", [{"ref": "v138"}, 0], {}, {"ref": "v141"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v142"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v139"}
+        ],
+        {},
+        {"ref": "v143"}
+      ],
+      ["int", [{"ref": "v143"}, 2], {}, {"ref": "v144"}],
+      ["getitem", [{"ref": "v140"}, {"slice": [null, 3, null]}], {}, {"ref": "v145"}],
+      ["iter", [{"ref": "v145"}, 0], {}, {"ref": "v146"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v146>"
+        ],
+        {},
+        {"ref": "v147"}
+      ],
+      ["iter", [{"ref": "v145"}, 1], {}, {"ref": "v148"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v148>"
+        ],
+        {},
+        {"ref": "v149"}
+      ],
+      ["getitem", [{"ref": "v140"}, {"slice": [3, null, null]}], {}, {"ref": "v150"}],
+      ["iter", [{"ref": "v150"}, 0], {}, {"ref": "v151"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v151>"
+        ],
+        {},
+        {"ref": "v152"}
+      ],
+      ["iter", [{"ref": "v150"}, 1], {}, {"ref": "v153"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v153>"
+        ],
+        {},
+        {"ref": "v154"}
+      ],
+      ["getitem", [{"ref": "v141"}, {"slice": [null, 3, null]}], {}, {"ref": "v155"}],
+      ["iter", [{"ref": "v155"}, 0], {}, {"ref": "v156"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v156>"
+        ],
+        {},
+        {"ref": "v157"}
+      ],
+      ["iter", [{"ref": "v155"}, 1], {}, {"ref": "v158"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v158>"
+        ],
+        {},
+        {"ref": "v159"}
+      ],
+      ["getitem", [{"ref": "v141"}, {"slice": [3, null, null]}], {}, {"ref": "v160"}],
+      ["iter", [{"ref": "v160"}, 0], {}, {"ref": "v161"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v161>"
+        ],
+        {},
+        {"ref": "v162"}
+      ],
+      ["iter", [{"ref": "v160"}, 1], {}, {"ref": "v163"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v163>"
+        ],
+        {},
+        {"ref": "v164"}
+      ],
+      ["iter", [{"ref": "v132"}, 1], {}, {"ref": "v165"}],
+      ["iter", [{"ref": "v135"}, 1], {}, {"ref": "v166"}],
+      ["iter", [{"ref": "v138"}, 1], {}, {"ref": "v167"}],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v168"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns"},
+          {"ref": "v165"}
+        ],
+        {},
+        {"ref": "v169"}
+      ],
+      ["int", [{"ref": "v169"}, 2], {}, {"ref": "v170"}],
+      ["getitem", [{"ref": "v166"}, {"slice": [null, 3, null]}], {}, {"ref": "v171"}],
+      ["iter", [{"ref": "v171"}, 0], {}, {"ref": "v172"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v172>"
+        ],
+        {},
+        {"ref": "v173"}
+      ],
+      ["iter", [{"ref": "v171"}, 1], {}, {"ref": "v174"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v174>"
+        ],
+        {},
+        {"ref": "v175"}
+      ],
+      ["getitem", [{"ref": "v166"}, {"slice": [3, null, null]}], {}, {"ref": "v176"}],
+      ["iter", [{"ref": "v176"}, 0], {}, {"ref": "v177"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v177>"
+        ],
+        {},
+        {"ref": "v178"}
+      ],
+      ["iter", [{"ref": "v176"}, 1], {}, {"ref": "v179"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v179>"
+        ],
+        {},
+        {"ref": "v180"}
+      ],
+      ["getitem", [{"ref": "v167"}, {"slice": [null, 3, null]}], {}, {"ref": "v181"}],
+      ["iter", [{"ref": "v181"}, 0], {}, {"ref": "v182"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v182>"
+        ],
+        {},
+        {"ref": "v183"}
+      ],
+      ["iter", [{"ref": "v181"}, 1], {}, {"ref": "v184"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v184>"
+        ],
+        {},
+        {"ref": "v185"}
+      ],
+      ["getitem", [{"ref": "v167"}, {"slice": [3, null, null]}], {}, {"ref": "v186"}],
+      ["iter", [{"ref": "v186"}, 0], {}, {"ref": "v187"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v187>"
+        ],
+        {},
+        {"ref": "v188"}
+      ],
+      ["iter", [{"ref": "v186"}, 1], {}, {"ref": "v189"}],
+      [
+        "call",
+        [
+          {"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.Decimal"},
+          "<v189>"
+        ],
+        {},
+        {"ref": "v190"}
+      ],
+      ["format", [{"ref": "v14"}, ""], {}, {"ref": "v191"}],
+      ["exit", [{"ref": "v94"}, null, null], {}, {"ref": "v192"}],
+      ["getattr", [{"ref": "v10"}, "batch_writer"], {}, {"ref": "v193"}],
+      [
+        "call",
+        [{"ref": "v193"}],
+        {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
+        {"ref": "v194"}
+      ],
+      ["enter", [{"ref": "v194"}], {}, {"ref": "v195"}],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v196"}],
+      [
+        "call",
+        [{"ref": "v196"}],
+        {
+          "Item": {
+            "instrument": "spice",
+            "instrument_version": "spice#<v117>",
+            "spice_kernels": {
+              "mapping": [
+                [{"ref": "v106"}, [{"ref": "v104"}, {"ref": "v108"}]],
+                [{"ref": "v110"}, []]
+              ]
+            },
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v197"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v198"}],
+      [
+        "call",
+        [{"ref": "v198"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v142>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v157"}, {"ref": "v159"}],
+            "sc_position_GSM": [{"ref": "v147"}, {"ref": "v149"}],
+            "sc_velocity_GSE": [{"ref": "v162"}, {"ref": "v164"}],
+            "sc_velocity_GSM": [{"ref": "v152"}, {"ref": "v154"}],
+            "time_utc": {"ref": "v126"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v199"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v200"}],
+      [
+        "call",
+        [{"ref": "v200"}],
+        {
+          "Item": {
+            "instrument": "spacecraft",
+            "instrument_version": "spacecraft#<v168>",
+            "kernel_set_key": {"ref": "v90"},
+            "sc_position_GSE": [{"ref": "v183"}, {"ref": "v185"}],
+            "sc_position_GSM": [{"ref": "v173"}, {"ref": "v175"}],
+            "sc_velocity_GSE": [{"ref": "v188"}, {"ref": "v190"}],
+            "sc_velocity_GSM": [{"ref": "v178"}, {"ref": "v180"}],
+            "time_utc": {"ref": "v128"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v201"}
+      ],
+      ["getattr", [{"ref": "v195"}, "put_item"], {}, {"ref": "v202"}],
+      [
+        "call",
+        [{"ref": "v202"}],
+        {
+          "Item": {
+            "ancillary_files": {},
+            "instrument": "ancillary",
+            "instrument_version": "ancillary#<v191>",
+            "software_versions": {"imap_data_access": "1.3.0", "imap_processing": "1.0.38"},
+            "time_utc": {"ref": "v90"},
+            "ttj2000ns": 2
+          }
+        },
+        {"ref": "v203"}
+      ],
+      ["exit", [{"ref": "v194"}, null, null], {}, {"ref": "v204"}],
+      [
+        "getattr",
+        [{"ref": "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.logger"}, "info"],
+        {},
+        {"ref": "v205"}
+      ],
+      [
+        "call",
+        [
+          {"ref": "v205"},
+          "Inserted %d %s items for %s %s",
+          4,
+          "spacecraft",
+          {"ref": "v13"},
+          {"ref": "v14"}
+        ],
+        {},
+        {"ref": "v206"}
+      ]
+    ]
+  }
+]
