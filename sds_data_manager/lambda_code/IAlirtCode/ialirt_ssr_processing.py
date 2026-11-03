@@ -431,187 +431,6 @@ def trim_packets(combined: xr.Dataset, day: datetime) -> xr.Dataset:
     return combined.sel(epoch=slice(day_start - buffer, day_end + buffer))
 
 
-def process_mag(
-    combined: xr.Dataset, day: datetime, download_dir: Path
-) -> tuple[list[dict], dict]:
-    """Process MAG.
-
-    Parameters
-    ----------
-    combined : xr.Dataset
-        L0 parsed data.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where ancillary files are downloaded.
-
-    Returns
-    -------
-    result : list[dict]
-        MAG data products.
-    ancillary_files : dict
-        Ancillary filenames used, keyed by instrument_descriptor.
-
-    Notes
-    -----
-    Same as realtime, except the ancillary files are chosen for the
-    day being processed.
-    """
-    ialirt_cal_path = get_ancillary("mag", "ialirt-calibration", day, download_dir)
-    l1b_cal_path = get_ancillary("mag", "l1b-calibration", day, download_dir)
-    result = process_packet(combined, load_cdf(l1b_cal_path), load_cdf(ialirt_cal_path))
-    ancillary_files = {
-        "mag_ialirt-calibration": ialirt_cal_path.name,
-        "mag_l1b-calibration": l1b_cal_path.name,
-    }
-    return result, ancillary_files
-
-
-def process_swe_ssr(
-    combined: xr.Dataset, day: datetime, download_dir: Path
-) -> tuple[list[dict], dict]:
-    """Process SWE.
-
-    Parameters
-    ----------
-    combined : xr.Dataset
-        L0 parsed data.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where ancillary files are downloaded.
-
-    Returns
-    -------
-    result : list[dict]
-        SWE data products.
-    ancillary_files : dict
-        Ancillary filenames used, keyed by instrument_descriptor.
-
-    Notes
-    -----
-    Same as realtime, except the ancillary file is chosen for the
-    day being processed.
-    """
-    cal_path = get_ancillary("swe", "l1b-in-flight-cal", day, download_dir)
-    result = process_swe(combined, [cal_path])
-    return result, {"swe_l1b-in-flight-cal": cal_path.name}
-
-
-def process_codice_lo(
-    combined: xr.Dataset, day: datetime, download_dir: Path
-) -> tuple[list[dict], dict]:
-    """Process CoDICE-Lo.
-
-    CoDICE-Lo uses the same efficiency and geometric factor tables as
-    regular processing.
-
-    Parameters
-    ----------
-    combined : xr.Dataset
-        L0 parsed data.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where ancillary files are downloaded.
-
-    Returns
-    -------
-    result : list[dict]
-        CoDICE-Lo data products.
-    ancillary_files : dict
-        Ancillary filenames used, keyed by instrument_descriptor.
-
-    Notes
-    -----
-    Same as realtime, except the ancillary files are chosen for the
-    day being processed.
-    """
-    lut_path = get_ancillary("codice", "l1a-sci-lut", day, download_dir)
-    efficiency_path = get_ancillary("codice", "l2-lo-efficiency", day, download_dir)
-    gfactor_path = get_ancillary("codice", "l2-lo-gfactor", day, download_dir)
-    result, _ = process_codice(
-        combined, lut_path, efficiency_path, "codice_lo", gfactor_path
-    )
-    ancillary_files = {
-        "codice_l1a-sci-lut": lut_path.name,
-        "codice_l2-lo-efficiency": efficiency_path.name,
-        "codice_l2-lo-gfactor": gfactor_path.name,
-    }
-    return result, ancillary_files
-
-
-def process_codice_hi(
-    combined: xr.Dataset, day: datetime, download_dir: Path
-) -> tuple[list[dict], dict]:
-    """Process CoDICE-Hi.
-
-    CoDICE-Hi uses its own I-ALiRT efficiency table and no geometric factor.
-
-    Parameters
-    ----------
-    combined : xr.Dataset
-        L0 parsed data.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where ancillary files are downloaded.
-
-    Returns
-    -------
-    result : list[dict]
-        CoDICE-Hi data products.
-    ancillary_files : dict
-        Ancillary filenames used, keyed by instrument_descriptor.
-
-    Notes
-    -----
-    Same as realtime, except the ancillary files are chosen for the
-    day being processed.
-    """
-    lut_path = get_ancillary("codice", "l1a-sci-lut", day, download_dir)
-    efficiency_path = get_ancillary(
-        "codice", "l2-hi-ialirt-efficiency", day, download_dir
-    )
-    _, result = process_codice(combined, lut_path, efficiency_path, "codice_hi")
-    ancillary_files = {
-        "codice_l1a-sci-lut": lut_path.name,
-        "codice_l2-hi-ialirt-efficiency": efficiency_path.name,
-    }
-    return result, ancillary_files
-
-
-def process_swapi(
-    combined: xr.Dataset, day: datetime, download_dir: Path
-) -> tuple[list[dict], dict]:
-    """Process SWAPI.
-
-    Parameters
-    ----------
-    combined : xr.Dataset
-        L0 parsed data.
-    day : datetime
-        The day being processed.
-    download_dir : Path
-        The directory where ancillary files are downloaded.
-
-    Returns
-    -------
-    result : list[dict]
-        SWAPI data products.
-    ancillary_files : dict
-        Ancillary filenames used, keyed by instrument_descriptor.
-
-    Notes
-    -----
-    Same as realtime, except the ancillary file is chosen for the
-    day being processed.
-    """
-    cal_path = get_ancillary("swapi", "esa-unit-conversion", day, download_dir)
-    result = process_swapi_ialirt(combined, pd.read_csv(cal_path))
-    return result, {"swapi_esa-unit-conversion": cal_path.name}
-
-
 def process_spacecraft_status(combined: xr.Dataset) -> list[dict]:
     """Process spacecraft status, one product per minute.
 
@@ -891,20 +710,55 @@ def process_algorithms(
     Return ancillary filenames, or None for empty or partially empty products
     so the handler can return before writing any items. Items are written only
     after the handler exits the SPICE kernel pool successfully.
+
+    Ancillary files are chosen for the day being processed.
     """
     if instrument == "mag":
-        result, ancillary_files = process_mag(combined, day, DOWNLOAD_DIR)
+        ialirt_cal_path = get_ancillary("mag", "ialirt-calibration", day, DOWNLOAD_DIR)
+        l1b_cal_path = get_ancillary("mag", "l1b-calibration", day, DOWNLOAD_DIR)
+        result = process_packet(
+            combined, load_cdf(l1b_cal_path), load_cdf(ialirt_cal_path)
+        )
+        ancillary_files = {
+            "mag_ialirt-calibration": ialirt_cal_path.name,
+            "mag_l1b-calibration": l1b_cal_path.name,
+        }
     elif instrument == "hit":
         # HIT has no ancillary files.
         result, ancillary_files = process_hit(combined), {}
     elif instrument == "swe":
-        result, ancillary_files = process_swe_ssr(combined, day, DOWNLOAD_DIR)
+        cal_path = get_ancillary("swe", "l1b-in-flight-cal", day, DOWNLOAD_DIR)
+        result = process_swe(combined, [cal_path])
+        ancillary_files = {"swe_l1b-in-flight-cal": cal_path.name}
     elif instrument == "codice_lo":
-        result, ancillary_files = process_codice_lo(combined, day, DOWNLOAD_DIR)
+        # CoDICE-Lo uses the same efficiency and geometric factor tables as
+        # regular processing.
+        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
+        efficiency_path = get_ancillary("codice", "l2-lo-efficiency", day, DOWNLOAD_DIR)
+        gfactor_path = get_ancillary("codice", "l2-lo-gfactor", day, DOWNLOAD_DIR)
+        result, _ = process_codice(
+            combined, lut_path, efficiency_path, "codice_lo", gfactor_path
+        )
+        ancillary_files = {
+            "codice_l1a-sci-lut": lut_path.name,
+            "codice_l2-lo-efficiency": efficiency_path.name,
+            "codice_l2-lo-gfactor": gfactor_path.name,
+        }
     elif instrument == "codice_hi":
-        result, ancillary_files = process_codice_hi(combined, day, DOWNLOAD_DIR)
+        # CoDICE-Hi uses its own I-ALiRT efficiency table and no geometric factor.
+        lut_path = get_ancillary("codice", "l1a-sci-lut", day, DOWNLOAD_DIR)
+        efficiency_path = get_ancillary(
+            "codice", "l2-hi-ialirt-efficiency", day, DOWNLOAD_DIR
+        )
+        _, result = process_codice(combined, lut_path, efficiency_path, "codice_hi")
+        ancillary_files = {
+            "codice_l1a-sci-lut": lut_path.name,
+            "codice_l2-hi-ialirt-efficiency": efficiency_path.name,
+        }
     elif instrument == "swapi":
-        result, ancillary_files = process_swapi(combined, day, DOWNLOAD_DIR)
+        cal_path = get_ancillary("swapi", "esa-unit-conversion", day, DOWNLOAD_DIR)
+        result = process_swapi_ialirt(combined, pd.read_csv(cal_path))
+        ancillary_files = {"swapi_esa-unit-conversion": cal_path.name}
     elif instrument == "spacecraft_status":
         # Spacecraft status has no ancillary files.
         result, ancillary_files = process_spacecraft_status(combined), {}
