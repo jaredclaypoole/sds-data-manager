@@ -268,7 +268,7 @@ def download_spice_files(
     List is priority ordered so furnishing in order results in correct SPICE priority.
 
     Realtime saves kernels to EFS and loads them here. SSR saves them
-    to /tmp and loads them later in process_day.
+    to /tmp and loads them later in lambda_handler.
     """
     imap_data_access.config["DATA_DIR"] = download_dir
     dependencies.download_all_files()
@@ -878,103 +878,7 @@ def ancillary_item(
     }
 
 
-def process_day(instrument: str, day: datetime, version: str, url: str, table):  # noqa: PLR0912
-    """Process one day of I-ALiRT SSR data for one instrument.
-
-    Parameters
-    ----------
-    instrument : str
-        The instrument to process, e.g. "mag".
-    day : datetime
-        The day to process.
-    version : str
-        The data version, e.g. "v001".
-    url : str
-        The IMAP data access API URL.
-    table : dynamodb.Table
-        The SSR DynamoDB table.
-    """
-    # /tmp persists between warm invocations. Clear it first in case a
-    # previous invocation failed or timed out before cleaning up.
-    shutil.rmtree(DOWNLOAD_DIR, ignore_errors=True)
-    DOWNLOAD_DIR.mkdir(parents=True)
-
-    start = time.perf_counter()
-    kernel_types = KERNELS if instrument in GEOMETRY_INSTRUMENTS else TIME_KERNELS
-    dependencies = get_latest_spice_kernels(url, day, kernel_types)
-    spice_files = download_spice_files(dependencies, DOWNLOAD_DIR)
-    size_mb = sum(path.stat().st_size for path in spice_files) / 1e6
-    logger.info(
-        "Downloaded %d SPICE files (%.1f MB) in %.1f s",
-        len(spice_files),
-        size_mb,
-        time.perf_counter() - start,
-    )
-
-    kernel_set_key = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
-
-    # Only these kernels are loaded inside the block. They are unloaded when
-    # the block exits, even on an error, so none carry over to the next
-    # invocation in a warm Lambda.
-    with spiceypy.KernelPool([str(path) for path in spice_files]):
-        kernel_set_key_ttj2000ns = int(et_to_ttj2000ns(str_to_et(kernel_set_key)))
-        items = [
-            spice_item(dependencies, version, kernel_set_key, kernel_set_key_ttj2000ns)
-        ]
-        if instrument == "spacecraft":
-            # The spacecraft has no ancillary files.
-            ancillary_files = {}
-            items += spacecraft_items(day, version, kernel_set_key)
-        else:
-            combined = parse_packets(query_filenames(day), DOWNLOAD_DIR)
-            check_day_coverage(combined, day)
-            combined = trim_packets(combined, day)
-            if instrument == "mag":
-                result, ancillary_files = process_mag(combined, day, DOWNLOAD_DIR)
-            elif instrument == "hit":
-                # HIT has no ancillary files.
-                result, ancillary_files = process_hit(combined), {}
-            elif instrument == "swe":
-                result, ancillary_files = process_swe_ssr(combined, day, DOWNLOAD_DIR)
-            elif instrument == "codice_lo":
-                result, ancillary_files = process_codice_lo(combined, day, DOWNLOAD_DIR)
-            elif instrument == "codice_hi":
-                result, ancillary_files = process_codice_hi(combined, day, DOWNLOAD_DIR)
-            elif instrument == "swapi":
-                result, ancillary_files = process_swapi(combined, day, DOWNLOAD_DIR)
-            elif instrument == "spacecraft_status":
-                # Spacecraft status has no ancillary files.
-                result, ancillary_files = process_spacecraft_status(combined), {}
-            else:
-                raise ValueError(f"Unknown instrument: {instrument}")
-            if not (any(result) and all(result)):
-                logger.info("No %s products for %s %s", instrument, day, version)
-                return
-            result = trim_to_day(result, day)
-            logger.info("[%s] results populated for [%s]", len(result), instrument)
-            items += format_items(result, instrument, version, kernel_set_key)
-            if instrument == "mag":
-                items += mag_hk_items(result, version, kernel_set_key)
-        # Always add the ancillary item so every run records its software versions.
-        items.append(
-            ancillary_item(
-                ancillary_files,
-                version,
-                kernel_set_key,
-                kernel_set_key_ttj2000ns,
-            )
-        )
-
-    with table.batch_writer(
-        overwrite_by_pkeys=["instrument_version", "time_utc"]
-    ) as batch:
-        for item in items:
-            batch.put_item(Item=item)
-
-    logger.info("Inserted %d %s items for %s %s", len(items), instrument, day, version)
-
-
-def lambda_handler(event, context):
+def lambda_handler(event, context):  # noqa: PLR0912, PLR0915
     """Process one day of I-ALiRT SSR data for one instrument.
 
     Parameters
@@ -1001,7 +905,94 @@ def lambda_handler(event, context):
             Name=os.environ["SSM_API_KEY_PARAMETER"], WithDecryption=True
         )
         imap_data_access.config["API_KEY"] = ssm_response["Parameter"]["Value"]
-        process_day(instrument, day, version, url, table)
+        # /tmp persists between warm invocations. Clear it first in case a
+        # previous invocation failed or timed out before cleaning up.
+        shutil.rmtree(DOWNLOAD_DIR, ignore_errors=True)
+        DOWNLOAD_DIR.mkdir(parents=True)
+
+        start = time.perf_counter()
+        kernel_types = KERNELS if instrument in GEOMETRY_INSTRUMENTS else TIME_KERNELS
+        dependencies = get_latest_spice_kernels(url, day, kernel_types)
+        spice_files = download_spice_files(dependencies, DOWNLOAD_DIR)
+        size_mb = sum(path.stat().st_size for path in spice_files) / 1e6
+        logger.info(
+            "Downloaded %d SPICE files (%.1f MB) in %.1f s",
+            len(spice_files),
+            size_mb,
+            time.perf_counter() - start,
+        )
+
+        kernel_set_key = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
+
+        # Only these kernels are loaded inside the block. They are unloaded when
+        # the block exits, even on an error, so none carry over to the next
+        # invocation in a warm Lambda.
+        with spiceypy.KernelPool([str(path) for path in spice_files]):
+            kernel_set_key_ttj2000ns = int(et_to_ttj2000ns(str_to_et(kernel_set_key)))
+            items = [
+                spice_item(
+                    dependencies, version, kernel_set_key, kernel_set_key_ttj2000ns
+                )
+            ]
+            if instrument == "spacecraft":
+                # The spacecraft has no ancillary files.
+                ancillary_files = {}
+                items += spacecraft_items(day, version, kernel_set_key)
+            else:
+                combined = parse_packets(query_filenames(day), DOWNLOAD_DIR)
+                check_day_coverage(combined, day)
+                combined = trim_packets(combined, day)
+                if instrument == "mag":
+                    result, ancillary_files = process_mag(combined, day, DOWNLOAD_DIR)
+                elif instrument == "hit":
+                    # HIT has no ancillary files.
+                    result, ancillary_files = process_hit(combined), {}
+                elif instrument == "swe":
+                    result, ancillary_files = process_swe_ssr(
+                        combined, day, DOWNLOAD_DIR
+                    )
+                elif instrument == "codice_lo":
+                    result, ancillary_files = process_codice_lo(
+                        combined, day, DOWNLOAD_DIR
+                    )
+                elif instrument == "codice_hi":
+                    result, ancillary_files = process_codice_hi(
+                        combined, day, DOWNLOAD_DIR
+                    )
+                elif instrument == "swapi":
+                    result, ancillary_files = process_swapi(combined, day, DOWNLOAD_DIR)
+                elif instrument == "spacecraft_status":
+                    # Spacecraft status has no ancillary files.
+                    result, ancillary_files = process_spacecraft_status(combined), {}
+                else:
+                    raise ValueError(f"Unknown instrument: {instrument}")
+                if not (any(result) and all(result)):
+                    logger.info("No %s products for %s %s", instrument, day, version)
+                    return
+                result = trim_to_day(result, day)
+                logger.info("[%s] results populated for [%s]", len(result), instrument)
+                items += format_items(result, instrument, version, kernel_set_key)
+                if instrument == "mag":
+                    items += mag_hk_items(result, version, kernel_set_key)
+            # Always add the ancillary item so every run records its software versions.
+            items.append(
+                ancillary_item(
+                    ancillary_files,
+                    version,
+                    kernel_set_key,
+                    kernel_set_key_ttj2000ns,
+                )
+            )
+
+        with table.batch_writer(
+            overwrite_by_pkeys=["instrument_version", "time_utc"]
+        ) as batch:
+            for item in items:
+                batch.put_item(Item=item)
+
+        logger.info(
+            "Inserted %d %s items for %s %s", len(items), instrument, day, version
+        )
     except Exception as e:
         logger.error(
             "FAILED %s %s %s: %s: %s",
