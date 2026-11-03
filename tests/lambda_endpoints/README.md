@@ -5,10 +5,11 @@ both `ialirt_ssr_processing.py` and `ialirt_ssr_utils.py`. Neither module's
 functions are mocked. The committed JSON files in
 `tests/lambda_endpoints/ssr_traces/` record the original implementation's ordered
 external calls, positional and keyword arguments, return/exception outcome, and
-final data-access configuration. Arrays that fit within 100 columns are formatted
-on one line, including short call records; larger structures use two-space
-indentation. These are characterization tests: existing
-behavior is the baseline, including any existing bugs.
+final data-access configuration. Arrays and dictionaries that fit within 100
+columns are formatted on one line, including short call records. The width check
+includes indentation, dictionary keys, and trailing commas; larger structures use
+two-space indentation. Individual strings remain unbroken. These are
+characterization tests: existing behavior is the baseline, including any existing bugs.
 
 ## Running during a refactor
 

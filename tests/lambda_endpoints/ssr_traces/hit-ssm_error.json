@@ -6,9 +6,6 @@
     ["ssm.get_parameter", [], {"Name": "/ssr/api-key", "WithDecryption": true}]
   ],
   "config": {},
-  "error": {
-    "exception": "RuntimeError",
-    "message": "ssm_error"
-  },
+  "error": {"exception": "RuntimeError", "message": "ssm_error"},
   "result": null
 }

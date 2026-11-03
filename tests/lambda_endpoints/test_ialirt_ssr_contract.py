@@ -60,23 +60,27 @@ CASES = (
 )
 
 
-def format_trace(value, indent=0):
-    """Render JSON with two-space indentation and arrays fitting 100 columns inline."""
+def format_trace(value, indent=0, width=100):
+    """Render JSON with two-space indentation and short containers inline."""
     compact = json.dumps(value, sort_keys=True)
-    if isinstance(value, list) and indent + len(compact) <= 100:
+    if indent + len(compact) <= width:
         return compact
     if isinstance(value, dict) and value:
-        entries = [
-            " " * (indent + 2)
-            + json.dumps(key)
-            + ": "
-            + format_trace(value[key], indent + 2)
-            for key in sorted(value)
-        ]
+        entries = []
+        for index, key in enumerate(sorted(value)):
+            prefix = json.dumps(key) + ": "
+            comma = int(index < len(value) - 1)
+            entries.append(
+                " " * (indent + 2)
+                + prefix
+                + format_trace(value[key], indent + 2, 100 - len(prefix) - comma)
+            )
         return "{\n" + ",\n".join(entries) + "\n" + " " * indent + "}"
     if isinstance(value, list) and value:
         entries = [
-            " " * (indent + 2) + format_trace(item, indent + 2) for item in value
+            " " * (indent + 2)
+            + format_trace(item, indent + 2, 100 - int(index < len(value) - 1))
+            for index, item in enumerate(value)
         ]
         return "[\n" + ",\n".join(entries) + "\n" + " " * indent + "]"
     return compact

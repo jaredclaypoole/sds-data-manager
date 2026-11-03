@@ -22,12 +22,7 @@
     ],
     ["response.raise_for_status", [], {}]
   ],
-  "config": {
-    "API_KEY": "fixture-key"
-  },
-  "error": {
-    "exception": "RuntimeError",
-    "message": "http_error"
-  },
+  "config": {"API_KEY": "fixture-key"},
+  "error": {"exception": "RuntimeError", "message": "http_error"},
   "result": null
 }

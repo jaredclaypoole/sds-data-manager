@@ -58,9 +58,7 @@
         "/ssr-fixture/20261007.pkts",
         "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
-      {
-        "use_derived_value": false
-      }
+      {"use_derived_value": false}
     ],
     ["imap_data_access.download", ["20261008.pkts"], {}],
     [
@@ -69,9 +67,7 @@
         "/ssr-fixture/20261008.pkts",
         "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
-      {
-        "use_derived_value": false
-      }
+      {"use_derived_value": false}
     ],
     ["imap_data_access.download", ["20261009.pkts"], {}],
     [
@@ -80,9 +76,7 @@
         "/ssr-fixture/20261009.pkts",
         "/imap-processing-fixture/ialirt/packet_definitions/ialirt.xml"
       ],
-      {
-        "use_derived_value": false
-      }
+      {"use_derived_value": false}
     ],
     ["str_yyyymmdd_to_ttj2000ns", ["20261008"], {}],
     ["str_yyyymmdd_to_ttj2000ns", ["20261009"], {}],
@@ -129,9 +123,7 @@
                 "dims": ["epoch"]
               }
             },
-            "dims": {
-              "epoch": 8
-            }
+            "dims": {"epoch": 8}
           }
         },
         ["/ssr-fixture/l1b-in-flight-cal.cdf"]
@@ -166,9 +158,7 @@
           "instrument_version": "swe#v001",
           "kernel_set_key": "2026-11-01T00:00:00.000000",
           "time_utc": "2026-10-08T12:00:00",
-          "value": {
-            "decimal": "1.25"
-          }
+          "value": {"decimal": "1.25"}
         }
       }
     ],
@@ -177,15 +167,10 @@
       [],
       {
         "Item": {
-          "ancillary_files": {
-            "swe_l1b-in-flight-cal": "l1b-in-flight-cal.cdf"
-          },
+          "ancillary_files": {"swe_l1b-in-flight-cal": "l1b-in-flight-cal.cdf"},
           "instrument": "ancillary",
           "instrument_version": "ancillary#v001",
-          "software_versions": {
-            "imap_data_access": "fixture",
-            "imap_processing": "fixture"
-          },
+          "software_versions": {"imap_data_access": "fixture", "imap_processing": "fixture"},
           "time_utc": "2026-11-01T00:00:00.000000",
           "ttj2000ns": 2073600000000000
         }
@@ -193,10 +178,7 @@
     ],
     ["batch.__exit__", [null, null], {}]
   ],
-  "config": {
-    "API_KEY": "fixture-key",
-    "DATA_DIR": "/ssr-fixture"
-  },
+  "config": {"API_KEY": "fixture-key", "DATA_DIR": "/ssr-fixture"},
   "error": null,
   "result": null
 }
