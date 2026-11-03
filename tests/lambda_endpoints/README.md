@@ -30,10 +30,12 @@ processes; all other argument list order is retained.
 The 21 scenarios cover all eight instruments, unknown instruments, empty and
 partially empty products, all four packet-coverage failures, missing L0 and
 ancillary files, and failures in SSM, HTTP, science processing, and DynamoDB
-writes. Packet fixtures include a sequence-counter rollover and duplicates
-across files. Ancillary fixtures include expired files and an end date equal
-to the processing day. Both modules reach 100% statement and branch coverage
-from these handler invocations alone.
+writes. Each packet file contributes distinct data, with duplicates across files,
+unsorted input, and a sequence-counter rollover. Packets at both trimming-buffer
+boundaries are retained, while packets just outside them are removed. Gap
+scenarios modify every overlapping copy consistently. Ancillary fixtures include
+expired files and an end date equal to the processing day. Both modules reach
+100% statement and branch coverage from these handler invocations alone.
 
 ## Recorded boundary and limits
 

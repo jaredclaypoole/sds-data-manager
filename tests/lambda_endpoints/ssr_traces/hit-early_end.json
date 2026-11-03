@@ -86,7 +86,7 @@
     ],
     ["str_yyyymmdd_to_ttj2000ns", ["20261008"], {}],
     ["str_yyyymmdd_to_ttj2000ns", ["20261009"], {}],
-    ["ttj2000ns_to_et", [30000000000], {}],
+    ["ttj2000ns_to_et", [86399000000000], {}],
     ["et_to_utc", [42.0], {}],
     [
       "KernelPool.__exit__",

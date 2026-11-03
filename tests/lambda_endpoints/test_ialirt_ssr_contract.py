@@ -276,11 +276,25 @@ def boundary(monkeypatch):  # noqa: PLR0915
         effect=lambda filename: Path("/ssr-fixture") / filename,
         name="imap_data_access.download",
     )
-    epoch = np.array([-30, 0, 30, 86400, 86430]) * 10**9
-    packets = xr.Dataset(
-        {"src_seq_ctr": ("epoch", [16383, 0, 1, 2, 3])}, coords={"epoch": epoch}
-    )
-    recorder.patch(utils, "packet_file_to_datasets", result={478: packets})
+    # Distinct files overlap at midnight and just before the next midnight.
+    # Include both buffer boundaries and packets just outside them; leave the
+    # final file unsorted so the processor arguments also characterize sorting.
+    packets_by_filename = {
+        filename: xr.Dataset(
+            {"src_seq_ctr": ("epoch", counters)},
+            coords={"epoch": np.array(seconds) * 10**9},
+        )
+        for filename, seconds, counters in (
+            ("20261007.pkts", [-601, -600, -30, 0], [16381, 16382, 16383, 0]),
+            ("20261008.pkts", [0, 30, 86399], [0, 1, 2]),
+            ("20261009.pkts", [86430, 86399, 86400, 87000, 87001], [4, 2, 3, 5, 6]),
+        )
+    }
+
+    def decode_packets(path, *args, **kwargs):
+        return {478: packets_by_filename[path.name].copy(deep=True)}
+
+    recorder.patch(utils, "packet_file_to_datasets", effect=decode_packets)
     recorder.patch(
         processing,
         "str_yyyymmdd_to_ttj2000ns",
@@ -320,7 +334,11 @@ def boundary(monkeypatch):  # noqa: PLR0915
         processing.pd, "read_csv", result={"calibration": "csv"}, name="pd.read_csv"
     )
     return SimpleNamespace(
-        recorder=recorder, packets=packets, response=response, ssm=ssm, batch=batch
+        recorder=recorder,
+        packets_by_filename=packets_by_filename,
+        response=response,
+        ssm=ssm,
+        batch=batch,
     )
 
 
@@ -336,20 +354,22 @@ def test_lambda_dependency_contract(boundary, monkeypatch, instrument, scenario)
             [] if scenario == "empty" else [{"met_in_utc": "2026-10-08T12:00:00"}, {}],
         ).side_effect
     elif scenario in {"no_packets", "late_start", "early_end", "sequence_gap"}:
-        packets = boundary.packets
-        if scenario == "no_packets":
-            packets = packets.isel(epoch=[])
-        elif scenario == "late_start":
-            packets = packets.assign_coords(
-                epoch=np.array([-30, 61, 90, 86400, 86430]) * 10**9
-            )
-        elif scenario == "early_end":
-            packets = packets.isel(epoch=slice(0, 3))
-        else:
-            packets = packets.assign(src_seq_ctr=("epoch", [16383, 0, 2, 3, 4]))
-        utils.packet_file_to_datasets.side_effect = boundary.recorder.function(
-            "packet_file_to_datasets", {478: packets}
-        ).side_effect
+        for filename, source_packets in boundary.packets_by_filename.items():
+            epoch = source_packets["epoch"].values
+            if scenario == "no_packets":
+                packets = source_packets.isel(epoch=[])
+            elif scenario == "late_start":
+                shifted = np.where(epoch == 0, 61 * 10**9, epoch)
+                packets = source_packets.assign_coords(
+                    epoch=np.where(epoch == 30 * 10**9, 90 * 10**9, shifted)
+                )
+            elif scenario == "early_end":
+                packets = source_packets.isel(epoch=epoch < DAY_NS)
+            else:
+                packets = source_packets.assign(
+                    src_seq_ctr=source_packets["src_seq_ctr"] + (epoch >= 30 * 10**9)
+                )
+            boundary.packets_by_filename[filename] = packets
     elif scenario in {"missing_l0", "missing_ancillary"}:
         original_query = imap_data_access.query.side_effect
 

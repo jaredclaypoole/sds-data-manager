@@ -97,6 +97,34 @@
             "coords": {
               "epoch": {
                 "attrs": {},
+                "data": [-600000000000],
+                "dims": ["epoch"]
+              }
+            },
+            "data_vars": {
+              "src_seq_ctr": {
+                "attrs": {},
+                "data": [16382],
+                "dims": ["epoch"]
+              }
+            },
+            "dims": {
+              "epoch": 1
+            }
+          }
+        }
+      ],
+      {}
+    ],
+    [
+      "process_status",
+      [
+        {
+          "dataset": {
+            "attrs": {},
+            "coords": {
+              "epoch": {
+                "attrs": {},
                 "data": [-30000000000],
                 "dims": ["epoch"]
               }
@@ -153,6 +181,34 @@
             "coords": {
               "epoch": {
                 "attrs": {},
+                "data": [86399000000000],
+                "dims": ["epoch"]
+              }
+            },
+            "data_vars": {
+              "src_seq_ctr": {
+                "attrs": {},
+                "data": [2],
+                "dims": ["epoch"]
+              }
+            },
+            "dims": {
+              "epoch": 1
+            }
+          }
+        }
+      ],
+      {}
+    ],
+    [
+      "process_status",
+      [
+        {
+          "dataset": {
+            "attrs": {},
+            "coords": {
+              "epoch": {
+                "attrs": {},
                 "data": [86430000000000],
                 "dims": ["epoch"]
               }
@@ -160,7 +216,35 @@
             "data_vars": {
               "src_seq_ctr": {
                 "attrs": {},
-                "data": [3],
+                "data": [4],
+                "dims": ["epoch"]
+              }
+            },
+            "dims": {
+              "epoch": 1
+            }
+          }
+        }
+      ],
+      {}
+    ],
+    [
+      "process_status",
+      [
+        {
+          "dataset": {
+            "attrs": {},
+            "coords": {
+              "epoch": {
+                "attrs": {},
+                "data": [87000000000000],
+                "dims": ["epoch"]
+              }
+            },
+            "data_vars": {
+              "src_seq_ctr": {
+                "attrs": {},
+                "data": [5],
                 "dims": ["epoch"]
               }
             },
@@ -188,6 +272,51 @@
           },
           "time_utc": "2026-11-01T00:00:00.000000",
           "ttj2000ns": 42
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "fixture",
+          "instrument_version": "spacecraft_status#v001",
+          "kernel_set_key": "2026-11-01T00:00:00.000000",
+          "time_utc": "2026-10-08T12:00:00",
+          "value": {
+            "decimal": "1.25"
+          }
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "fixture",
+          "instrument_version": "spacecraft_status#v001",
+          "kernel_set_key": "2026-11-01T00:00:00.000000",
+          "time_utc": "2026-10-08T12:00:00",
+          "value": {
+            "decimal": "1.25"
+          }
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "fixture",
+          "instrument_version": "spacecraft_status#v001",
+          "kernel_set_key": "2026-11-01T00:00:00.000000",
+          "time_utc": "2026-10-08T12:00:00",
+          "value": {
+            "decimal": "1.25"
+          }
         }
       }
     ],
