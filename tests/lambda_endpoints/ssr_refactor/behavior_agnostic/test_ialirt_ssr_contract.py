@@ -2,24 +2,20 @@
 
 import json
 import os
-import sys
 from pathlib import Path
 
 import pytest
 
-from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_utils as ssr_utils
 from tests.lambda_endpoints.ssr_refactor.behavior_agnostic.utils import (
     Inputs,
     discover,
     external_bindings,
     readable_runs,
 )
-from tests.lambda_endpoints.ssr_refactor.utils import format_trace
+from tests.lambda_endpoints.ssr_refactor.utils import format_trace, load_ssr_modules
 
-sys.modules["ialirt_ssr_utils"] = ssr_utils
-from sds_data_manager.lambda_code.IAlirtCode import (  # noqa: E402
-    ialirt_ssr_processing as processing,
-)
+processing, ssr_utils = load_ssr_modules()
+TARGET_MODULES = (processing,) if ssr_utils is None else (processing, ssr_utils)
 
 INSTRUMENTS = (
     "mag",
@@ -33,8 +29,9 @@ INSTRUMENTS = (
     "unknown",
 )
 TRACE_DIR = Path(__file__).with_name("ssr_traces")
-# Mock imported dependencies and external instances, never either module's helpers.
-MOCKS = external_bindings((processing, ssr_utils))
+# Mock imported dependencies and external instances,
+# never helpers defined in the target modules.
+MOCKS = external_bindings(TARGET_MODULES)
 
 
 @pytest.mark.parametrize("instrument", INSTRUMENTS)
@@ -49,7 +46,7 @@ def test_lambda_dependency_contract(instrument):
             Inputs(recorder, "event"), Inputs(recorder, "context")
         )
 
-    actual = readable_runs(discover(invoke, MOCKS), (processing, ssr_utils))
+    actual = readable_runs(discover(invoke, MOCKS), TARGET_MODULES)
     baseline = TRACE_DIR / f"{instrument}.json"
     if os.environ.get("SSR_UPDATE_TRACES") == "1":
         TRACE_DIR.mkdir(exist_ok=True)

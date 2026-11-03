@@ -1,13 +1,31 @@
 """Shared serialization and recording helpers for SSR refactoring tests."""
 
 import json
+import sys
 from datetime import datetime
 from decimal import Decimal
+from importlib import import_module
 from pathlib import Path
 from unittest.mock import DEFAULT, Mock
 
 import numpy as np
 import xarray as xr
+
+
+def load_ssr_modules():
+    """Load SSR processing and its optional utilities, supporting flat imports."""
+    package = "sds_data_manager.lambda_code.IAlirtCode"
+    utils_name = f"{package}.ialirt_ssr_utils"
+    try:
+        utils = import_module(utils_name)
+    except ModuleNotFoundError as error:
+        if error.name != utils_name:
+            raise
+        utils = None
+    if utils is not None:
+        sys.modules["ialirt_ssr_utils"] = utils
+    processing = import_module(f"{package}.ialirt_ssr_processing")
+    return processing, utils
 
 
 def format_trace(value, indent=0, width=100, *, sort_keys=True):

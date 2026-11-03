@@ -5,7 +5,6 @@ See README.md in this directory for the baseline/update workflow and scope.
 
 import json
 import os
-import sys
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -17,14 +16,15 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_utils as utils
-from tests.lambda_endpoints.ssr_refactor.utils import Boundary, format_trace, freeze
-
-# Match the Lambda's flat import without loading a second copy of the utilities.
-sys.modules["ialirt_ssr_utils"] = utils
-from sds_data_manager.lambda_code.IAlirtCode import (  # noqa: E402
-    ialirt_ssr_processing as processing,
+from tests.lambda_endpoints.ssr_refactor.utils import (
+    Boundary,
+    format_trace,
+    freeze,
+    load_ssr_modules,
 )
+
+processing, ssr_utils = load_ssr_modules()
+utils = processing if ssr_utils is None else ssr_utils
 
 DAY = datetime(2026, 10, 8)
 DAY_NS = 86400 * 10**9
@@ -63,7 +63,7 @@ CASES = (
 
 @pytest.fixture
 def boundary(monkeypatch):  # noqa: PLR0915
-    """Install mocks only outside the two modules under refactoring."""
+    """Install mocks only outside the SSR modules under refactoring."""
     recorder = Boundary(monkeypatch)
     for name, value in {
         "SSR_TABLE": "ssr-table",

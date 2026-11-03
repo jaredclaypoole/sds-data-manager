@@ -3,13 +3,16 @@
 This harness supplies only eight instrument names and one unknown name. Event
 fields, other environment variables, and dependency results are synthetic values.
 There are no packet fixtures, calibration tables, expected exceptions, processor
-outputs, or per-instrument setup. The handler and both modules' helpers run normally.
+outputs, or per-instrument setup. The handler and all processing helpers run normally.
 
 `test_ialirt_ssr_contract.py` defines the input names and mock boundary.
 `utils.py` contains reusable discovery tools. The formatter is shared with the
 behavior-aware harness in `../utils.py`.
 
 Run against the committed baseline:
+
+Use `poetry run python check_ialirt_ssr_refactor.py` at the repository root to run all refactoring
+checks, including pre-commit, both harnesses, and the full I-ALiRT test set.
 
 ```bash
 poetry run pytest tests/lambda_endpoints/ssr_refactor/behavior_agnostic
@@ -27,8 +30,8 @@ regenerating after a refactor would replace the evidence being compared.
 ## Discovery
 
 `external_bindings()` identifies imported functions, constructors, modules, and
-external instances in the two target modules. It excludes functions and modules
-defined within that pair. This includes logging, NumPy, xarray, datetime, paths,
+external instances in the processing module. It excludes functions and modules
+defined within that module. This includes logging, NumPy, xarray, datetime, paths,
 AWS, HTTP, science processing, and SPICE. Callers can instead pass an explicit list
 of `(module, attribute)` pairs to `discover()` to choose a narrower boundary.
 Aliases for the same external object share a substitute. Patches are local to the
@@ -130,12 +133,11 @@ Built-in operations on concrete values and internal constants still execute
 normally; coverage does not imply equivalence for every input. Keep the sibling
 behavior-aware harness for realistic data manipulation and explicit failure cases.
 
-Measure coverage of the two target modules separately from the discovery tools:
+Measure coverage of the processing module separately from the discovery tools:
 
 ```bash
 poetry run pytest tests/lambda_endpoints/ssr_refactor/behavior_agnostic/test_ialirt_ssr_contract.py \
   --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing \
-  --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils \
   --cov-branch --cov-report=term-missing
 ```
 
@@ -236,3 +238,18 @@ baselines against the trusted implementation and inspect the differences. Verify
 that extracting or modifying shared helpers leaves all behavior-aware traces
 byte-for-byte unchanged. Statement and branch coverage remain useful checks,
 but do not prove exhaustive symbolic paths or realistic data correctness.
+
+Pre-commit runs in a temporary copy of tracked files and non-ignored untracked
+files, including current edits and deletions. Hook fixes are shown on failure
+and discarded; the working tree and index are unchanged. Tests run in the
+original working tree. Python's `TemporaryDirectory` owns and removes the temporary copy when the
+checks exit; there is no shell recursive-delete command.
+
+Status lines include local timestamps, total elapsed seconds, and seconds since
+the previous status line (`+Ns`) around each step, including exit cleanup.
+
+Both harnesses optionally import `ialirt_ssr_utils` before importing processing.
+When present, its helpers run normally and its external dependencies are included
+in the mocking boundary. When absent, only the processing module is targeted.
+Missing dependencies inside the utilities module still fail import rather than
+being mistaken for an absent utilities module. Trace comparisons are unchanged.

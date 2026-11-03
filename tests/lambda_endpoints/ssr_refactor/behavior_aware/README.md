@@ -1,8 +1,8 @@
 # I-ALiRT SSR refactoring tests
 
 `tests/lambda_endpoints/ssr_refactor/behavior_aware/test_ialirt_ssr_contract.py` runs `lambda_handler` through
-both `ialirt_ssr_processing.py` and `ialirt_ssr_utils.py`. Neither module's
-functions are mocked. The committed JSON files in
+`ialirt_ssr_processing.py`, including the helpers moved from `ialirt_ssr_utils.py`.
+None of the processing module's functions are mocked. The committed JSON files in
 `tests/lambda_endpoints/ssr_refactor/behavior_aware/ssr_traces/` record the original implementation's ordered
 external calls, positional and keyword arguments, return/exception outcome, and
 final data-access configuration. Arrays and dictionaries that fit within 100
@@ -13,10 +13,14 @@ characterization tests: existing behavior is the baseline, including any existin
 
 ## Running during a refactor
 
+Run `poetry run python check_ialirt_ssr_refactor.py` from the repository root for pre-commit checks,
+this harness with 100% statement and branch coverage required, and all I-ALiRT
+tests including the behavior-agnostic harness. The script disables trace updates
+and stops on the first failed command.
+
 ```bash
 poetry run pytest tests/lambda_endpoints/ssr_refactor/behavior_aware/test_ialirt_ssr_contract.py \
   --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing \
-  --cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils \
   --cov-branch --cov-report=term-missing --cov-fail-under=100
 ```
 
@@ -35,7 +39,7 @@ writes. Each packet file contributes distinct data, with duplicates across files
 unsorted input, and a sequence-counter rollover. Packets at both trimming-buffer
 boundaries are retained, while packets just outside them are removed. Gap
 scenarios modify every overlapping copy consistently. Ancillary fixtures include
-expired files and an end date equal to the processing day. Both modules reach
+expired files and an end date equal to the processing day. The consolidated module reaches
 100% statement and branch coverage from these handler invocations alone.
 
 ## Recorded boundary and limits
@@ -45,7 +49,7 @@ data-access queries and downloads, processing-input construction and methods,
 packet decoding, calibration loading, science processors, SPICE pool lifetime,
 time conversions, spacecraft geometry, directory cleanup/creation, file size,
 and performance timing. One shared trace preserves order across dependencies
-and both modules. Exception paths record pool/writer exit and the propagated
+and all processing helpers. Exception paths record pool/writer exit and the propagated
 exception type and message. The tests use deterministic external results and
 never contact AWS or download files.
 
@@ -54,7 +58,7 @@ formatting, and logging run normally and their individual calls are **not**
 compared. Their effects are reflected in subsequent recorded arguments. This
 boundary therefore checks service/science interactions and data passed between
 them; it does not promise literal equality of every call to code defined outside
-the two modules. Extend the recording boundary if that stricter contract is
+the processing module. Extend the recording boundary if that stricter contract is
 needed. It also does not detect a newly introduced external dependency that has
 not been added to the fixture.
 
@@ -86,3 +90,18 @@ first capture its baseline using the original two modules in a separate checkout
 The shared formatter, argument snapshots, and recording mocks live in
 `../utils.py`. The sibling `../behavior_agnostic/` harness discovers synthetic
 execution paths without the scenario-specific fixtures used here.
+
+Pre-commit runs in a temporary copy of tracked files and non-ignored untracked
+files, including current edits and deletions. Hook fixes are shown on failure
+and discarded; the working tree and index are unchanged. Tests run in the
+original working tree. Python's `TemporaryDirectory` owns and removes the temporary copy when the
+checks exit; there is no shell recursive-delete command.
+
+Status lines include local timestamps, total elapsed seconds, and seconds since
+the previous status line (`+Ns`) around each step, including exit cleanup.
+
+Both harnesses optionally import `ialirt_ssr_utils` before importing processing.
+When present, its helpers run normally and its external dependencies are included
+in the mocking boundary. When absent, only the processing module is targeted.
+Missing dependencies inside the utilities module still fail import rather than
+being mistaken for an absent utilities module. Trace comparisons are unchanged.
