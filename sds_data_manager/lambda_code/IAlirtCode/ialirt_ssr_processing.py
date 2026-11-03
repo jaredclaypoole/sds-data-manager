@@ -826,7 +826,8 @@ def lambda_handler(event, context):
 
     instrument = os.environ["INSTRUMENT"]
     url = os.environ["IMAP_DATA_ACCESS_URL"]
-    data_table = boto3.resource("dynamodb").Table(os.environ["SSR_TABLE"])
+    dynamodb = boto3.resource("dynamodb")
+    data_table = dynamodb.Table(os.environ["SSR_TABLE"])
 
     day = datetime.strptime(event["day"], "%Y%m%d")
     version = event["version"]
@@ -871,7 +872,8 @@ def lambda_handler(event, context):
                 ancillary_files = {}
                 items += spacecraft_items(day, version, kernel_set_key)
             else:
-                combined = parse_packets(query_filenames(day), DOWNLOAD_DIR)
+                filenames = query_filenames(day)
+                combined = parse_packets(filenames, DOWNLOAD_DIR)
                 check_day_coverage(combined, day)
                 combined = trim_packets(combined, day)
                 ancillary_files = process_algorithms(
@@ -892,8 +894,8 @@ def lambda_handler(event, context):
         with data_table.batch_writer(
             overwrite_by_pkeys=["instrument_version", "time_utc"]
         ) as batch:
-            for item in items:
-                batch.put_item(Item=item)
+            for record in items:
+                batch.put_item(Item=record)
 
         logger.info(
             "Inserted %d %s items for %s %s", len(items), instrument, day, version
