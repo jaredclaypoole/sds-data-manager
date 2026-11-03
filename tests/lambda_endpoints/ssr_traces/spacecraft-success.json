@@ -1,0 +1,148 @@
+{
+  "calls": [
+    ["boto3.resource", ["dynamodb"], {}],
+    ["dynamodb.Table", ["ssr-table"], {}],
+    ["boto3.client", ["ssm"], {}],
+    ["ssm.get_parameter", [], {"Name": "/ssr/api-key", "WithDecryption": true}],
+    ["rmtree", ["/ssr-fixture"], {"ignore_errors": true}],
+    ["Path.mkdir", ["/ssr-fixture"], {"parents": true}],
+    ["perf_counter", [], {}],
+    [
+      "requests.get",
+      ["https://ssr.example/metakernel"],
+      {
+        "params": {
+          "end_time": "20261010",
+          "file_types": [
+            "ephemeris_90days",
+            "ephemeris_predicted",
+            "imap_frames",
+            "leapseconds",
+            "planetary_constants",
+            "planetary_ephemeris",
+            "science_frames",
+            "spacecraft_clock"
+          ],
+          "list_files": "True",
+          "start_time": "20261007"
+        },
+        "timeout": 10
+      }
+    ],
+    ["response.raise_for_status", [], {}],
+    ["response.json", [], {}],
+    ["ProcessingInputCollection", [], {}],
+    ["SPICEInput", ["naif0012.tls", "imap_sclk_0000.tsc", "imap_sclk_0001.tsc"], {}],
+    [
+      "collection.add",
+      [{"filenames": ["naif0012.tls", "imap_sclk_0000.tsc", "imap_sclk_0001.tsc"]}],
+      {}
+    ],
+    ["collection.download_all_files", [], {}],
+    ["collection.get_file_paths", [], {"data_type": "spice"}],
+    ["Path.stat", ["/ssr-fixture/naif0012.tls"], {}],
+    ["perf_counter", [], {}],
+    ["datetime.now", [], {"tz": "UTC"}],
+    ["KernelPool", [["/ssr-fixture/naif0012.tls"]], {}],
+    ["KernelPool.__enter__", [], {}],
+    ["str_to_et", ["2026-11-01T00:00:00.000000"], {}],
+    ["et_to_ttj2000ns", [42.0], {}],
+    ["str_to_et", ["2026-10-08T00:00:00"], {}],
+    ["str_to_et", ["2026-10-08T12:00:00"], {}],
+    [
+      "imap_state",
+      [{"array": [42.0, 42.0], "dtype": "float64"}],
+      {
+        "observer": 399,
+        "ref_frame": -43917
+      }
+    ],
+    [
+      "imap_state",
+      [{"array": [42.0, 42.0], "dtype": "float64"}],
+      {
+        "observer": 399,
+        "ref_frame": -43916
+      }
+    ],
+    ["et_to_ttj2000ns", [42.0], {}],
+    ["et_to_ttj2000ns", [42.0], {}],
+    ["KernelPool.__exit__", [null, null], {}],
+    ["table.batch_writer", [], {"overwrite_by_pkeys": ["instrument_version", "time_utc"]}],
+    ["batch.__enter__", [], {}],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "spice",
+          "instrument_version": "spice#v001",
+          "spice_kernels": {
+            "leapseconds": ["naif0012.tls"],
+            "spacecraft_clock": ["imap_sclk_0000.tsc", "imap_sclk_0001.tsc"]
+          },
+          "time_utc": "2026-11-01T00:00:00.000000",
+          "ttj2000ns": 42
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "spacecraft",
+          "instrument_version": "spacecraft#v001",
+          "kernel_set_key": "2026-11-01T00:00:00.000000",
+          "sc_position_GSE": [{"decimal": "0"}, {"decimal": "1"}, {"decimal": "2"}],
+          "sc_position_GSM": [{"decimal": "0"}, {"decimal": "1"}, {"decimal": "2"}],
+          "sc_velocity_GSE": [{"decimal": "3"}, {"decimal": "4"}, {"decimal": "5"}],
+          "sc_velocity_GSM": [{"decimal": "3"}, {"decimal": "4"}, {"decimal": "5"}],
+          "time_utc": "2026-10-08T00:00:00",
+          "ttj2000ns": 42
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "instrument": "spacecraft",
+          "instrument_version": "spacecraft#v001",
+          "kernel_set_key": "2026-11-01T00:00:00.000000",
+          "sc_position_GSE": [{"decimal": "6"}, {"decimal": "7"}, {"decimal": "8"}],
+          "sc_position_GSM": [{"decimal": "6"}, {"decimal": "7"}, {"decimal": "8"}],
+          "sc_velocity_GSE": [{"decimal": "9"}, {"decimal": "10"}, {"decimal": "11"}],
+          "sc_velocity_GSM": [{"decimal": "9"}, {"decimal": "10"}, {"decimal": "11"}],
+          "time_utc": "2026-10-08T12:00:00",
+          "ttj2000ns": 42
+        }
+      }
+    ],
+    [
+      "batch.put_item",
+      [],
+      {
+        "Item": {
+          "ancillary_files": {},
+          "instrument": "ancillary",
+          "instrument_version": "ancillary#v001",
+          "software_versions": {
+            "imap_data_access": "fixture",
+            "imap_processing": "fixture"
+          },
+          "time_utc": "2026-11-01T00:00:00.000000",
+          "ttj2000ns": 42
+        }
+      }
+    ],
+    ["batch.__exit__", [null, null], {}]
+  ],
+  "config": {
+    "API_KEY": "fixture-key",
+    "DATA_DIR": "/ssr-fixture"
+  },
+  "error": null,
+  "result": null
+}

@@ -1,0 +1,112 @@
+{
+  "calls": [
+    ["boto3.resource", ["dynamodb"], {}],
+    ["dynamodb.Table", ["ssr-table"], {}],
+    ["boto3.client", ["ssm"], {}],
+    ["ssm.get_parameter", [], {"Name": "/ssr/api-key", "WithDecryption": true}],
+    ["rmtree", ["/ssr-fixture"], {"ignore_errors": true}],
+    ["Path.mkdir", ["/ssr-fixture"], {"parents": true}],
+    ["perf_counter", [], {}],
+    [
+      "requests.get",
+      ["https://ssr.example/metakernel"],
+      {
+        "params": {
+          "end_time": "20261010",
+          "file_types": ["leapseconds", "spacecraft_clock"],
+          "list_files": "True",
+          "start_time": "20261007"
+        },
+        "timeout": 10
+      }
+    ],
+    ["response.raise_for_status", [], {}],
+    ["response.json", [], {}],
+    ["ProcessingInputCollection", [], {}],
+    ["SPICEInput", ["naif0012.tls", "imap_sclk_0000.tsc", "imap_sclk_0001.tsc"], {}],
+    [
+      "collection.add",
+      [{"filenames": ["naif0012.tls", "imap_sclk_0000.tsc", "imap_sclk_0001.tsc"]}],
+      {}
+    ],
+    ["collection.download_all_files", [], {}],
+    ["collection.get_file_paths", [], {"data_type": "spice"}],
+    ["Path.stat", ["/ssr-fixture/naif0012.tls"], {}],
+    ["perf_counter", [], {}],
+    ["datetime.now", [], {"tz": "UTC"}],
+    ["KernelPool", [["/ssr-fixture/naif0012.tls"]], {}],
+    ["KernelPool.__enter__", [], {}],
+    ["str_to_et", ["2026-11-01T00:00:00.000000"], {}],
+    ["et_to_ttj2000ns", [42.0], {}],
+    [
+      "imap_data_access.query",
+      [],
+      {
+        "data_level": "l0",
+        "descriptor": "raw",
+        "end_date": "20261009",
+        "instrument": "ialirt",
+        "start_date": "20261007",
+        "table": "science",
+        "version": "latest"
+      }
+    ],
+    ["imap_data_access.download", ["20261007.pkts"], {}],
+    [
+      "packet_file_to_datasets",
+      [
+        "/ssr-fixture/20261007.pkts",
+        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+      ],
+      {
+        "use_derived_value": false
+      }
+    ],
+    ["imap_data_access.download", ["20261008.pkts"], {}],
+    [
+      "packet_file_to_datasets",
+      [
+        "/ssr-fixture/20261008.pkts",
+        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+      ],
+      {
+        "use_derived_value": false
+      }
+    ],
+    ["imap_data_access.download", ["20261009.pkts"], {}],
+    [
+      "packet_file_to_datasets",
+      [
+        "/ssr-fixture/20261009.pkts",
+        "/Users/jc1617/repos/sds-data-manager/.venv/lib/python3.12/site-packages/imap_processing/ialirt/packet_definitions/ialirt.xml"
+      ],
+      {
+        "use_derived_value": false
+      }
+    ],
+    ["str_yyyymmdd_to_ttj2000ns", ["20261008"], {}],
+    ["str_yyyymmdd_to_ttj2000ns", ["20261009"], {}],
+    ["ttj2000ns_to_et", [61000000000], {}],
+    ["et_to_utc", [42.0], {}],
+    [
+      "KernelPool.__exit__",
+      [
+        "IalirtDataGapError",
+        {
+          "exception": "IalirtDataGapError",
+          "message": "20261008: first packet at fixture-utc."
+        }
+      ],
+      {}
+    ]
+  ],
+  "config": {
+    "API_KEY": "fixture-key",
+    "DATA_DIR": "/ssr-fixture"
+  },
+  "error": {
+    "exception": "IalirtDataGapError",
+    "message": "20261008: first packet at fixture-utc."
+  },
+  "result": null
+}

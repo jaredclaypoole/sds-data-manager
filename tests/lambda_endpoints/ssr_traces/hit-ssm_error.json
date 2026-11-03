@@ -1,0 +1,14 @@
+{
+  "calls": [
+    ["boto3.resource", ["dynamodb"], {}],
+    ["dynamodb.Table", ["ssr-table"], {}],
+    ["boto3.client", ["ssm"], {}],
+    ["ssm.get_parameter", [], {"Name": "/ssr/api-key", "WithDecryption": true}]
+  ],
+  "config": {},
+  "error": {
+    "exception": "RuntimeError",
+    "message": "ssm_error"
+  },
+  "result": null
+}

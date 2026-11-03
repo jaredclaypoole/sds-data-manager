@@ -1,0 +1,33 @@
+{
+  "calls": [
+    ["boto3.resource", ["dynamodb"], {}],
+    ["dynamodb.Table", ["ssr-table"], {}],
+    ["boto3.client", ["ssm"], {}],
+    ["ssm.get_parameter", [], {"Name": "/ssr/api-key", "WithDecryption": true}],
+    ["rmtree", ["/ssr-fixture"], {"ignore_errors": true}],
+    ["Path.mkdir", ["/ssr-fixture"], {"parents": true}],
+    ["perf_counter", [], {}],
+    [
+      "requests.get",
+      ["https://ssr.example/metakernel"],
+      {
+        "params": {
+          "end_time": "20261010",
+          "file_types": ["leapseconds", "spacecraft_clock"],
+          "list_files": "True",
+          "start_time": "20261007"
+        },
+        "timeout": 10
+      }
+    ],
+    ["response.raise_for_status", [], {}]
+  ],
+  "config": {
+    "API_KEY": "fixture-key"
+  },
+  "error": {
+    "exception": "RuntimeError",
+    "message": "http_error"
+  },
+  "result": null
+}
