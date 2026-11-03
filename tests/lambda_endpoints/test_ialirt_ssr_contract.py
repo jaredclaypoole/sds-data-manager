@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import Mock
+from unittest.mock import DEFAULT, Mock
 
 import imap_data_access
 import numpy as np
@@ -133,9 +133,18 @@ class Boundary:
             self.calls.append([name, freeze(args), freeze(kwargs)])
             if effect is not None:
                 return effect(*args, **kwargs)
-            return result
+            return DEFAULT
 
-        return Mock(side_effect=invoke)
+        return Mock(return_value=result, side_effect=invoke)
+
+    def context_exit(self, name):
+        """Record exception type/message without the nondeterministic traceback."""
+
+        def exit_context(exc_type, exc, tb):
+            self.calls.append([name, freeze([exc_type, exc]), {}])
+            return False
+
+        return Mock(side_effect=exit_context)
 
     def patch(self, owner, attribute, result=None, effect=None, name=None):
         """Replace one dependency with a recording mock."""
@@ -189,12 +198,7 @@ def boundary(monkeypatch):  # noqa: PLR0915
     batch = SimpleNamespace(put_item=recorder.function("batch.put_item"))
     writer = Mock()
     writer.__enter__ = recorder.function("batch.__enter__", batch)
-    writer.__exit__ = Mock(
-        side_effect=lambda exc_type, exc, tb: (
-            recorder.calls.append(["batch.__exit__", freeze([exc_type, exc]), {}])
-            or False
-        )
-    )
+    writer.__exit__ = recorder.context_exit("batch.__exit__")
     table = SimpleNamespace(
         batch_writer=recorder.function("table.batch_writer", writer)
     )
@@ -208,12 +212,7 @@ def boundary(monkeypatch):  # noqa: PLR0915
     recorder.patch(processing.boto3, "client", result=ssm, name="boto3.client")
     pool = Mock()
     pool.__enter__ = recorder.function("KernelPool.__enter__")
-    # Record exception type/message, excluding the nondeterministic traceback.
-    pool.__exit__ = recorder.function("KernelPool.__exit__", effect=lambda *args: False)
-    pool.__exit__.side_effect = lambda exc_type, exc, tb: (
-        recorder.calls.append(["KernelPool.__exit__", freeze([exc_type, exc]), {}])
-        or False
-    )
+    pool.__exit__ = recorder.context_exit("KernelPool.__exit__")
     recorder.patch(processing.spiceypy, "KernelPool", result=pool)
 
     response = SimpleNamespace(
@@ -372,14 +371,13 @@ def boundary(monkeypatch):  # noqa: PLR0915
 @pytest.mark.parametrize(
     ("instrument", "scenario"), CASES, ids=[f"{i}-{s}" for i, s in CASES]
 )
-def test_lambda_dependency_contract(boundary, monkeypatch, instrument, scenario):  # noqa: PLR0912
+def test_lambda_dependency_contract(boundary, monkeypatch, instrument, scenario):
     """Compare the full ordered boundary trace with the pre-refactor baseline."""
     monkeypatch.setenv("INSTRUMENT", instrument)
     if scenario in {"empty", "mixed"}:
-        processing.process_hit.side_effect = boundary.recorder.function(
-            "process_hit",
-            [] if scenario == "empty" else [{"met_in_utc": "2026-10-08T12:00:00"}, {}],
-        ).side_effect
+        processing.process_hit.return_value = (
+            [] if scenario == "empty" else [{"met_in_utc": "2026-10-08T12:00:00"}, {}]
+        )
     elif scenario in {"no_packets", "late_start", "early_end", "sequence_gap"}:
         for filename, source_packets in boundary.packets_by_filename.items():
             epoch = source_packets["epoch"].values
@@ -433,16 +431,6 @@ def test_lambda_dependency_contract(boundary, monkeypatch, instrument, scenario)
         "error": error,
         "config": freeze(imap_data_access.config),
     }
-    expected_exception = None
-    if instrument == "unknown":
-        expected_exception = "ValueError"
-    elif scenario in {"missing_l0", "missing_ancillary"}:
-        expected_exception = "FileNotFoundError"
-    elif scenario in {"no_packets", "late_start", "early_end", "sequence_gap"}:
-        expected_exception = "IalirtDataGapError"
-    elif scenario.endswith("_error"):
-        expected_exception = "RuntimeError"
-    assert (error["exception"] if error else None) == expected_exception
     baseline = TRACE_DIR / f"{instrument}-{scenario}.json"
     if os.environ.get("SSR_UPDATE_TRACES") == "1":
         baseline.write_text(format_trace(actual) + "\n")
