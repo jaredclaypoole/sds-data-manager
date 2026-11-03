@@ -37,7 +37,7 @@
     ["KernelPool", [["/ssr-fixture/naif0012.tls"]], {}],
     ["KernelPool.__enter__", [], {}],
     ["str_to_et", ["2026-11-01T00:00:00.000000"], {}],
-    ["et_to_ttj2000ns", [42.0], {}],
+    ["et_to_ttj2000ns", [2073600.0], {}],
     [
       "imap_data_access.query",
       [],
@@ -87,14 +87,14 @@
     ["str_yyyymmdd_to_ttj2000ns", ["20261008"], {}],
     ["str_yyyymmdd_to_ttj2000ns", ["20261009"], {}],
     ["ttj2000ns_to_et", [0], {}],
-    ["et_to_utc", [42.0], {}],
+    ["et_to_utc", [0.0], {}],
     [
       "KernelPool.__exit__",
       [
         "IalirtDataGapError",
         {
           "exception": "IalirtDataGapError",
-          "message": "20261008: 1 src_seq_ctr gap(s), first after fixture-utc."
+          "message": "20261008: 1 src_seq_ctr gap(s), first after 2026-10-08T00:00:00.000000."
         }
       ],
       {}
@@ -106,7 +106,7 @@
   },
   "error": {
     "exception": "IalirtDataGapError",
-    "message": "20261008: 1 src_seq_ctr gap(s), first after fixture-utc."
+    "message": "20261008: 1 src_seq_ctr gap(s), first after 2026-10-08T00:00:00.000000."
   },
   "result": null
 }

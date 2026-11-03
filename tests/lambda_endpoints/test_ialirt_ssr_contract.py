@@ -300,11 +300,31 @@ def boundary(monkeypatch):  # noqa: PLR0915
         "str_yyyymmdd_to_ttj2000ns",
         effect=lambda date: (datetime.strptime(date, "%Y%m%d") - DAY).days * DAY_NS,
     )
-    recorder.patch(processing, "str_to_et", result=42.0)
-    recorder.patch(processing, "et_to_ttj2000ns", result=42)
-    recorder.patch(processing, "ttj2000ns_to_et", result=42.0)
-    recorder.patch(processing, "et_to_utc", result="fixture-utc")
-    recorder.patch(processing, "imap_state", result=np.arange(12).reshape(2, 6))
+    # Use a simple fixture time scale relative to DAY, with distinct outputs
+    # for each timestamp, rather than reproducing real SPICE time conversions.
+    recorder.patch(
+        processing,
+        "str_to_et",
+        effect=lambda value: (datetime.fromisoformat(value) - DAY).total_seconds(),
+    )
+    recorder.patch(processing, "et_to_ttj2000ns", effect=lambda et: round(et * 10**9))
+    recorder.patch(processing, "ttj2000ns_to_et", effect=lambda ns: ns / 10**9)
+    recorder.patch(
+        processing,
+        "et_to_utc",
+        effect=lambda et: (DAY + timedelta(seconds=float(et))).isoformat(
+            timespec="microseconds"
+        ),
+    )
+
+    def state(ets, ref_frame, observer):
+        offset = {
+            processing.SpiceFrame.IMAP_GSM: 100,
+            processing.SpiceFrame.IMAP_GSE: 200,
+        }
+        return np.asarray(ets)[:, None] / 3600 + np.arange(6) + offset[ref_frame]
+
+    recorder.patch(processing, "imap_state", effect=state)
     product = {
         "met_in_utc": "2026-10-08T12:00:00",
         "instrument": "fixture",
@@ -325,7 +345,14 @@ def boundary(monkeypatch):  # noqa: PLR0915
         "process_swapi_ialirt",
     ):
         recorder.patch(processing, name, result=products)
-    recorder.patch(processing, "process_codice", result=(products, products))
+    recorder.patch(
+        processing,
+        "process_codice",
+        result=(
+            [dict(item, instrument="codice_lo") for item in products],
+            [dict(item, instrument="codice_hi") for item in products],
+        ),
+    )
     recorder.patch(processing, "process_status", result=[product])
     recorder.patch(
         processing, "load_cdf", effect=lambda path: {"calibration": path.name}

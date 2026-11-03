@@ -37,7 +37,7 @@
     ["KernelPool", [["/ssr-fixture/naif0012.tls"]], {}],
     ["KernelPool.__enter__", [], {}],
     ["str_to_et", ["2026-11-01T00:00:00.000000"], {}],
-    ["et_to_ttj2000ns", [42.0], {}],
+    ["et_to_ttj2000ns", [2073600.0], {}],
     [
       "imap_data_access.query",
       [],
@@ -180,7 +180,7 @@
             "spacecraft_clock": ["imap_sclk_0000.tsc", "imap_sclk_0001.tsc"]
           },
           "time_utc": "2026-11-01T00:00:00.000000",
-          "ttj2000ns": 42
+          "ttj2000ns": 2073600000000000
         }
       }
     ],
@@ -189,7 +189,7 @@
       [],
       {
         "Item": {
-          "instrument": "fixture",
+          "instrument": "codice_lo",
           "instrument_version": "codice_lo#v001",
           "kernel_set_key": "2026-11-01T00:00:00.000000",
           "time_utc": "2026-10-08T12:00:00",
@@ -216,7 +216,7 @@
             "imap_processing": "fixture"
           },
           "time_utc": "2026-11-01T00:00:00.000000",
-          "ttj2000ns": 42
+          "ttj2000ns": 2073600000000000
         }
       }
     ],

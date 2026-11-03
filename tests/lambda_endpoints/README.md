@@ -60,8 +60,11 @@ not been added to the fixture.
 The clock, software-version metadata, and download directory are fixed. The
 spacecraft cadence is set to twelve hours to keep the baseline readable while
 exercising multiple iterations; the existing `test_spacecraft_items` unit test
-checks the default 1,440 samples. Coverage measures branches taken by these
-fixtures, not equivalence for every possible input or correctness of the science
+checks the default 1,440 samples. Mock time conversions use a simple scale relative
+to the fixture day, with different outputs for different timestamps. Mock geometry
+varies by timestamp and coordinate frame, and CoDICE-Lo/Hi return distinct products
+so selecting the wrong output changes the trace. Coverage measures branches taken
+by these fixtures, not equivalence for every possible input or correctness of the science
 algorithms. These tests intentionally preserve the current implementation's
 behavior.
 
