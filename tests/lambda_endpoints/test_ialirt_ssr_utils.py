@@ -1,11 +1,18 @@
 """Test the I-ALiRT SSR utilities."""
 
+# ruff: noqa: E402
+import sys
 from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
 import xarray as xr
 from imap_data_access.processing_input import ProcessingInputCollection, SPICEInput
+
+from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_utils
+
+# The Lambda imports ialirt_ssr_utils by its plain name.
+sys.modules["ialirt_ssr_utils"] = ialirt_ssr_utils
 
 from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     download_spice_file,

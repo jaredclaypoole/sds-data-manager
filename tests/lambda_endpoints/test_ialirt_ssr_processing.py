@@ -1,5 +1,7 @@
 """Test the I-ALiRT SSR processing lambda."""
 
+# ruff: noqa: E402
+import sys
 from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, call, patch
@@ -10,27 +12,34 @@ import pytest
 import xarray as xr
 from imap_data_access.processing_input import ProcessingInputCollection, SPICEInput
 
-from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_processing as processing
-from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
-    KERNELS,
+from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_utils
+from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils import (
     SOFTWARE_VERSIONS,
     IalirtDataGapError,
     ancillary_item,
     check_day_coverage,
+    process_spacecraft_status,
+    spacecraft_items,
+    trim_to_day,
+)
+
+# The Lambda imports ialirt_ssr_utils by its plain name.
+sys.modules["ialirt_ssr_utils"] = ialirt_ssr_utils
+
+from sds_data_manager.lambda_code.IAlirtCode import ialirt_ssr_processing as processing
+from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
+    KERNELS,
     insert_formatted_data,
     lambda_handler,
     process_day,
-    process_spacecraft_status,
-    spacecraft_items,
     spice_item,
-    trim_to_day,
 )
 
 DAY_NS = 86400 * 10**9
 
 
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_yyyymmdd_to_ttj2000ns"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.str_yyyymmdd_to_ttj2000ns"
 )
 def test_check_day_coverage(mock_str_to_ttj2000ns):
     """Test that a complete day passes."""
@@ -44,9 +53,9 @@ def test_check_day_coverage(mock_str_to_ttj2000ns):
     check_day_coverage(combined, datetime(2026, 10, 8))
 
 
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.ttj2000ns_to_utc")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.ttj2000ns_to_utc")
 @patch(
-    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_yyyymmdd_to_ttj2000ns"
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.str_yyyymmdd_to_ttj2000ns"
 )
 def test_check_day_coverage_gap(mock_str_to_ttj2000ns, mock_to_utc):
     """Test that a missing packet raises."""
@@ -172,7 +181,7 @@ def test_ancillary_item():
     }
 
 
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.process_status")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.process_status")
 def test_process_spacecraft_status(mock_process_status):
     """Test that there is one spacecraft status product per minute."""
     mock_process_status.return_value = [{"met_in_utc": "2026-10-08T12:00:00"}]
@@ -184,9 +193,9 @@ def test_process_spacecraft_status(mock_process_status):
     assert len(result) == 3
 
 
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns")
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et")
-@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.imap_state")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.et_to_ttj2000ns")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.str_to_et")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils.imap_state")
 def test_spacecraft_items(mock_imap_state, mock_str_to_et, mock_et_to_ttj2000ns):
     """Test that there is one spacecraft position item per minute."""
     mock_imap_state.return_value = np.ones((1440, 6))
