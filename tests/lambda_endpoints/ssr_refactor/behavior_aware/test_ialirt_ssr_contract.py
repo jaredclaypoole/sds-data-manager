@@ -24,7 +24,20 @@ from tests.lambda_endpoints.ssr_refactor.utils import (
 )
 
 processing, ssr_utils = load_ssr_modules()
-utils = processing if ssr_utils is None else ssr_utils
+SSR_MODULES = (processing,) if ssr_utils is None else (processing, ssr_utils)
+
+
+def owners(name):
+    """Return the SSR modules that bind a name, wherever it currently lives."""
+    found = [module for module in SSR_MODULES if name in vars(module)]
+    assert found, f"No SSR module binds {name}"
+    return found
+
+
+def binding(name):
+    """Return the object an SSR module binds to a name, e.g. an imported module."""
+    return getattr(owners(name)[0], name)
+
 
 DAY = datetime(2026, 10, 8)
 DAY_NS = 86400 * 10**9
@@ -65,6 +78,17 @@ CASES = (
 def boundary(monkeypatch):  # noqa: PLR0915
     """Install mocks only outside the SSR modules under refactoring."""
     recorder = Boundary(monkeypatch)
+
+    def set_all(name, value):
+        for module in owners(name):
+            monkeypatch.setattr(module, name, value)
+
+    def patch_all(attribute, result=None, effect=None, name=None):
+        # One shared mock, so a call is recorded once whichever module makes it.
+        mock = recorder.function(name or attribute, result, effect)
+        set_all(attribute, mock)
+        return mock
+
     for name, value in {
         "SSR_TABLE": "ssr-table",
         "SSM_API_KEY_PARAMETER": "/ssr/api-key",
@@ -72,16 +96,13 @@ def boundary(monkeypatch):  # noqa: PLR0915
     }.items():
         monkeypatch.setenv(name, value)
     monkeypatch.setattr(imap_data_access, "config", {})
-    monkeypatch.setattr(
-        utils, "imap_module_directory", Path("/imap-processing-fixture")
-    )
+    set_all("imap_module_directory", Path("/imap-processing-fixture"))
     # Stable provenance, clock, and path; no actual /tmp/ssr files are touched.
-    monkeypatch.setattr(
-        processing,
+    set_all(
         "SOFTWARE_VERSIONS",
         {"imap_processing": "fixture", "imap_data_access": "fixture"},
     )
-    monkeypatch.setattr(processing, "SPACECRAFT_CADENCE", timedelta(hours=12))
+    set_all("SPACECRAFT_CADENCE", timedelta(hours=12))
 
     class FixturePath(type(Path())):
         def mkdir(self, *args, **kwargs):
@@ -91,7 +112,7 @@ def boundary(monkeypatch):  # noqa: PLR0915
             recorder.calls.append(["Path.stat", freeze([self, *args]), freeze(kwargs)])
             return SimpleNamespace(st_size=100)
 
-    monkeypatch.setattr(processing, "DOWNLOAD_DIR", FixturePath("/ssr-fixture"))
+    set_all("DOWNLOAD_DIR", FixturePath("/ssr-fixture"))
 
     class Clock(datetime):
         @classmethod
@@ -99,9 +120,9 @@ def boundary(monkeypatch):  # noqa: PLR0915
             recorder.calls.append(["datetime.now", [], {"tz": str(tz)}])
             return datetime(2026, 11, 1, tzinfo=timezone.utc)
 
-    monkeypatch.setattr(processing, "datetime", Clock)
-    recorder.patch(processing.time, "perf_counter", result=100.0)
-    recorder.patch(processing.shutil, "rmtree")
+    set_all("datetime", Clock)
+    recorder.patch(binding("time"), "perf_counter", result=100.0)
+    recorder.patch(binding("shutil"), "rmtree")
 
     batch = SimpleNamespace(put_item=recorder.function("batch.put_item"))
     writer = Mock()
@@ -116,12 +137,12 @@ def boundary(monkeypatch):  # noqa: PLR0915
             "ssm.get_parameter", {"Parameter": {"Value": "fixture-key"}}
         )
     )
-    recorder.patch(processing.boto3, "resource", result=resource, name="boto3.resource")
-    recorder.patch(processing.boto3, "client", result=ssm, name="boto3.client")
+    recorder.patch(binding("boto3"), "resource", result=resource, name="boto3.resource")
+    recorder.patch(binding("boto3"), "client", result=ssm, name="boto3.client")
     pool = Mock()
     pool.__enter__ = recorder.function("KernelPool.__enter__")
     pool.__exit__ = recorder.context_exit("KernelPool.__exit__")
-    recorder.patch(processing.spiceypy, "KernelPool", result=pool)
+    recorder.patch(binding("spiceypy"), "KernelPool", result=pool)
 
     response = SimpleNamespace(
         raise_for_status=recorder.function("response.raise_for_status"),
@@ -130,12 +151,12 @@ def boundary(monkeypatch):  # noqa: PLR0915
             ["naif0012.tls", "imap_sclk_0000.tsc", "imap_sclk_0001.tsc"],
         ),
     )
-    recorder.patch(utils.requests, "get", result=response, name="requests.get")
+    recorder.patch(binding("requests"), "get", result=response, name="requests.get")
     # Preserve real metadata parsing, but record constructors and collection methods.
-    recorder.patch(utils, "SPICEInput", effect=utils.SPICEInput)
-    collection_type = utils.ProcessingInputCollection
+    patch_all("SPICEInput", effect=binding("SPICEInput"))
+    collection_type = binding("ProcessingInputCollection")
     collection = collection_type()
-    recorder.patch(utils, "ProcessingInputCollection", result=collection)
+    patch_all("ProcessingInputCollection", result=collection)
     recorder.patch(collection, "add", effect=collection.add, name="collection.add")
     recorder.patch(
         collection, "download_all_files", name="collection.download_all_files"
@@ -201,23 +222,20 @@ def boundary(monkeypatch):  # noqa: PLR0915
     def decode_packets(path, *args, **kwargs):
         return {478: packets_by_filename[path.name].copy(deep=True)}
 
-    recorder.patch(utils, "packet_file_to_datasets", effect=decode_packets)
-    recorder.patch(
-        processing,
+    patch_all("packet_file_to_datasets", effect=decode_packets)
+    patch_all(
         "str_yyyymmdd_to_ttj2000ns",
         effect=lambda date: (datetime.strptime(date, "%Y%m%d") - DAY).days * DAY_NS,
     )
     # Use a simple fixture time scale relative to DAY, with distinct outputs
     # for each timestamp, rather than reproducing real SPICE time conversions.
-    recorder.patch(
-        processing,
+    patch_all(
         "str_to_et",
         effect=lambda value: (datetime.fromisoformat(value) - DAY).total_seconds(),
     )
-    recorder.patch(processing, "et_to_ttj2000ns", effect=lambda et: round(et * 10**9))
-    recorder.patch(processing, "ttj2000ns_to_et", effect=lambda ns: ns / 10**9)
-    recorder.patch(
-        processing,
+    patch_all("et_to_ttj2000ns", effect=lambda et: round(et * 10**9))
+    patch_all("ttj2000ns_to_et", effect=lambda ns: ns / 10**9)
+    patch_all(
         "et_to_utc",
         effect=lambda et: (DAY + timedelta(seconds=float(et))).isoformat(
             timespec="microseconds"
@@ -226,12 +244,12 @@ def boundary(monkeypatch):  # noqa: PLR0915
 
     def state(ets, ref_frame, observer):
         offset = {
-            processing.SpiceFrame.IMAP_GSM: 100,
-            processing.SpiceFrame.IMAP_GSE: 200,
+            binding("SpiceFrame").IMAP_GSM: 100,
+            binding("SpiceFrame").IMAP_GSE: 200,
         }
         return np.asarray(ets)[:, None] / 3600 + np.arange(6) + offset[ref_frame]
 
-    recorder.patch(processing, "imap_state", effect=state)
+    patch_all("imap_state", effect=state)
     product = {
         "met_in_utc": "2026-10-08T12:00:00",
         "instrument": "fixture",
@@ -251,21 +269,18 @@ def boundary(monkeypatch):  # noqa: PLR0915
         "process_swe",
         "process_swapi_ialirt",
     ):
-        recorder.patch(processing, name, result=products)
-    recorder.patch(
-        processing,
+        patch_all(name, result=products)
+    patch_all(
         "process_codice",
         result=(
             [dict(item, instrument="codice_lo") for item in products],
             [dict(item, instrument="codice_hi") for item in products],
         ),
     )
-    recorder.patch(processing, "process_status", result=[product])
+    patch_all("process_status", result=[product])
+    patch_all("load_cdf", effect=lambda path: {"calibration": path.name})
     recorder.patch(
-        processing, "load_cdf", effect=lambda path: {"calibration": path.name}
-    )
-    recorder.patch(
-        processing.pd, "read_csv", result={"calibration": "csv"}, name="pd.read_csv"
+        binding("pd"), "read_csv", result={"calibration": "csv"}, name="pd.read_csv"
     )
     return SimpleNamespace(
         recorder=recorder,
