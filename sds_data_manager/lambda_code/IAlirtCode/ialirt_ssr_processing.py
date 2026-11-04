@@ -336,7 +336,7 @@ def parse_packets(
     return combined
 
 
-def process_algorithms(
+def process_algorithms(  # noqa: PLR0915
     combined: xr.Dataset,
     items: list[dict],
     instrument: str,
@@ -374,12 +374,17 @@ def process_algorithms(
     if True:
         if True:
             if instrument == "swe":
+                logger.info("Processing SWE.")
                 download_path = get_ancillary(instrument, "l1b-in-flight-cal")
+                logger.info("swe l1b-in-flight-cal: %s", download_path)
                 ancillary_files = {"swe_l1b-in-flight-cal": download_path.name}
                 result = process_func(combined, [download_path])
             elif instrument == "mag":
+                logger.info("Processing MAG.")
                 ialirt_cal_path = get_ancillary(instrument, "ialirt-calibration")
+                logger.info("mag ialirt-calibration: %s", ialirt_cal_path)
                 l1b_cal_path = get_ancillary(instrument, "l1b-calibration")
+                logger.info("mag l1b-calibration: %s", l1b_cal_path)
                 l1b_calibration_data = load_cdf(l1b_cal_path)
                 ialirt_calibration_data = load_cdf(ialirt_cal_path)
                 ancillary_files = {
@@ -392,6 +397,7 @@ def process_algorithms(
                     ialirt_calibration_data,
                 )
             elif instrument == "codice_lo":
+                logger.info("Processing CoDICE-Lo.")
                 l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 # CoDICE-Lo uses the same efficiency and geometric factor tables as
                 # regular processing.
@@ -399,6 +405,9 @@ def process_algorithms(
                     "codice", "l2-lo-efficiency"
                 )
                 l2_geometric_download_path = get_ancillary("codice", "l2-lo-gfactor")
+                logger.info("codice l1a-sci-lut: %s", l1a_download_path)
+                logger.info("codice l2-lo-efficiency: %s", l2_efficiency_download_path)
+                logger.info("codice l2-lo-gfactor: %s", l2_geometric_download_path)
                 ancillary_files = {
                     "codice_l1a-sci-lut": l1a_download_path.name,
                     "codice_l2-lo-efficiency": l2_efficiency_download_path.name,
@@ -412,11 +421,16 @@ def process_algorithms(
                     l2_geometric_download_path,
                 )
             elif instrument == "codice_hi":
+                logger.info("Processing CoDICE-Hi.")
                 l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 # CoDICE-Hi uses its own I-ALiRT efficiency table
                 # and no geometric factor.
                 l2_efficiency_download_path = get_ancillary(
                     "codice", "l2-hi-ialirt-efficiency"
+                )
+                logger.info("codice l1a-sci-lut: %s", l1a_download_path)
+                logger.info(
+                    "codice l2-hi-ialirt-efficiency: %s", l2_efficiency_download_path
                 )
                 ancillary_files = {
                     "codice_l1a-sci-lut": l1a_download_path.name,
@@ -429,15 +443,19 @@ def process_algorithms(
                     "codice_hi",
                 )
             elif instrument == "swapi":
+                logger.info("Processing SWAPI.")
                 download_path = get_ancillary(instrument, "esa-unit-conversion")
+                logger.info("swapi esa-unit-conversion: %s", download_path)
                 ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
                 calibration_data = pd.read_csv(download_path)
                 result = process_func(combined, calibration_data)
             elif instrument == "hit":
+                logger.info("Processing HIT.")
                 # HIT has no ancillary files.
                 ancillary_files = {}
                 result = process_func(combined)
             else:
+                logger.info("Processing Spacecraft Status.")
                 # Spacecraft status has no ancillary files.
                 ancillary_files = {}
                 result = process_func(combined)
