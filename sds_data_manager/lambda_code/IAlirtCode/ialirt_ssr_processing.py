@@ -873,70 +873,7 @@ def lambda_handler(event, context):
             Name=os.environ["SSM_API_KEY_PARAMETER"], WithDecryption=True
         )
         imap_data_access.config["API_KEY"] = ssm_response["Parameter"]["Value"]
-        # /tmp persists between warm invocations. Clear it first in case a
-        # previous invocation failed or timed out before cleaning up.
-        shutil.rmtree(DOWNLOAD_DIR, ignore_errors=True)
-        DOWNLOAD_DIR.mkdir(parents=True)
-
-        start = time.perf_counter()
-        kernel_types = KERNELS if instrument in GEOMETRY_INSTRUMENTS else TIME_KERNELS
-        dependency_inputs = get_latest_spice_kernels(url, day, kernel_types)
-        spice_files = download_spice_file(dependency_inputs, DOWNLOAD_DIR)
-        size_mb = sum(path.stat().st_size for path in spice_files) / 1e6
-        logger.info(
-            "Downloaded %d SPICE files (%.1f MB) in %.1f s",
-            len(spice_files),
-            size_mb,
-            time.perf_counter() - start,
-        )
-
-        kernel_set_key = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
-
-        # Only these kernels are loaded inside the block. They are unloaded when
-        # the block exits, even on an error, so none carry over to the next
-        # invocation in a warm Lambda.
-        with spiceypy.KernelPool([str(path) for path in spice_files]):
-            kernel_set_key_ttj2000ns = int(et_to_ttj2000ns(str_to_et(kernel_set_key)))
-            items = [
-                spice_item(
-                    dependency_inputs, version, kernel_set_key, kernel_set_key_ttj2000ns
-                )
-            ]
-            if instrument == "spacecraft":
-                # The spacecraft has no ancillary files.
-                ancillary_files = {}
-                items += spacecraft_items(day, version, kernel_set_key)
-            else:
-                filenames = query_filenames(day)
-                # Get packets into datasets and combine.
-                combined = parse_packets(filenames, DOWNLOAD_DIR)
-                check_day_coverage(combined, day)
-                combined = trim_packets(combined, day)
-                # Process algorithms and add new data to items.
-                ancillary_files = process_algorithms(
-                    combined, items, instrument, day, version, kernel_set_key
-                )
-                if ancillary_files is None:
-                    return
-            # Always add the ancillary item so every run records its software versions.
-            items.append(
-                ancillary_item(
-                    ancillary_files,
-                    version,
-                    kernel_set_key,
-                    kernel_set_key_ttj2000ns,
-                )
-            )
-
-        with data_table.batch_writer(
-            overwrite_by_pkeys=["instrument_version", "time_utc"]
-        ) as batch:
-            for record in items:
-                batch.put_item(Item=record)
-
-        logger.info(
-            "Inserted %d %s items for %s %s", len(items), instrument, day, version
-        )
+        process_day(instrument, day, version, url, data_table)
     except Exception as e:
         logger.error(
             "FAILED %s %s %s: %s: %s",
@@ -947,3 +884,85 @@ def lambda_handler(event, context):
             e,
         )
         raise
+
+
+def process_day(
+    instrument: str, day: datetime, version: str, url: str, data_table
+) -> None:
+    """Process one day of I-ALiRT SSR data for one instrument.
+
+    Parameters
+    ----------
+    instrument : str
+        The instrument to process, e.g. "mag".
+    day : datetime
+        The day to process.
+    version : str
+        The data version, e.g. "v001".
+    url : str
+        The IMAP data access API URL.
+    data_table : dynamodb.Table
+        The SSR DynamoDB table.
+    """
+    # /tmp persists between warm invocations. Clear it first in case a
+    # previous invocation failed or timed out before cleaning up.
+    shutil.rmtree(DOWNLOAD_DIR, ignore_errors=True)
+    DOWNLOAD_DIR.mkdir(parents=True)
+
+    start = time.perf_counter()
+    kernel_types = KERNELS if instrument in GEOMETRY_INSTRUMENTS else TIME_KERNELS
+    dependency_inputs = get_latest_spice_kernels(url, day, kernel_types)
+    spice_files = download_spice_file(dependency_inputs, DOWNLOAD_DIR)
+    size_mb = sum(path.stat().st_size for path in spice_files) / 1e6
+    logger.info(
+        "Downloaded %d SPICE files (%.1f MB) in %.1f s",
+        len(spice_files),
+        size_mb,
+        time.perf_counter() - start,
+    )
+
+    kernel_set_key = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
+
+    # Only these kernels are loaded inside the block. They are unloaded when
+    # the block exits, even on an error, so none carry over to the next
+    # invocation in a warm Lambda.
+    with spiceypy.KernelPool([str(path) for path in spice_files]):
+        kernel_set_key_ttj2000ns = int(et_to_ttj2000ns(str_to_et(kernel_set_key)))
+        items = [
+            spice_item(
+                dependency_inputs, version, kernel_set_key, kernel_set_key_ttj2000ns
+            )
+        ]
+        if instrument == "spacecraft":
+            # The spacecraft has no ancillary files.
+            ancillary_files = {}
+            items += spacecraft_items(day, version, kernel_set_key)
+        else:
+            filenames = query_filenames(day)
+            # Get packets into datasets and combine.
+            combined = parse_packets(filenames, DOWNLOAD_DIR)
+            check_day_coverage(combined, day)
+            combined = trim_packets(combined, day)
+            # Process algorithms and add new data to items.
+            ancillary_files = process_algorithms(
+                combined, items, instrument, day, version, kernel_set_key
+            )
+            if ancillary_files is None:
+                return
+        # Always add the ancillary item so every run records its software versions.
+        items.append(
+            ancillary_item(
+                ancillary_files,
+                version,
+                kernel_set_key,
+                kernel_set_key_ttj2000ns,
+            )
+        )
+
+    with data_table.batch_writer(
+        overwrite_by_pkeys=["instrument_version", "time_utc"]
+    ) as batch:
+        for record in items:
+            batch.put_item(Item=record)
+
+    logger.info("Inserted %d %s items for %s %s", len(items), instrument, day, version)
