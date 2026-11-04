@@ -701,11 +701,6 @@ def insert_formatted_data(
             items.append(record)
 
 
-def to_decimal(values: np.ndarray) -> list[Decimal]:
-    """Convert floats to Decimal, since DynamoDB does not accept floats."""
-    return [Decimal(str(val)) for val in values]
-
-
 def spacecraft_items(day: datetime, version: str, kernel_set_key: str) -> list[dict]:
     """Calculate spacecraft position and velocity over the day.
 
@@ -733,6 +728,7 @@ def spacecraft_items(day: datetime, version: str, kernel_set_key: str) -> list[d
     time_strs = [t.strftime("%Y-%m-%dT%H:%M:%S") for t in times]
     ets = np.array([str_to_et(t) for t in time_strs])
 
+    # Calculate the spacecraft position and velocity in GSE/GSM coordinates.
     gsm_state = imap_state(ets, ref_frame=SpiceFrame.IMAP_GSM, observer=SpiceBody.EARTH)
     gse_state = imap_state(ets, ref_frame=SpiceFrame.IMAP_GSE, observer=SpiceBody.EARTH)
 
@@ -742,10 +738,10 @@ def spacecraft_items(day: datetime, version: str, kernel_set_key: str) -> list[d
             "time_utc": time_str,
             "instrument": "spacecraft",
             "ttj2000ns": int(et_to_ttj2000ns(et)),
-            "sc_position_GSM": to_decimal(gsm[:3]),
-            "sc_velocity_GSM": to_decimal(gsm[3:]),
-            "sc_position_GSE": to_decimal(gse[:3]),
-            "sc_velocity_GSE": to_decimal(gse[3:]),
+            "sc_position_GSM": [Decimal(str(val)) for val in gsm[:3]],
+            "sc_velocity_GSM": [Decimal(str(val)) for val in gsm[3:]],
+            "sc_position_GSE": [Decimal(str(val)) for val in gse[:3]],
+            "sc_velocity_GSE": [Decimal(str(val)) for val in gse[3:]],
             "kernel_set_key": kernel_set_key,
         }
         for time_str, et, gsm, gse in zip(
