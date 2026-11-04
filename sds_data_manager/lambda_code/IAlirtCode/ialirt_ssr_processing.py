@@ -607,22 +607,56 @@ def process_algorithms(
 
 
 def reformat_data(
-    data: list[dict],
-    instrument: str,
-    version: str,
-    kernel_set_key: str,
-) -> list[dict]:
-    """Format science records with SSR version and kernel provenance keys."""
+    data: list[dict], instrument: str, version: str
+) -> tuple[list[dict], list[dict]]:
+    """Reformat science and housekeeping data.
+
+    Parameters
+    ----------
+    data : list[dict]
+        Data product.
+    instrument : str
+        The prefix for the product name.
+    version : str
+        The data version, e.g. "v001".
+
+    Returns
+    -------
+    science_data : list[dict]
+        Reformatted science data.
+    hk_data : list[dict]
+        Reformatted housekeeping data.
+
+    Notes
+    -----
+    SSR adds the instrument_version key and puts it and time_utc first.
+    Housekeeping is only made for MAG, chosen by instrument rather than
+    by each item's instrument field.
+    """
     exclude_keys = {"apid", "met", "met_in_utc", "mag_hk_status"}
-    return [
+    science_data = [
         {
             "instrument_version": f"{instrument}#{version}",
             "time_utc": item["met_in_utc"],
             **{k: v for k, v in item.items() if k not in exclude_keys},
-            "kernel_set_key": kernel_set_key,
         }
         for item in data
     ]
+    hk_data = (
+        [
+            {
+                "instrument_version": f"mag_hk#{version}",
+                "time_utc": item["met_in_utc"],
+                "instrument": "mag_hk",
+                "mag_hk_status": item["mag_hk_status"],
+            }
+            for item in data
+        ]
+        if instrument == "mag"
+        else []
+    )
+
+    return science_data, hk_data
 
 
 def insert_formatted_data(
@@ -632,25 +666,39 @@ def insert_formatted_data(
     version: str,
     kernel_set_key: str,
 ) -> None:
-    """Append science and MAG housekeeping records to the pending SSR items.
+    """Append science and housekeeping records to the pending SSR items.
 
+    Parameters
+    ----------
+    data : list[dict]
+        Data product produced from processing respectively instrument.
+    items : list[dict]
+        The pending items, written by the handler.
+    instrument : str
+        The prefix for the product name.
+    version : str
+        The data version, e.g. "v001".
+    kernel_set_key : str
+        The kernel set identifier.
+
+    Notes
+    -----
     Unlike realtime's immediate inserts, SSR defers database writes until
-    the handler exits the SPICE kernel pool successfully.
+    the handler exits the SPICE kernel pool successfully. Spacecraft
+    position is calculated separately, for the whole day.
     """
-    science_data = reformat_data(data, instrument, version, kernel_set_key)
-    items += science_data
-    if instrument == "mag":
-        hk_data = [
-            {
-                "instrument_version": f"mag_hk#{version}",
-                "time_utc": item["met_in_utc"],
-                "instrument": "mag_hk",
-                "mag_hk_status": item["mag_hk_status"],
-                "kernel_set_key": kernel_set_key,
-            }
-            for item in data
-        ]
-        items += hk_data
+    science_data, hk_data = reformat_data(data, instrument, version)
+
+    # Insert science data
+    for record in science_data:
+        record["kernel_set_key"] = kernel_set_key
+        items.append(record)
+
+    # Insert hk data
+    if hk_data:
+        for record in hk_data:
+            record["kernel_set_key"] = kernel_set_key
+            items.append(record)
 
 
 def to_decimal(values: np.ndarray) -> list[Decimal]:
