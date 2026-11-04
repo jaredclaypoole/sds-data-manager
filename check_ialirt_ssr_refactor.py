@@ -178,6 +178,7 @@ def main():
                         "tests/lambda_endpoints/ssr_refactor/behavior_aware/"
                         "test_ialirt_ssr_contract.py",
                         "--cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing",
+                        "--cov=sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_utils",
                         "--cov-branch",
                         "--cov-report=term-missing",
                         "--cov-fail-under=100",
