@@ -516,8 +516,8 @@ def test_process_algorithms(  # noqa: PLR0912, PLR0915
     ]
     if instrument == "mag":
         assert load_cdf.call_args_list == [
-            call(tmp_path / "mag_l1b-calibration.cdf"),
             call(tmp_path / "mag_ialirt-calibration.cdf"),
+            call(tmp_path / "mag_l1b-calibration.cdf"),
         ]
     else:
         load_cdf.assert_not_called()
