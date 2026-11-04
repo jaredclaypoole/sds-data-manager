@@ -904,9 +904,11 @@ def lambda_handler(event, context):
                 items += spacecraft_items(day, version, kernel_set_key)
             else:
                 filenames = query_filenames(day)
+                # Get packets into datasets and combine.
                 combined = parse_packets(filenames, DOWNLOAD_DIR)
                 check_day_coverage(combined, day)
                 combined = trim_packets(combined, day)
+                # Process algorithms and add new data to items.
                 ancillary_files = process_algorithms(
                     combined, items, instrument, day, version, kernel_set_key
                 )
