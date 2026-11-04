@@ -375,30 +375,35 @@ def process_algorithms(
         if True:
             if instrument == "swe":
                 download_path = get_ancillary(instrument, "l1b-in-flight-cal")
-                result = process_func(combined, [download_path])
                 ancillary_files = {"swe_l1b-in-flight-cal": download_path.name}
+                result = process_func(combined, [download_path])
             elif instrument == "mag":
                 ialirt_cal_path = get_ancillary(instrument, "ialirt-calibration")
                 l1b_cal_path = get_ancillary(instrument, "l1b-calibration")
                 l1b_calibration_data = load_cdf(l1b_cal_path)
                 ialirt_calibration_data = load_cdf(ialirt_cal_path)
+                ancillary_files = {
+                    "mag_ialirt-calibration": ialirt_cal_path.name,
+                    "mag_l1b-calibration": l1b_cal_path.name,
+                }
                 result = process_func(
                     combined,
                     l1b_calibration_data,
                     ialirt_calibration_data,
                 )
-                ancillary_files = {
-                    "mag_ialirt-calibration": ialirt_cal_path.name,
-                    "mag_l1b-calibration": l1b_cal_path.name,
-                }
             elif instrument == "codice_lo":
+                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 # CoDICE-Lo uses the same efficiency and geometric factor tables as
                 # regular processing.
-                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 l2_efficiency_download_path = get_ancillary(
                     "codice", "l2-lo-efficiency"
                 )
                 l2_geometric_download_path = get_ancillary("codice", "l2-lo-gfactor")
+                ancillary_files = {
+                    "codice_l1a-sci-lut": l1a_download_path.name,
+                    "codice_l2-lo-efficiency": l2_efficiency_download_path.name,
+                    "codice_l2-lo-gfactor": l2_geometric_download_path.name,
+                }
                 result, _ = process_func(
                     combined,
                     l1a_download_path,
@@ -406,33 +411,28 @@ def process_algorithms(
                     "codice_lo",
                     l2_geometric_download_path,
                 )
-                ancillary_files = {
-                    "codice_l1a-sci-lut": l1a_download_path.name,
-                    "codice_l2-lo-efficiency": l2_efficiency_download_path.name,
-                    "codice_l2-lo-gfactor": l2_geometric_download_path.name,
-                }
             elif instrument == "codice_hi":
+                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 # CoDICE-Hi uses its own I-ALiRT efficiency table
                 # and no geometric factor.
-                l1a_download_path = get_ancillary("codice", "l1a-sci-lut")
                 l2_efficiency_download_path = get_ancillary(
                     "codice", "l2-hi-ialirt-efficiency"
                 )
+                ancillary_files = {
+                    "codice_l1a-sci-lut": l1a_download_path.name,
+                    "codice_l2-hi-ialirt-efficiency": l2_efficiency_download_path.name,
+                }
                 _, result = process_func(
                     combined,
                     l1a_download_path,
                     l2_efficiency_download_path,
                     "codice_hi",
                 )
-                ancillary_files = {
-                    "codice_l1a-sci-lut": l1a_download_path.name,
-                    "codice_l2-hi-ialirt-efficiency": l2_efficiency_download_path.name,
-                }
             elif instrument == "swapi":
                 download_path = get_ancillary(instrument, "esa-unit-conversion")
+                ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
                 calibration_data = pd.read_csv(download_path)
                 result = process_func(combined, calibration_data)
-                ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
             elif instrument == "hit":
                 # HIT has no ancillary files.
                 ancillary_files = {}
