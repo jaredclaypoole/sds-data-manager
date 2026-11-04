@@ -3580,59 +3580,60 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v233"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
       {"bool": {"ref": "v233"}, "value": true, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v235"}},
+      {"bool": {"ref": "v235"}, "value": true, "result": {"ref": "v236"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v237"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v237"}, "result": {"ref": "v238"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v239"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v239"}, "result": {"ref": "v240"}},
       {
-        "call": "v238.strftime",
+        "call": "v240.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v242"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v242"}, "result": {"ref": "v243"}},
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"op": "lt", "left": {"ref": "v242"}, "right": {"ref": "v240"}, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v245"}, "value": false, "result": {"ref": "v246"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v248"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v248"}, "result": {"ref": "v249"}},
-      {"bool": {"ref": "v249"}, "value": true, "result": {"ref": "v250"}},
-      {"op": "lt", "left": {"ref": "v248"}, "right": {"ref": "v240"}, "result": {"ref": "v251"}},
-      {"bool": {"ref": "v251"}, "value": false, "result": {"ref": "v252"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v244"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v244"}, "result": {"ref": "v245"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"op": "lt", "left": {"ref": "v244"}, "right": {"ref": "v242"}, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v247"}, "value": false, "result": {"ref": "v248"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v250"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v250"}, "result": {"ref": "v251"}},
+      {"bool": {"ref": "v251"}, "value": true, "result": {"ref": "v252"}},
+      {"op": "lt", "left": {"ref": "v250"}, "right": {"ref": "v242"}, "result": {"ref": "v253"}},
+      {"bool": {"ref": "v253"}, "value": false, "result": {"ref": "v254"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "hit"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v255"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v257"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v256"}
+        "result": {"ref": "v258"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"enter": {"ref": "v258"}, "result": {"ref": "v259"}},
+      {"enter": {"ref": "v260"}, "result": {"ref": "v261"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -3645,14 +3646,14 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v261"}
+        "result": {"ref": "v263"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v255>",
+            "instrument_version": "ancillary#<v257>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -3660,19 +3661,19 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v263"}
+        "result": {"ref": "v265"}
       },
       {
-        "exit": {"ref": "v258"},
+        "exit": {"ref": "v260"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v264"}
+        "result": {"ref": "v266"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       }
     ]
   },
@@ -4566,18 +4567,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": false, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": false, "result": {"ref": "v232"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v233"}},
+      {"bool": {"ref": "v233"}, "value": false, "result": {"ref": "v234"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v234"}
+        "result": {"ref": "v236"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v235"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v237"}}
     ]
   },
   {
@@ -5018,18 +5020,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
-      {"bool": {"ref": "v231"}, "value": false, "result": {"ref": "v232"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
+      {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
+      {"bool": {"ref": "v233"}, "value": false, "result": {"ref": "v234"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v234"}
+        "result": {"ref": "v236"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v235"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v237"}}
     ]
   },
   {
@@ -5470,55 +5473,56 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v233"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
       {"bool": {"ref": "v233"}, "value": true, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v235"}},
+      {"bool": {"ref": "v235"}, "value": true, "result": {"ref": "v236"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v237"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v237"}, "result": {"ref": "v238"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v239"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v239"}, "result": {"ref": "v240"}},
       {
-        "call": "v238.strftime",
+        "call": "v240.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v242"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v242"}, "result": {"ref": "v243"}},
-      {"bool": {"ref": "v243"}, "value": false, "result": {"ref": "v244"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v245"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v246"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v246"}, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v247"}, "value": false, "result": {"ref": "v248"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v244"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v244"}, "result": {"ref": "v245"}},
+      {"bool": {"ref": "v245"}, "value": false, "result": {"ref": "v246"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v247"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v248"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v248"}, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v249"}, "value": false, "result": {"ref": "v250"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "hit"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v251"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v253"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v252"}
+        "result": {"ref": "v254"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"enter": {"ref": "v254"}, "result": {"ref": "v255"}},
+      {"enter": {"ref": "v256"}, "result": {"ref": "v257"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -5531,14 +5535,14 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v257"}
+        "result": {"ref": "v259"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v251>",
+            "instrument_version": "ancillary#<v253>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -5546,19 +5550,19 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v259"}
+        "result": {"ref": "v261"}
       },
       {
-        "exit": {"ref": "v254"},
+        "exit": {"ref": "v256"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v260"}
+        "result": {"ref": "v262"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v264"}
       }
     ]
   },
@@ -6000,81 +6004,82 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v233"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
       {"bool": {"ref": "v233"}, "value": true, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v235"}},
+      {"bool": {"ref": "v235"}, "value": true, "result": {"ref": "v236"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v237"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v237"}, "result": {"ref": "v238"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v239"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v239"}, "result": {"ref": "v240"}},
       {
-        "call": "v238.strftime",
+        "call": "v240.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v242"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v242"}, "result": {"ref": "v243"}},
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"op": "lt", "left": {"ref": "v242"}, "right": {"ref": "v240"}, "result": {"ref": "v245"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v244"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v244"}, "result": {"ref": "v245"}},
       {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v248"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v248"}, "result": {"ref": "v249"}},
-      {"bool": {"ref": "v249"}, "value": true, "result": {"ref": "v250"}},
-      {"op": "lt", "left": {"ref": "v248"}, "right": {"ref": "v240"}, "result": {"ref": "v251"}},
+      {"op": "lt", "left": {"ref": "v244"}, "right": {"ref": "v242"}, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v248"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v250"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v250"}, "result": {"ref": "v251"}},
       {"bool": {"ref": "v251"}, "value": true, "result": {"ref": "v252"}},
+      {"op": "lt", "left": {"ref": "v250"}, "right": {"ref": "v242"}, "result": {"ref": "v253"}},
+      {"bool": {"ref": "v253"}, "value": true, "result": {"ref": "v254"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "hit"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v256"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v258"}},
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v260"}},
-      {"iter": {"ref": "v259"}, "index": 1, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v258"}, "index": 1, "result": {"ref": "v262"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v264"}},
-      {"op": "eq", "left": {"ref": "v260"}, "right": {"ref": "v263"}, "result": {"ref": "v265"}},
-      {"bool": {"ref": "v265"}, "value": true, "result": {"ref": "v266"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v267"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v268"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v270"}},
-      {"iter": {"ref": "v270"}, "index": 0, "result": {"ref": "v271"}},
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v270"}, "index": 1, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v276"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v279"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v258"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v260"}},
+      {"iter": {"ref": "v260"}, "index": 0, "result": {"ref": "v261"}},
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v262"}},
+      {"iter": {"ref": "v261"}, "index": 1, "result": {"ref": "v263"}},
+      {"iter": {"ref": "v260"}, "index": 1, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v265"}},
+      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v266"}},
+      {"op": "eq", "left": {"ref": "v262"}, "right": {"ref": "v265"}, "result": {"ref": "v267"}},
+      {"bool": {"ref": "v267"}, "value": true, "result": {"ref": "v268"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v270"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
+      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v279"}, "value": true, "result": {"ref": "v280"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v281"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v280"}
+        "result": {"ref": "v282"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v282"}
+        "result": {"ref": "v284"}
       },
-      {"enter": {"ref": "v282"}, "result": {"ref": "v283"}},
+      {"enter": {"ref": "v284"}, "result": {"ref": "v285"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -6087,21 +6092,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v285"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "hit#<v255>"],
-              ["time_utc", {"ref": "v256"}],
-              [{"ref": "v260"}, {"ref": "v264"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v287"}
       },
       {
@@ -6110,9 +6100,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "hit#<v267>"],
-              ["time_utc", {"ref": "v268"}],
-              [{"ref": "v272"}, {"ref": "v276"}],
+              ["instrument_version", "hit#<v257>"],
+              ["time_utc", {"ref": "v258"}],
+              [{"ref": "v262"}, {"ref": "v266"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -6124,7 +6114,22 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v279>",
+            "mapping": [
+              ["instrument_version", "hit#<v269>"],
+              ["time_utc", {"ref": "v270"}],
+              [{"ref": "v274"}, {"ref": "v278"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v291"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v281>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -6132,19 +6137,19 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v291"}
+        "result": {"ref": "v293"}
       },
       {
-        "exit": {"ref": "v282"},
+        "exit": {"ref": "v284"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v292"}
+        "result": {"ref": "v294"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 4, "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v294"}
+        "result": {"ref": "v296"}
       }
     ]
   },
@@ -6601,85 +6606,86 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v233"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
       {"bool": {"ref": "v233"}, "value": true, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v235"}},
+      {"bool": {"ref": "v235"}, "value": true, "result": {"ref": "v236"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v237"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v237"}, "result": {"ref": "v238"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v239"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v239"}, "result": {"ref": "v240"}},
       {
-        "call": "v238.strftime",
+        "call": "v240.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v242"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v242"}, "result": {"ref": "v243"}},
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"op": "lt", "left": {"ref": "v242"}, "right": {"ref": "v240"}, "result": {"ref": "v245"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v244"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v244"}, "result": {"ref": "v245"}},
       {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v248"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v248"}, "result": {"ref": "v249"}},
-      {"bool": {"ref": "v249"}, "value": true, "result": {"ref": "v250"}},
-      {"op": "lt", "left": {"ref": "v248"}, "right": {"ref": "v240"}, "result": {"ref": "v251"}},
+      {"op": "lt", "left": {"ref": "v244"}, "right": {"ref": "v242"}, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v248"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v250"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v250"}, "result": {"ref": "v251"}},
       {"bool": {"ref": "v251"}, "value": true, "result": {"ref": "v252"}},
+      {"op": "lt", "left": {"ref": "v250"}, "right": {"ref": "v242"}, "result": {"ref": "v253"}},
+      {"bool": {"ref": "v253"}, "value": true, "result": {"ref": "v254"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "hit"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v256"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v258"}},
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v260"}},
-      {"iter": {"ref": "v259"}, "index": 1, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v258"}, "index": 1, "result": {"ref": "v262"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v264"}},
-      {"op": "eq", "left": {"ref": "v260"}, "right": {"ref": "v263"}, "result": {"ref": "v265"}},
-      {"bool": {"ref": "v265"}, "value": false, "result": {"ref": "v266"}},
-      {"op": "eq", "left": {"ref": "v260"}, "right": {"ref": "v263"}, "result": {"ref": "v267"}},
-      {"bool": {"ref": "v267"}, "value": true, "result": {"ref": "v268"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v270"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
-      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
-      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
-      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
-      {"bool": {"ref": "v279"}, "value": false, "result": {"ref": "v280"}},
-      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v281"}},
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v283"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v258"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v260"}},
+      {"iter": {"ref": "v260"}, "index": 0, "result": {"ref": "v261"}},
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v262"}},
+      {"iter": {"ref": "v261"}, "index": 1, "result": {"ref": "v263"}},
+      {"iter": {"ref": "v260"}, "index": 1, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v265"}},
+      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v266"}},
+      {"op": "eq", "left": {"ref": "v262"}, "right": {"ref": "v265"}, "result": {"ref": "v267"}},
+      {"bool": {"ref": "v267"}, "value": false, "result": {"ref": "v268"}},
+      {"op": "eq", "left": {"ref": "v262"}, "right": {"ref": "v265"}, "result": {"ref": "v269"}},
+      {"bool": {"ref": "v269"}, "value": true, "result": {"ref": "v270"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v271"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v272"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v275"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v275"}, "index": 1, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v278"}, "index": 0, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v278"}, "index": 1, "result": {"ref": "v280"}},
+      {"op": "eq", "left": {"ref": "v276"}, "right": {"ref": "v279"}, "result": {"ref": "v281"}},
+      {"bool": {"ref": "v281"}, "value": false, "result": {"ref": "v282"}},
+      {"op": "eq", "left": {"ref": "v276"}, "right": {"ref": "v279"}, "result": {"ref": "v283"}},
+      {"bool": {"ref": "v283"}, "value": true, "result": {"ref": "v284"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v285"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v284"}
+        "result": {"ref": "v286"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v286"}
+        "result": {"ref": "v288"}
       },
-      {"enter": {"ref": "v286"}, "result": {"ref": "v287"}},
+      {"enter": {"ref": "v288"}, "result": {"ref": "v289"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -6692,21 +6698,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v289"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "hit#<v255>"],
-              ["time_utc", {"ref": "v256"}],
-              [{"ref": "v260"}, {"ref": "v264"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v291"}
       },
       {
@@ -6715,9 +6706,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "hit#<v269>"],
-              ["time_utc", {"ref": "v270"}],
-              [{"ref": "v274"}, {"ref": "v278"}],
+              ["instrument_version", "hit#<v257>"],
+              ["time_utc", {"ref": "v258"}],
+              [{"ref": "v262"}, {"ref": "v266"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -6729,7 +6720,22 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v283>",
+            "mapping": [
+              ["instrument_version", "hit#<v271>"],
+              ["time_utc", {"ref": "v272"}],
+              [{"ref": "v276"}, {"ref": "v280"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v295"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v285>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -6737,19 +6743,19 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v295"}
+        "result": {"ref": "v297"}
       },
       {
-        "exit": {"ref": "v286"},
+        "exit": {"ref": "v288"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v296"}
+        "result": {"ref": "v298"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 4, "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       }
     ]
   },
@@ -7206,85 +7212,86 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v228"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v229"}},
-      {"bool": {"ref": "v229"}, "value": true, "result": {"ref": "v230"}},
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v231"}},
+      {"call": "logger.info", "args": ["Processing HIT."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"call": "process_hit", "args": [{"ref": "v227"}], "kwargs": {}, "result": {"ref": "v230"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v231"}},
       {"bool": {"ref": "v231"}, "value": true, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v233"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v233"}},
       {"bool": {"ref": "v233"}, "value": true, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v235"}},
+      {"bool": {"ref": "v235"}, "value": true, "result": {"ref": "v236"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v237"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v237"}, "result": {"ref": "v238"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v239"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v239"}, "result": {"ref": "v240"}},
       {
-        "call": "v238.strftime",
+        "call": "v240.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"iter": {"ref": "v228"}, "index": 0, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v242"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v242"}, "result": {"ref": "v243"}},
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"op": "lt", "left": {"ref": "v242"}, "right": {"ref": "v240"}, "result": {"ref": "v245"}},
+      {"iter": {"ref": "v230"}, "index": 0, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v244"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v244"}, "result": {"ref": "v245"}},
       {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
-      {"iter": {"ref": "v228"}, "index": 1, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v248"}},
-      {"op": "le", "left": {"ref": "v236"}, "right": {"ref": "v248"}, "result": {"ref": "v249"}},
-      {"bool": {"ref": "v249"}, "value": true, "result": {"ref": "v250"}},
-      {"op": "lt", "left": {"ref": "v248"}, "right": {"ref": "v240"}, "result": {"ref": "v251"}},
+      {"op": "lt", "left": {"ref": "v244"}, "right": {"ref": "v242"}, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v248"}},
+      {"iter": {"ref": "v230"}, "index": 1, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v250"}},
+      {"op": "le", "left": {"ref": "v238"}, "right": {"ref": "v250"}, "result": {"ref": "v251"}},
       {"bool": {"ref": "v251"}, "value": true, "result": {"ref": "v252"}},
+      {"op": "lt", "left": {"ref": "v250"}, "right": {"ref": "v242"}, "result": {"ref": "v253"}},
+      {"bool": {"ref": "v253"}, "value": true, "result": {"ref": "v254"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "hit"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v241"}, "key": "met_in_utc", "result": {"ref": "v256"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v258"}},
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v260"}},
-      {"iter": {"ref": "v259"}, "index": 1, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v258"}, "index": 1, "result": {"ref": "v262"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v264"}},
-      {"op": "eq", "left": {"ref": "v260"}, "right": {"ref": "v263"}, "result": {"ref": "v265"}},
-      {"bool": {"ref": "v265"}, "value": false, "result": {"ref": "v266"}},
-      {"op": "eq", "left": {"ref": "v260"}, "right": {"ref": "v263"}, "result": {"ref": "v267"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v243"}, "key": "met_in_utc", "result": {"ref": "v258"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v260"}},
+      {"iter": {"ref": "v260"}, "index": 0, "result": {"ref": "v261"}},
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v262"}},
+      {"iter": {"ref": "v261"}, "index": 1, "result": {"ref": "v263"}},
+      {"iter": {"ref": "v260"}, "index": 1, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v265"}},
+      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v266"}},
+      {"op": "eq", "left": {"ref": "v262"}, "right": {"ref": "v265"}, "result": {"ref": "v267"}},
       {"bool": {"ref": "v267"}, "value": false, "result": {"ref": "v268"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
-      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v270"}},
-      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
-      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
-      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
-      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
-      {"bool": {"ref": "v279"}, "value": false, "result": {"ref": "v280"}},
-      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v281"}},
+      {"op": "eq", "left": {"ref": "v262"}, "right": {"ref": "v265"}, "result": {"ref": "v269"}},
+      {"bool": {"ref": "v269"}, "value": false, "result": {"ref": "v270"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v271"}},
+      {"getitem": {"ref": "v249"}, "key": "met_in_utc", "result": {"ref": "v272"}},
+      {"call": "process_hit.items", "args": [], "kwargs": {}, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v275"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v275"}, "index": 1, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v278"}, "index": 0, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v278"}, "index": 1, "result": {"ref": "v280"}},
+      {"op": "eq", "left": {"ref": "v276"}, "right": {"ref": "v279"}, "result": {"ref": "v281"}},
       {"bool": {"ref": "v281"}, "value": false, "result": {"ref": "v282"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v283"}},
+      {"op": "eq", "left": {"ref": "v276"}, "right": {"ref": "v279"}, "result": {"ref": "v283"}},
+      {"bool": {"ref": "v283"}, "value": false, "result": {"ref": "v284"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v285"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v284"}
+        "result": {"ref": "v286"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v286"}
+        "result": {"ref": "v288"}
       },
-      {"enter": {"ref": "v286"}, "result": {"ref": "v287"}},
+      {"enter": {"ref": "v288"}, "result": {"ref": "v289"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -7297,22 +7304,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v289"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "hit#<v255>"],
-              ["time_utc", {"ref": "v256"}],
-              [{"ref": "v260"}, {"ref": "v261"}],
-              [{"ref": "v263"}, {"ref": "v264"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v291"}
       },
       {
@@ -7321,10 +7312,10 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "hit#<v269>"],
-              ["time_utc", {"ref": "v270"}],
-              [{"ref": "v274"}, {"ref": "v275"}],
-              [{"ref": "v277"}, {"ref": "v278"}],
+              ["instrument_version", "hit#<v257>"],
+              ["time_utc", {"ref": "v258"}],
+              [{"ref": "v262"}, {"ref": "v263"}],
+              [{"ref": "v265"}, {"ref": "v266"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -7336,7 +7327,23 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v283>",
+            "mapping": [
+              ["instrument_version", "hit#<v271>"],
+              ["time_utc", {"ref": "v272"}],
+              [{"ref": "v276"}, {"ref": "v277"}],
+              [{"ref": "v279"}, {"ref": "v280"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v295"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v285>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -7344,19 +7351,19 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v295"}
+        "result": {"ref": "v297"}
       },
       {
-        "exit": {"ref": "v286"},
+        "exit": {"ref": "v288"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v296"}
+        "result": {"ref": "v298"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 4, "hit", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       }
     ]
   }

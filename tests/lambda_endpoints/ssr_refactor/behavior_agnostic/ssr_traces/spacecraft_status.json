@@ -3580,93 +3580,99 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v248"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v250"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v251"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v251"}, "result": {"ref": "v252"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v253"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v253"}, "result": {"ref": "v254"}},
       {
-        "call": "v252.strftime",
+        "call": "v254.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v255"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v255"}, "result": {"ref": "v256"}},
-      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
-      {"op": "lt", "left": {"ref": "v255"}, "right": {"ref": "v254"}, "result": {"ref": "v258"}},
-      {"bool": {"ref": "v258"}, "value": false, "result": {"ref": "v259"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v260"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v260"}, "result": {"ref": "v261"}},
-      {"bool": {"ref": "v261"}, "value": true, "result": {"ref": "v262"}},
-      {"op": "lt", "left": {"ref": "v260"}, "right": {"ref": "v254"}, "result": {"ref": "v263"}},
-      {"bool": {"ref": "v263"}, "value": false, "result": {"ref": "v264"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v257"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v257"}, "result": {"ref": "v258"}},
+      {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
+      {"op": "lt", "left": {"ref": "v257"}, "right": {"ref": "v256"}, "result": {"ref": "v260"}},
+      {"bool": {"ref": "v260"}, "value": false, "result": {"ref": "v261"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v262"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v262"}, "result": {"ref": "v263"}},
+      {"bool": {"ref": "v263"}, "value": true, "result": {"ref": "v264"}},
+      {"op": "lt", "left": {"ref": "v262"}, "right": {"ref": "v256"}, "result": {"ref": "v265"}},
+      {"bool": {"ref": "v265"}, "value": false, "result": {"ref": "v266"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "spacecraft_status"],
         "kwargs": {},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v267"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v268"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v270"}
+        "result": {"ref": "v272"}
       },
-      {"enter": {"ref": "v270"}, "result": {"ref": "v271"}},
+      {"enter": {"ref": "v272"}, "result": {"ref": "v273"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -3679,14 +3685,14 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v273"}
+        "result": {"ref": "v275"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v267>",
+            "instrument_version": "ancillary#<v269>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -3694,13 +3700,13 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v275"}
+        "result": {"ref": "v277"}
       },
       {
-        "exit": {"ref": "v270"},
+        "exit": {"ref": "v272"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v276"}
+        "result": {"ref": "v278"}
       },
       {
         "call": "logger.info",
@@ -3712,7 +3718,7 @@
           {"ref": "v14"}
         ],
         "kwargs": {},
-        "result": {"ref": "v278"}
+        "result": {"ref": "v280"}
       }
     ]
   },
@@ -4606,55 +4612,61 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": false, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v245"}, "value": false, "result": {"ref": "v247"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": false, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v247"}, "value": false, "result": {"ref": "v249"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "spacecraft_status", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v249"}
+        "result": {"ref": "v251"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v250"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v252"}}
     ]
   },
   {
@@ -5095,55 +5107,61 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": false, "result": {"ref": "v247"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": false, "result": {"ref": "v249"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "spacecraft_status", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v249"}
+        "result": {"ref": "v251"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v250"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v252"}}
     ]
   },
   {
@@ -5584,89 +5602,95 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v248"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v250"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v251"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v251"}, "result": {"ref": "v252"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v253"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v253"}, "result": {"ref": "v254"}},
       {
-        "call": "v252.strftime",
+        "call": "v254.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v255"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v255"}, "result": {"ref": "v256"}},
-      {"bool": {"ref": "v256"}, "value": false, "result": {"ref": "v257"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v258"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v258"}, "result": {"ref": "v259"}},
-      {"bool": {"ref": "v259"}, "value": false, "result": {"ref": "v260"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v257"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v257"}, "result": {"ref": "v258"}},
+      {"bool": {"ref": "v258"}, "value": false, "result": {"ref": "v259"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v260"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v260"}, "result": {"ref": "v261"}},
+      {"bool": {"ref": "v261"}, "value": false, "result": {"ref": "v262"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "spacecraft_status"],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v264"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v263"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v265"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v264"}
+        "result": {"ref": "v266"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       },
-      {"enter": {"ref": "v266"}, "result": {"ref": "v267"}},
+      {"enter": {"ref": "v268"}, "result": {"ref": "v269"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -5679,14 +5703,14 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v269"}
+        "result": {"ref": "v271"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v263>",
+            "instrument_version": "ancillary#<v265>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -5694,13 +5718,13 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v273"}
       },
       {
-        "exit": {"ref": "v266"},
+        "exit": {"ref": "v268"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v272"}
+        "result": {"ref": "v274"}
       },
       {
         "call": "logger.info",
@@ -5712,7 +5736,7 @@
           {"ref": "v14"}
         ],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v276"}
       }
     ]
   },
@@ -6154,115 +6178,121 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v248"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v250"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v251"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v251"}, "result": {"ref": "v252"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v253"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v253"}, "result": {"ref": "v254"}},
       {
-        "call": "v252.strftime",
+        "call": "v254.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v255"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v255"}, "result": {"ref": "v256"}},
-      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
-      {"op": "lt", "left": {"ref": "v255"}, "right": {"ref": "v254"}, "result": {"ref": "v258"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v257"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v257"}, "result": {"ref": "v258"}},
       {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v260"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v260"}, "result": {"ref": "v261"}},
-      {"bool": {"ref": "v261"}, "value": true, "result": {"ref": "v262"}},
-      {"op": "lt", "left": {"ref": "v260"}, "right": {"ref": "v254"}, "result": {"ref": "v263"}},
+      {"op": "lt", "left": {"ref": "v257"}, "right": {"ref": "v256"}, "result": {"ref": "v260"}},
+      {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v262"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v262"}, "result": {"ref": "v263"}},
       {"bool": {"ref": "v263"}, "value": true, "result": {"ref": "v264"}},
+      {"op": "lt", "left": {"ref": "v262"}, "right": {"ref": "v256"}, "result": {"ref": "v265"}},
+      {"bool": {"ref": "v265"}, "value": true, "result": {"ref": "v266"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "spacecraft_status"],
         "kwargs": {},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v267"}},
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v268"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v270"}},
-      {"iter": {"ref": "v270"}, "index": 0, "result": {"ref": "v271"}},
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v270"}, "index": 1, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v276"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v279"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v280"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v282"}},
-      {"iter": {"ref": "v282"}, "index": 0, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v283"}, "index": 0, "result": {"ref": "v284"}},
-      {"iter": {"ref": "v283"}, "index": 1, "result": {"ref": "v285"}},
-      {"iter": {"ref": "v282"}, "index": 1, "result": {"ref": "v286"}},
-      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v287"}},
-      {"iter": {"ref": "v286"}, "index": 1, "result": {"ref": "v288"}},
-      {"op": "eq", "left": {"ref": "v284"}, "right": {"ref": "v287"}, "result": {"ref": "v289"}},
-      {"bool": {"ref": "v289"}, "value": true, "result": {"ref": "v290"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v291"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v270"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
+      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v279"}, "value": true, "result": {"ref": "v280"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v281"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v282"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v284"}, "index": 0, "result": {"ref": "v285"}},
+      {"iter": {"ref": "v285"}, "index": 0, "result": {"ref": "v286"}},
+      {"iter": {"ref": "v285"}, "index": 1, "result": {"ref": "v287"}},
+      {"iter": {"ref": "v284"}, "index": 1, "result": {"ref": "v288"}},
+      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v289"}},
+      {"iter": {"ref": "v288"}, "index": 1, "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v293"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v292"}
+        "result": {"ref": "v294"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v294"}
+        "result": {"ref": "v296"}
       },
-      {"enter": {"ref": "v294"}, "result": {"ref": "v295"}},
+      {"enter": {"ref": "v296"}, "result": {"ref": "v297"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -6275,21 +6305,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v297"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "spacecraft_status#<v267>"],
-              ["time_utc", {"ref": "v268"}],
-              [{"ref": "v272"}, {"ref": "v276"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v299"}
       },
       {
@@ -6298,9 +6313,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "spacecraft_status#<v279>"],
-              ["time_utc", {"ref": "v280"}],
-              [{"ref": "v284"}, {"ref": "v288"}],
+              ["instrument_version", "spacecraft_status#<v269>"],
+              ["time_utc", {"ref": "v270"}],
+              [{"ref": "v274"}, {"ref": "v278"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -6312,7 +6327,22 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v291>",
+            "mapping": [
+              ["instrument_version", "spacecraft_status#<v281>"],
+              ["time_utc", {"ref": "v282"}],
+              [{"ref": "v286"}, {"ref": "v290"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v303"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v293>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -6320,13 +6350,13 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v303"}
+        "result": {"ref": "v305"}
       },
       {
-        "exit": {"ref": "v294"},
+        "exit": {"ref": "v296"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v304"}
+        "result": {"ref": "v306"}
       },
       {
         "call": "logger.info",
@@ -6338,7 +6368,7 @@
           {"ref": "v14"}
         ],
         "kwargs": {},
-        "result": {"ref": "v306"}
+        "result": {"ref": "v308"}
       }
     ]
   },
@@ -6795,119 +6825,125 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v248"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v250"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v251"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v251"}, "result": {"ref": "v252"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v253"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v253"}, "result": {"ref": "v254"}},
       {
-        "call": "v252.strftime",
+        "call": "v254.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v255"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v255"}, "result": {"ref": "v256"}},
-      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
-      {"op": "lt", "left": {"ref": "v255"}, "right": {"ref": "v254"}, "result": {"ref": "v258"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v257"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v257"}, "result": {"ref": "v258"}},
       {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v260"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v260"}, "result": {"ref": "v261"}},
-      {"bool": {"ref": "v261"}, "value": true, "result": {"ref": "v262"}},
-      {"op": "lt", "left": {"ref": "v260"}, "right": {"ref": "v254"}, "result": {"ref": "v263"}},
+      {"op": "lt", "left": {"ref": "v257"}, "right": {"ref": "v256"}, "result": {"ref": "v260"}},
+      {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v262"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v262"}, "result": {"ref": "v263"}},
       {"bool": {"ref": "v263"}, "value": true, "result": {"ref": "v264"}},
+      {"op": "lt", "left": {"ref": "v262"}, "right": {"ref": "v256"}, "result": {"ref": "v265"}},
+      {"bool": {"ref": "v265"}, "value": true, "result": {"ref": "v266"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "spacecraft_status"],
         "kwargs": {},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v267"}},
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v268"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v270"}},
-      {"iter": {"ref": "v270"}, "index": 0, "result": {"ref": "v271"}},
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v270"}, "index": 1, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v276"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": false, "result": {"ref": "v278"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v279"}},
-      {"bool": {"ref": "v279"}, "value": true, "result": {"ref": "v280"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v281"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v282"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v284"}},
-      {"iter": {"ref": "v284"}, "index": 0, "result": {"ref": "v285"}},
-      {"iter": {"ref": "v285"}, "index": 0, "result": {"ref": "v286"}},
-      {"iter": {"ref": "v285"}, "index": 1, "result": {"ref": "v287"}},
-      {"iter": {"ref": "v284"}, "index": 1, "result": {"ref": "v288"}},
-      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v289"}},
-      {"iter": {"ref": "v288"}, "index": 1, "result": {"ref": "v290"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
-      {"bool": {"ref": "v291"}, "value": false, "result": {"ref": "v292"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v289"}, "result": {"ref": "v293"}},
-      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v295"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v270"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
+      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v279"}, "value": false, "result": {"ref": "v280"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v281"}},
+      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v284"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v286"}},
+      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v287"}},
+      {"iter": {"ref": "v287"}, "index": 0, "result": {"ref": "v288"}},
+      {"iter": {"ref": "v287"}, "index": 1, "result": {"ref": "v289"}},
+      {"iter": {"ref": "v286"}, "index": 1, "result": {"ref": "v290"}},
+      {"iter": {"ref": "v290"}, "index": 0, "result": {"ref": "v291"}},
+      {"iter": {"ref": "v290"}, "index": 1, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v291"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": false, "result": {"ref": "v294"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v291"}, "result": {"ref": "v295"}},
+      {"bool": {"ref": "v295"}, "value": true, "result": {"ref": "v296"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v297"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v296"}
+        "result": {"ref": "v298"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"enter": {"ref": "v298"}, "result": {"ref": "v299"}},
+      {"enter": {"ref": "v300"}, "result": {"ref": "v301"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -6920,21 +6956,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v301"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "spacecraft_status#<v267>"],
-              ["time_utc", {"ref": "v268"}],
-              [{"ref": "v272"}, {"ref": "v276"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v303"}
       },
       {
@@ -6943,9 +6964,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "spacecraft_status#<v281>"],
-              ["time_utc", {"ref": "v282"}],
-              [{"ref": "v286"}, {"ref": "v290"}],
+              ["instrument_version", "spacecraft_status#<v269>"],
+              ["time_utc", {"ref": "v270"}],
+              [{"ref": "v274"}, {"ref": "v278"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -6957,7 +6978,22 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v295>",
+            "mapping": [
+              ["instrument_version", "spacecraft_status#<v283>"],
+              ["time_utc", {"ref": "v284"}],
+              [{"ref": "v288"}, {"ref": "v292"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v307"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v297>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -6965,13 +7001,13 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v307"}
+        "result": {"ref": "v309"}
       },
       {
-        "exit": {"ref": "v298"},
+        "exit": {"ref": "v300"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v308"}
+        "result": {"ref": "v310"}
       },
       {
         "call": "logger.info",
@@ -6983,7 +7019,7 @@
           {"ref": "v14"}
         ],
         "kwargs": {},
-        "result": {"ref": "v310"}
+        "result": {"ref": "v312"}
       }
     ]
   },
@@ -7440,119 +7476,125 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v228"}},
-      {"op": "floordiv", "left": {"ref": "v228"}, "right": 60000000000, "result": {"ref": "v229"}},
+      {
+        "call": "logger.info",
+        "args": ["Processing Spacecraft Status."],
+        "kwargs": {},
+        "result": {"ref": "v229"}
+      },
+      {"getitem": {"ref": "v227"}, "key": "epoch", "result": {"ref": "v230"}},
+      {"op": "floordiv", "left": {"ref": "v230"}, "right": 60000000000, "result": {"ref": "v231"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby",
-        "args": [{"ref": "v229"}],
+        "args": [{"ref": "v231"}],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
-      {"iter": {"ref": "v231"}, "index": 0, "result": {"ref": "v232"}},
-      {"iter": {"ref": "v232"}, "index": 0, "result": {"ref": "v233"}},
-      {"iter": {"ref": "v232"}, "index": 1, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v234"}, "index": 0, "result": {"ref": "v235"}},
+      {"iter": {"ref": "v234"}, "index": 1, "result": {"ref": "v236"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v236"}],
+        "args": [{"ref": "v238"}],
         "kwargs": {},
-        "result": {"ref": "v237"}
+        "result": {"ref": "v239"}
       },
-      {"getitem": {"ref": "v237"}, "key": 0, "result": {"ref": "v238"}},
-      {"iter": {"ref": "v231"}, "index": 1, "result": {"ref": "v239"}},
-      {"iter": {"ref": "v239"}, "index": 0, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v239"}, "index": 1, "result": {"ref": "v241"}},
+      {"getitem": {"ref": "v239"}, "key": 0, "result": {"ref": "v240"}},
+      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"iter": {"ref": "v241"}, "index": 0, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v241"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "xr.concat.sortby.isel.sel.groupby.isel",
         "args": [],
         "kwargs": {"epoch": [-1]},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
       {
         "call": "process_status",
-        "args": [{"ref": "v243"}],
+        "args": [{"ref": "v245"}],
         "kwargs": {},
-        "result": {"ref": "v244"}
+        "result": {"ref": "v246"}
       },
-      {"getitem": {"ref": "v244"}, "key": 0, "result": {"ref": "v245"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v247"}},
-      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v248"}},
+      {"getitem": {"ref": "v246"}, "key": 0, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v240"}, "value": true, "result": {"ref": "v249"}},
+      {"bool": {"ref": "v247"}, "value": true, "result": {"ref": "v250"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v250"}
+        "result": {"ref": "v252"}
       },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v251"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v251"}, "result": {"ref": "v252"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v253"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v253"}, "result": {"ref": "v254"}},
       {
-        "call": "v252.strftime",
+        "call": "v254.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v254"}
+        "result": {"ref": "v256"}
       },
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v255"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v255"}, "result": {"ref": "v256"}},
-      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
-      {"op": "lt", "left": {"ref": "v255"}, "right": {"ref": "v254"}, "result": {"ref": "v258"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v257"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v257"}, "result": {"ref": "v258"}},
       {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v260"}},
-      {"op": "le", "left": {"ref": "v250"}, "right": {"ref": "v260"}, "result": {"ref": "v261"}},
-      {"bool": {"ref": "v261"}, "value": true, "result": {"ref": "v262"}},
-      {"op": "lt", "left": {"ref": "v260"}, "right": {"ref": "v254"}, "result": {"ref": "v263"}},
+      {"op": "lt", "left": {"ref": "v257"}, "right": {"ref": "v256"}, "result": {"ref": "v260"}},
+      {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v262"}},
+      {"op": "le", "left": {"ref": "v252"}, "right": {"ref": "v262"}, "result": {"ref": "v263"}},
       {"bool": {"ref": "v263"}, "value": true, "result": {"ref": "v264"}},
+      {"op": "lt", "left": {"ref": "v262"}, "right": {"ref": "v256"}, "result": {"ref": "v265"}},
+      {"bool": {"ref": "v265"}, "value": true, "result": {"ref": "v266"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "spacecraft_status"],
         "kwargs": {},
-        "result": {"ref": "v266"}
+        "result": {"ref": "v268"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v267"}},
-      {"getitem": {"ref": "v238"}, "key": "met_in_utc", "result": {"ref": "v268"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v270"}},
-      {"iter": {"ref": "v270"}, "index": 0, "result": {"ref": "v271"}},
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v273"}},
-      {"iter": {"ref": "v270"}, "index": 1, "result": {"ref": "v274"}},
-      {"iter": {"ref": "v274"}, "index": 0, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v274"}, "index": 1, "result": {"ref": "v276"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": false, "result": {"ref": "v278"}},
-      {"op": "eq", "left": {"ref": "v272"}, "right": {"ref": "v275"}, "result": {"ref": "v279"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v269"}},
+      {"getitem": {"ref": "v240"}, "key": "met_in_utc", "result": {"ref": "v270"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
+      {"iter": {"ref": "v273"}, "index": 0, "result": {"ref": "v274"}},
+      {"iter": {"ref": "v273"}, "index": 1, "result": {"ref": "v275"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v276"}, "index": 0, "result": {"ref": "v277"}},
+      {"iter": {"ref": "v276"}, "index": 1, "result": {"ref": "v278"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
       {"bool": {"ref": "v279"}, "value": false, "result": {"ref": "v280"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v281"}},
-      {"getitem": {"ref": "v245"}, "key": "met_in_utc", "result": {"ref": "v282"}},
-      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v284"}},
-      {"iter": {"ref": "v284"}, "index": 0, "result": {"ref": "v285"}},
-      {"iter": {"ref": "v285"}, "index": 0, "result": {"ref": "v286"}},
-      {"iter": {"ref": "v285"}, "index": 1, "result": {"ref": "v287"}},
-      {"iter": {"ref": "v284"}, "index": 1, "result": {"ref": "v288"}},
-      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v289"}},
-      {"iter": {"ref": "v288"}, "index": 1, "result": {"ref": "v290"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
-      {"bool": {"ref": "v291"}, "value": false, "result": {"ref": "v292"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v289"}, "result": {"ref": "v293"}},
+      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v277"}, "result": {"ref": "v281"}},
+      {"bool": {"ref": "v281"}, "value": false, "result": {"ref": "v282"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v247"}, "key": "met_in_utc", "result": {"ref": "v284"}},
+      {"call": "process_status[0].items", "args": [], "kwargs": {}, "result": {"ref": "v286"}},
+      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v287"}},
+      {"iter": {"ref": "v287"}, "index": 0, "result": {"ref": "v288"}},
+      {"iter": {"ref": "v287"}, "index": 1, "result": {"ref": "v289"}},
+      {"iter": {"ref": "v286"}, "index": 1, "result": {"ref": "v290"}},
+      {"iter": {"ref": "v290"}, "index": 0, "result": {"ref": "v291"}},
+      {"iter": {"ref": "v290"}, "index": 1, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v291"}, "result": {"ref": "v293"}},
       {"bool": {"ref": "v293"}, "value": false, "result": {"ref": "v294"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v295"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v291"}, "result": {"ref": "v295"}},
+      {"bool": {"ref": "v295"}, "value": false, "result": {"ref": "v296"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v297"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v296"}
+        "result": {"ref": "v298"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"enter": {"ref": "v298"}, "result": {"ref": "v299"}},
+      {"enter": {"ref": "v300"}, "result": {"ref": "v301"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -7565,22 +7607,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v301"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "spacecraft_status#<v267>"],
-              ["time_utc", {"ref": "v268"}],
-              [{"ref": "v272"}, {"ref": "v273"}],
-              [{"ref": "v275"}, {"ref": "v276"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v303"}
       },
       {
@@ -7589,10 +7615,10 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "spacecraft_status#<v281>"],
-              ["time_utc", {"ref": "v282"}],
-              [{"ref": "v286"}, {"ref": "v287"}],
-              [{"ref": "v289"}, {"ref": "v290"}],
+              ["instrument_version", "spacecraft_status#<v269>"],
+              ["time_utc", {"ref": "v270"}],
+              [{"ref": "v274"}, {"ref": "v275"}],
+              [{"ref": "v277"}, {"ref": "v278"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -7604,7 +7630,23 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v295>",
+            "mapping": [
+              ["instrument_version", "spacecraft_status#<v283>"],
+              ["time_utc", {"ref": "v284"}],
+              [{"ref": "v288"}, {"ref": "v289"}],
+              [{"ref": "v291"}, {"ref": "v292"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v307"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v297>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {},
@@ -7612,13 +7654,13 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v307"}
+        "result": {"ref": "v309"}
       },
       {
-        "exit": {"ref": "v298"},
+        "exit": {"ref": "v300"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v308"}
+        "result": {"ref": "v310"}
       },
       {
         "call": "logger.info",
@@ -7630,7 +7672,7 @@
           {"ref": "v14"}
         ],
         "kwargs": {},
-        "result": {"ref": "v310"}
+        "result": {"ref": "v312"}
       }
     ]
   }

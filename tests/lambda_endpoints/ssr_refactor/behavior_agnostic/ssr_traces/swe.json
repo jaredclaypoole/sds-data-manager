@@ -3596,18 +3596,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -3616,114 +3617,120 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"op": "lt", "left": {"ref": "v283"}, "right": {"ref": "v275"}, "result": {"ref": "v286"}},
-      {"bool": {"ref": "v286"}, "value": false, "result": {"ref": "v287"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v279"}, "result": {"ref": "v284"}},
+      {"bool": {"ref": "v284"}, "value": false, "result": {"ref": "v285"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v287"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"bool": {"ref": "v288"}, "value": true, "result": {"ref": "v289"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v279"}, "result": {"ref": "v290"}},
+      {"bool": {"ref": "v290"}, "value": false, "result": {"ref": "v291"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "swe"],
         "kwargs": {},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v293"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v294"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v291"}
+        "result": {"ref": "v295"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v293"}
+        "result": {"ref": "v297"}
       },
-      {"enter": {"ref": "v293"}, "result": {"ref": "v294"}},
+      {"enter": {"ref": "v297"}, "result": {"ref": "v298"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -3736,34 +3743,34 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v296"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v290>",
+            "instrument_version": "ancillary#<v294>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v298"}
+        "result": {"ref": "v302"}
       },
       {
-        "exit": {"ref": "v293"},
+        "exit": {"ref": "v297"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v299"}
+        "result": {"ref": "v303"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v305"}
       }
     ]
   },
@@ -4672,18 +4679,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -4692,108 +4700,114 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": false, "result": {"ref": "v237"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v238"}},
+      {"bool": {"ref": "v238"}, "value": false, "result": {"ref": "v239"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v240"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v240"}
+        "result": {"ref": "v242"}
       },
-      {"bool": {"ref": "v240"}, "value": false, "result": {"ref": "v241"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v242"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v243"}},
-      {"getitem": {"ref": "v238"}, "key": "start_date", "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v238"}, "key": "version", "result": {"ref": "v245"}},
-      {"op": "eq", "left": {"ref": "v242"}, "right": {"ref": "v244"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"op": "eq", "left": {"ref": "v243"}, "right": {"ref": "v245"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v242"}, "value": false, "result": {"ref": "v243"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v244"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v245"}},
+      {"getitem": {"ref": "v240"}, "key": "start_date", "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v240"}, "key": "version", "result": {"ref": "v247"}},
+      {"op": "eq", "left": {"ref": "v244"}, "right": {"ref": "v246"}, "result": {"ref": "v248"}},
       {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v251"}},
+      {"op": "eq", "left": {"ref": "v245"}, "right": {"ref": "v247"}, "result": {"ref": "v250"}},
+      {"bool": {"ref": "v250"}, "value": true, "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v253"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v251"}],
+        "args": [{"ref": "v253"}],
         "kwargs": {},
-        "result": {"ref": "v252"}
+        "result": {"ref": "v254"}
       },
-      {"format": {"ref": "v252"}, "spec": "", "result": {"ref": "v254"}},
+      {"format": {"ref": "v254"}, "spec": "", "result": {"ref": "v256"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v254>"],
-        "kwargs": {},
-        "result": {"ref": "v255"}
-      },
-      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v256"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v252"}]],
+        "args": ["Downloaded ancillary file: <v256>"],
         "kwargs": {},
         "result": {"ref": "v257"}
       },
-      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v258"}},
-      {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v260"}},
-      {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v257"}, "index": 1, "result": {"ref": "v262"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v254"}],
+        "kwargs": {},
+        "result": {"ref": "v259"}
+      },
+      {"getattr": "name", "object": {"ref": "v254"}, "result": {"ref": "v260"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v254"}]],
+        "kwargs": {},
+        "result": {"ref": "v261"}
+      },
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v262"}},
       {"bool": {"ref": "v262"}, "value": true, "result": {"ref": "v263"}},
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v264"}},
+      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
+      {"iter": {"ref": "v261"}, "index": 1, "result": {"ref": "v266"}},
+      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v265"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v266"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v266"}, "result": {"ref": "v267"}},
-      {
-        "call": "v267.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v269"}
       },
-      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v270"}},
-      {"getitem": {"ref": "v270"}, "key": "met_in_utc", "result": {"ref": "v271"}},
-      {"op": "le", "left": {"ref": "v265"}, "right": {"ref": "v271"}, "result": {"ref": "v272"}},
-      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
-      {"op": "lt", "left": {"ref": "v271"}, "right": {"ref": "v269"}, "result": {"ref": "v274"}},
-      {"bool": {"ref": "v274"}, "value": false, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v257"}, "index": 1, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v265"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v269"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v270"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v270"}, "result": {"ref": "v271"}},
+      {
+        "call": "v271.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v273"}
+      },
+      {"iter": {"ref": "v261"}, "index": 0, "result": {"ref": "v274"}},
+      {"getitem": {"ref": "v274"}, "key": "met_in_utc", "result": {"ref": "v275"}},
+      {"op": "le", "left": {"ref": "v269"}, "right": {"ref": "v275"}, "result": {"ref": "v276"}},
+      {"bool": {"ref": "v276"}, "value": true, "result": {"ref": "v277"}},
+      {"op": "lt", "left": {"ref": "v275"}, "right": {"ref": "v273"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": false, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v261"}, "index": 1, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v269"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v273"}, "result": {"ref": "v284"}},
+      {"bool": {"ref": "v284"}, "value": false, "result": {"ref": "v285"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "swe"],
         "kwargs": {},
-        "result": {"ref": "v283"}
+        "result": {"ref": "v287"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v284"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v288"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v285"}
+        "result": {"ref": "v289"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v287"}
+        "result": {"ref": "v291"}
       },
-      {"enter": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"enter": {"ref": "v291"}, "result": {"ref": "v292"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -4806,34 +4820,34 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v290"}
+        "result": {"ref": "v294"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v284>",
+            "instrument_version": "ancillary#<v288>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v256"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v260"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v292"}
+        "result": {"ref": "v296"}
       },
       {
-        "exit": {"ref": "v287"},
+        "exit": {"ref": "v291"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v293"}
+        "result": {"ref": "v297"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v295"}
+        "result": {"ref": "v299"}
       }
     ]
   },
@@ -4842,7 +4856,7 @@
     "result": null,
     "error": {
       "exception": "FileNotFoundError",
-      "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v231>"
+      "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v233>"
     },
     "steps": [
       {"call": "json.dumps", "args": [{"ref": "event"}], "kwargs": {}, "result": {"ref": "v2"}},
@@ -5278,18 +5292,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -5298,58 +5313,58 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": false, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": false, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": false, "result": {"ref": "v247"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": false, "result": {"ref": "v249"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": {"type": "builtins.FileNotFoundError"},
         "exception": {
           "exception": "FileNotFoundError",
-          "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v231>"
+          "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v233>"
         },
-        "result": {"ref": "v248"}
+        "result": {"ref": "v250"}
       },
-      {"getitem": {"ref": "event"}, "key": "day", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "event"}, "key": "day", "result": {"ref": "v252"}},
       {
         "call": "logger.error",
         "args": [
           "FAILED %s %s %s: %s: %s",
           "swe",
-          {"ref": "v250"},
+          {"ref": "v252"},
           {"ref": "v14"},
           "FileNotFoundError",
           {
             "exception": "FileNotFoundError",
-            "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v231>"
+            "message": "No ancillary file found for instrument='swe', descriptor='l1b-in-flight-cal', date_str=<v233>"
           }
         ],
         "kwargs": {},
-        "result": {"ref": "v251"}
+        "result": {"ref": "v253"}
       }
     ]
   },
@@ -5807,18 +5822,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -5827,114 +5843,120 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": false, "result": {"ref": "v253"}},
-      {"op": "lt", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": false, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "lt", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": false, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"op": "lt", "left": {"ref": "v283"}, "right": {"ref": "v275"}, "result": {"ref": "v286"}},
-      {"bool": {"ref": "v286"}, "value": false, "result": {"ref": "v287"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v279"}, "result": {"ref": "v284"}},
+      {"bool": {"ref": "v284"}, "value": false, "result": {"ref": "v285"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v287"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"bool": {"ref": "v288"}, "value": true, "result": {"ref": "v289"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v279"}, "result": {"ref": "v290"}},
+      {"bool": {"ref": "v290"}, "value": false, "result": {"ref": "v291"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "swe"],
         "kwargs": {},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v293"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v294"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v291"}
+        "result": {"ref": "v295"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v293"}
+        "result": {"ref": "v297"}
       },
-      {"enter": {"ref": "v293"}, "result": {"ref": "v294"}},
+      {"enter": {"ref": "v297"}, "result": {"ref": "v298"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -5947,34 +5969,34 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v296"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v290>",
+            "instrument_version": "ancillary#<v294>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v298"}
+        "result": {"ref": "v302"}
       },
       {
-        "exit": {"ref": "v293"},
+        "exit": {"ref": "v297"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v299"}
+        "result": {"ref": "v303"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v305"}
       }
     ]
   },
@@ -6416,18 +6438,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -6436,73 +6459,79 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": false, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": false, "result": {"ref": "v267"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
+      {"bool": {"ref": "v268"}, "value": false, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": false, "result": {"ref": "v271"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v273"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v270"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v274"}}
     ]
   },
   {
@@ -6943,18 +6972,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -6963,73 +6993,79 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": false, "result": {"ref": "v267"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
+      {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": false, "result": {"ref": "v271"}},
       {
         "call": "logger.info",
         "args": ["No %s products for %s %s", "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v273"}
       },
-      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v270"}}
+      {"exit": {"ref": "v94"}, "exception_type": null, "exception": null, "result": {"ref": "v274"}}
     ]
   },
   {
@@ -7485,18 +7521,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -7505,110 +7542,116 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": false, "result": {"ref": "v279"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v280"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
       {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": false, "result": {"ref": "v283"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v284"}},
+      {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
+      {"bool": {"ref": "v286"}, "value": false, "result": {"ref": "v287"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 0, "swe"],
         "kwargs": {},
-        "result": {"ref": "v285"}
+        "result": {"ref": "v289"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v286"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v287"}
+        "result": {"ref": "v291"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v293"}
       },
-      {"enter": {"ref": "v289"}, "result": {"ref": "v290"}},
+      {"enter": {"ref": "v293"}, "result": {"ref": "v294"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -7621,34 +7664,34 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v292"}
+        "result": {"ref": "v296"}
       },
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v286>",
+            "instrument_version": "ancillary#<v290>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v294"}
+        "result": {"ref": "v298"}
       },
       {
-        "exit": {"ref": "v289"},
+        "exit": {"ref": "v293"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v295"}
+        "result": {"ref": "v299"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 2, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v297"}
+        "result": {"ref": "v301"}
       }
     ]
   },
@@ -8107,18 +8150,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -8127,804 +8171,127 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v279"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"op": "lt", "left": {"ref": "v283"}, "right": {"ref": "v275"}, "result": {"ref": "v286"}},
-      {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v287"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"bool": {"ref": "v288"}, "value": true, "result": {"ref": "v289"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v279"}, "result": {"ref": "v290"}},
+      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "swe"],
         "kwargs": {},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v293"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v291"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v293"}},
-      {"iter": {"ref": "v293"}, "index": 0, "result": {"ref": "v294"}},
-      {"iter": {"ref": "v294"}, "index": 0, "result": {"ref": "v295"}},
-      {"iter": {"ref": "v294"}, "index": 1, "result": {"ref": "v296"}},
-      {"iter": {"ref": "v293"}, "index": 1, "result": {"ref": "v297"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v295"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v297"}},
       {"iter": {"ref": "v297"}, "index": 0, "result": {"ref": "v298"}},
-      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v299"}},
-      {"op": "eq", "left": {"ref": "v295"}, "right": {"ref": "v298"}, "result": {"ref": "v300"}},
-      {"bool": {"ref": "v300"}, "value": true, "result": {"ref": "v301"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v302"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v303"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v305"}},
-      {"iter": {"ref": "v305"}, "index": 0, "result": {"ref": "v306"}},
-      {"iter": {"ref": "v306"}, "index": 0, "result": {"ref": "v307"}},
-      {"iter": {"ref": "v306"}, "index": 1, "result": {"ref": "v308"}},
-      {"iter": {"ref": "v305"}, "index": 1, "result": {"ref": "v309"}},
+      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v299"}},
+      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v300"}},
+      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v301"}, "index": 0, "result": {"ref": "v302"}},
+      {"iter": {"ref": "v301"}, "index": 1, "result": {"ref": "v303"}},
+      {"op": "eq", "left": {"ref": "v299"}, "right": {"ref": "v302"}, "result": {"ref": "v304"}},
+      {"bool": {"ref": "v304"}, "value": true, "result": {"ref": "v305"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v306"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v307"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v309"}},
       {"iter": {"ref": "v309"}, "index": 0, "result": {"ref": "v310"}},
-      {"iter": {"ref": "v309"}, "index": 1, "result": {"ref": "v311"}},
-      {"op": "eq", "left": {"ref": "v307"}, "right": {"ref": "v310"}, "result": {"ref": "v312"}},
-      {"bool": {"ref": "v312"}, "value": true, "result": {"ref": "v313"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v314"}},
-      {
-        "exit": {"ref": "v94"},
-        "exception_type": null,
-        "exception": null,
-        "result": {"ref": "v315"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer",
-        "args": [],
-        "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v317"}
-      },
-      {"enter": {"ref": "v317"}, "result": {"ref": "v318"}},
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "instrument_version": "spice#<v115>",
-            "time_utc": {"ref": "v90"},
-            "instrument": "spice",
-            "spice_kernels": {"mapping": [[{"ref": "v106"}, [{"ref": "v104"}, {"ref": "v108"}]]]},
-            "ttj2000ns": 2
-          }
-        },
-        "result": {"ref": "v320"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "swe#<v290>"],
-              ["time_utc", {"ref": "v291"}],
-              [{"ref": "v295"}, {"ref": "v299"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
-        "result": {"ref": "v322"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "swe#<v302>"],
-              ["time_utc", {"ref": "v303"}],
-              [{"ref": "v307"}, {"ref": "v311"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
-        "result": {"ref": "v324"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "instrument_version": "ancillary#<v314>",
-            "time_utc": {"ref": "v90"},
-            "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
-            "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
-            "ttj2000ns": 2
-          }
-        },
-        "result": {"ref": "v326"}
-      },
-      {
-        "exit": {"ref": "v317"},
-        "exception_type": null,
-        "exception": null,
-        "result": {"ref": "v327"}
-      },
-      {
-        "call": "logger.info",
-        "args": ["Inserted %d %s items for %s %s", 4, "swe", {"ref": "v13"}, {"ref": "v14"}],
-        "kwargs": {},
-        "result": {"ref": "v329"}
-      }
-    ]
-  },
-  {
-    "choices": [
-      true,
-      true,
-      true,
-      true,
-      false,
-      false,
-      false,
-      false,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      false,
-      true
-    ],
-    "result": null,
-    "error": null,
-    "steps": [
-      {"call": "json.dumps", "args": [{"ref": "event"}], "kwargs": {}, "result": {"ref": "v2"}},
-      {
-        "call": "logger.info",
-        "args": ["Received event: %s", {"ref": "v2"}],
-        "kwargs": {},
-        "result": {"ref": "v3"}
-      },
-      {
-        "getitem": {"ref": "environment"},
-        "key": "INSTRUMENT",
-        "value": "swe",
-        "result": {"ref": "v4"}
-      },
-      {"getitem": {"ref": "environment"}, "key": "IMAP_DATA_ACCESS_URL", "result": {"ref": "v5"}},
-      {"call": "boto3.resource", "args": ["dynamodb"], "kwargs": {}, "result": {"ref": "v7"}},
-      {"getitem": {"ref": "environment"}, "key": "SSR_TABLE", "result": {"ref": "v9"}},
-      {
-        "call": "boto3.resource.Table",
-        "args": [{"ref": "v9"}],
-        "kwargs": {},
-        "result": {"ref": "v10"}
-      },
-      {"getitem": {"ref": "event"}, "key": "day", "result": {"ref": "v12"}},
-      {
-        "call": "datetime.strptime",
-        "args": [{"ref": "v12"}, "%Y%m%d"],
-        "kwargs": {},
-        "result": {"ref": "v13"}
-      },
-      {"getitem": {"ref": "event"}, "key": "version", "result": {"ref": "v14"}},
-      {"call": "boto3.client", "args": ["ssm"], "kwargs": {}, "result": {"ref": "v16"}},
-      {"getitem": {"ref": "environment"}, "key": "SSM_API_KEY_PARAMETER", "result": {"ref": "v18"}},
-      {
-        "call": "boto3.client.get_parameter",
-        "args": [],
-        "kwargs": {"Name": {"ref": "v18"}, "WithDecryption": true},
-        "result": {"ref": "v19"}
-      },
-      {"getitem": {"ref": "v19"}, "key": "Parameter", "result": {"ref": "v20"}},
-      {"getitem": {"ref": "v20"}, "key": "Value", "result": {"ref": "v21"}},
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v22"}},
-      {
-        "setitem": {"ref": "v22"},
-        "key": "API_KEY",
-        "value": {"ref": "v21"},
-        "result": {"ref": "v23"}
-      },
-      {
-        "call": "shutil.rmtree",
-        "args": [{"ref": "DOWNLOAD_DIR"}],
-        "kwargs": {"ignore_errors": true},
-        "result": {"ref": "v25"}
-      },
-      {
-        "call": "DOWNLOAD_DIR.mkdir",
-        "args": [],
-        "kwargs": {"parents": true},
-        "result": {"ref": "v27"}
-      },
-      {"call": "time.perf_counter", "args": [], "kwargs": {}, "result": {"ref": "v29"}},
-      {"op": "add", "left": {"ref": "v5"}, "right": "/metakernel", "result": {"ref": "v30"}},
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v31"}},
-      {"op": "sub", "left": {"ref": "v13"}, "right": {"ref": "v31"}, "result": {"ref": "v32"}},
-      {"call": "v32.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v34"}},
-      {"call": "timedelta", "args": [], "kwargs": {"days": 2}, "result": {"ref": "v35"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v35"}, "result": {"ref": "v36"}},
-      {"call": "v36.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v38"}},
-      {"format": {"ref": "v30"}, "spec": "", "result": {"ref": "v40"}},
-      {
-        "call": "logger.info",
-        "args": [
-          "Sending request to <v40> with params: {'start_time': <v34>, 'end_time': <v38>, 'list_files': 'True', 'file_types': 'leapseconds,spacecraft_clock'}"
-        ],
-        "kwargs": {},
-        "result": {"ref": "v41"}
-      },
-      {
-        "call": "requests.get",
-        "args": [{"ref": "v30"}],
-        "kwargs": {
-          "params": {
-            "start_time": {"ref": "v34"},
-            "end_time": {"ref": "v38"},
-            "list_files": "True",
-            "file_types": "leapseconds,spacecraft_clock"
-          },
-          "timeout": 10
-        },
-        "result": {"ref": "v43"}
-      },
-      {"call": "requests.get.raise_for_status", "args": [], "kwargs": {}, "result": {"ref": "v45"}},
-      {"call": "requests.get.json", "args": [], "kwargs": {}, "result": {"ref": "v47"}},
-      {"format": {"ref": "v47"}, "spec": "", "result": {"ref": "v49"}},
-      {
-        "call": "logger.info",
-        "args": ["Found metakernel files: <v49>. Adding to collection."],
-        "kwargs": {},
-        "result": {"ref": "v50"}
-      },
-      {"call": "ProcessingInputCollection", "args": [], "kwargs": {}, "result": {"ref": "v51"}},
-      {"len": {"ref": "v47"}, "value": 2, "result": {"ref": "v53"}},
-      {"iter": {"ref": "v47"}, "index": 0, "result": {"ref": "v54"}},
-      {"iter": {"ref": "v47"}, "index": 1, "result": {"ref": "v55"}},
-      {
-        "call": "SPICEInput",
-        "args": [{"ref": "v54"}, {"ref": "v55"}],
-        "kwargs": {},
-        "result": {"ref": "v56"}
-      },
-      {
-        "call": "ProcessingInputCollection.add",
-        "args": [{"ref": "v56"}],
-        "kwargs": {},
-        "result": {"ref": "v57"}
-      },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v58"}},
-      {
-        "setitem": {"ref": "v58"},
-        "key": "DATA_DIR",
-        "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v59"}
-      },
-      {
-        "call": "ProcessingInputCollection.download_all_files",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v61"}
-      },
-      {"getattr": "SPICE", "object": {"ref": "SPICESource"}, "result": {"ref": "v63"}},
-      {"getattr": "value", "object": {"ref": "v63"}, "result": {"ref": "v64"}},
-      {
-        "call": "ProcessingInputCollection.get_file_paths",
-        "args": [],
-        "kwargs": {"data_type": {"ref": "v64"}},
-        "result": {"ref": "v65"}
-      },
-      {"format": {"ref": "v65"}, "spec": "", "result": {"ref": "v67"}},
-      {
-        "call": "logger.info",
-        "args": ["Downloaded SPICE files: <v67>"],
-        "kwargs": {},
-        "result": {"ref": "v68"}
-      },
-      {"iter": {"ref": "v65"}, "index": 0, "result": {"ref": "v69"}},
-      {
-        "call": "ProcessingInputCollection.get_file_paths.stat",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v71"}
-      },
-      {"getattr": "st_size", "object": {"ref": "v71"}, "result": {"ref": "v72"}},
-      {"op": "add", "left": 0, "right": {"ref": "v72"}, "result": {"ref": "v73"}},
-      {"iter": {"ref": "v65"}, "index": 1, "result": {"ref": "v74"}},
-      {
-        "call": "ProcessingInputCollection.get_file_paths.stat",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v76"}
-      },
-      {"getattr": "st_size", "object": {"ref": "v76"}, "result": {"ref": "v77"}},
-      {"op": "add", "left": {"ref": "v73"}, "right": {"ref": "v77"}, "result": {"ref": "v78"}},
-      {"op": "truediv", "left": {"ref": "v78"}, "right": 1000000.0, "result": {"ref": "v79"}},
-      {"len": {"ref": "v65"}, "value": 2, "result": {"ref": "v81"}},
-      {"call": "time.perf_counter", "args": [], "kwargs": {}, "result": {"ref": "v83"}},
-      {"op": "sub", "left": {"ref": "v83"}, "right": {"ref": "v29"}, "result": {"ref": "v84"}},
-      {
-        "call": "logger.info",
-        "args": [
-          "Downloaded %d SPICE files (%.1f MB) in %.1f s",
-          2,
-          {"ref": "v79"},
-          {"ref": "v84"}
-        ],
-        "kwargs": {},
-        "result": {"ref": "v85"}
-      },
-      {"getattr": "utc", "object": {"ref": "timezone"}, "result": {"ref": "v87"}},
-      {"call": "datetime.now", "args": [{"ref": "v87"}], "kwargs": {}, "result": {"ref": "v88"}},
-      {
-        "call": "datetime.now.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S.%f"],
-        "kwargs": {},
-        "result": {"ref": "v90"}
-      },
-      {"iter": {"ref": "v65"}, "index": 0, "result": {"ref": "v92"}},
-      {"iter": {"ref": "v65"}, "index": 1, "result": {"ref": "v93"}},
-      {
-        "call": "spiceypy.KernelPool",
-        "args": [["<v92>", "<v93>"]],
-        "kwargs": {},
-        "result": {"ref": "v94"}
-      },
-      {"enter": {"ref": "v94"}, "result": {"ref": "v95"}},
-      {"call": "str_to_et", "args": [{"ref": "v90"}], "kwargs": {}, "result": {"ref": "v96"}},
-      {"call": "et_to_ttj2000ns", "args": [{"ref": "v96"}], "kwargs": {}, "result": {"ref": "v97"}},
-      {"int": {"ref": "v97"}, "value": 2, "result": {"ref": "v98"}},
-      {"getattr": "processing_input", "object": {"ref": "v51"}, "result": {"ref": "v99"}},
-      {"getitem": {"ref": "v99"}, "key": 0, "result": {"ref": "v100"}},
-      {"getattr": "imap_file_paths", "object": {"ref": "v100"}, "result": {"ref": "v101"}},
-      {"getattr": "filename_list", "object": {"ref": "v100"}, "result": {"ref": "v102"}},
-      {"iter": {"ref": "v101"}, "index": 0, "result": {"ref": "v103"}},
-      {"iter": {"ref": "v102"}, "index": 0, "result": {"ref": "v104"}},
-      {"getattr": "spice_metadata", "object": {"ref": "v103"}, "result": {"ref": "v105"}},
-      {"getitem": {"ref": "v105"}, "key": "type", "result": {"ref": "v106"}},
-      {"iter": {"ref": "v101"}, "index": 1, "result": {"ref": "v107"}},
-      {"iter": {"ref": "v102"}, "index": 1, "result": {"ref": "v108"}},
-      {"getattr": "spice_metadata", "object": {"ref": "v107"}, "result": {"ref": "v109"}},
-      {"getitem": {"ref": "v109"}, "key": "type", "result": {"ref": "v110"}},
-      {"op": "eq", "left": {"ref": "v106"}, "right": {"ref": "v110"}, "result": {"ref": "v111"}},
-      {"bool": {"ref": "v111"}, "value": true, "result": {"ref": "v112"}},
-      {"op": "eq", "left": {"ref": "v106"}, "right": {"ref": "v110"}, "result": {"ref": "v113"}},
-      {"bool": {"ref": "v113"}, "value": true, "result": {"ref": "v114"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v115"}},
-      {"call": "timedelta", "args": [], "kwargs": {"days": -1}, "result": {"ref": "v116"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v116"}, "result": {"ref": "v117"}},
-      {"call": "v117.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v119"}},
-      {"call": "timedelta", "args": [], "kwargs": {"days": 0}, "result": {"ref": "v120"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v120"}, "result": {"ref": "v121"}},
-      {"call": "v121.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v123"}},
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v124"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v124"}, "result": {"ref": "v125"}},
-      {"call": "v125.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v127"}},
-      {
-        "call": "imap_data_access.query",
-        "args": [],
-        "kwargs": {
-          "table": "science",
-          "instrument": "ialirt",
-          "data_level": "l0",
-          "descriptor": "raw",
-          "start_date": {"ref": "v119"},
-          "end_date": {"ref": "v127"},
-          "version": "latest"
-        },
-        "result": {"ref": "v129"}
-      },
-      {"iter": {"ref": "v129"}, "index": 0, "result": {"ref": "v130"}},
-      {"getitem": {"ref": "v130"}, "key": "start_date", "result": {"ref": "v131"}},
-      {"iter": {"ref": "v129"}, "index": 1, "result": {"ref": "v132"}},
-      {"getitem": {"ref": "v132"}, "key": "start_date", "result": {"ref": "v133"}},
-      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v133"}, "result": {"ref": "v134"}},
-      {"bool": {"ref": "v134"}, "value": true, "result": {"ref": "v135"}},
-      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v119"}, "result": {"ref": "v136"}},
-      {"bool": {"ref": "v136"}, "value": true, "result": {"ref": "v137"}},
-      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v123"}, "result": {"ref": "v138"}},
-      {"bool": {"ref": "v138"}, "value": true, "result": {"ref": "v139"}},
-      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v127"}, "result": {"ref": "v140"}},
-      {"bool": {"ref": "v140"}, "value": true, "result": {"ref": "v141"}},
-      {"iter": {"ref": "v129"}, "index": 0, "result": {"ref": "v142"}},
-      {"getitem": {"ref": "v142"}, "key": "file_path", "result": {"ref": "v143"}},
-      {"iter": {"ref": "v129"}, "index": 1, "result": {"ref": "v144"}},
-      {"getitem": {"ref": "v144"}, "key": "file_path", "result": {"ref": "v145"}},
-      {
-        "call": "logger.info",
-        "args": ["Found I-ALiRT L0 files for [<v119>, <v123>, <v127>]: [<v143>, <v145>]"],
-        "kwargs": {},
-        "result": {"ref": "v147"}
-      },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v148"}},
-      {
-        "setitem": {"ref": "v148"},
-        "key": "DATA_DIR",
-        "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v149"}
-      },
-      {
-        "op": "truediv",
-        "left": {"ref": "imap_module_directory"},
-        "right": "ialirt",
-        "result": {"ref": "v150"}
-      },
-      {
-        "op": "truediv",
-        "left": {"ref": "v150"},
-        "right": "packet_definitions",
-        "result": {"ref": "v151"}
-      },
-      {"op": "truediv", "left": {"ref": "v151"}, "right": "ialirt.xml", "result": {"ref": "v152"}},
-      {
-        "call": "imap_data_access.download",
-        "args": [{"ref": "v143"}],
-        "kwargs": {},
-        "result": {"ref": "v154"}
-      },
-      {
-        "call": "packet_file_to_datasets",
-        "args": [{"ref": "v154"}, {"ref": "v152"}],
-        "kwargs": {"use_derived_value": false},
-        "result": {"ref": "v155"}
-      },
-      {"getitem": {"ref": "v155"}, "key": 478, "result": {"ref": "v156"}},
-      {
-        "call": "imap_data_access.download",
-        "args": [{"ref": "v145"}],
-        "kwargs": {},
-        "result": {"ref": "v158"}
-      },
-      {
-        "call": "packet_file_to_datasets",
-        "args": [{"ref": "v158"}, {"ref": "v152"}],
-        "kwargs": {"use_derived_value": false},
-        "result": {"ref": "v159"}
-      },
-      {"getitem": {"ref": "v159"}, "key": 478, "result": {"ref": "v160"}},
-      {
-        "call": "xr.concat",
-        "args": [[{"ref": "v156"}, {"ref": "v160"}]],
-        "kwargs": {"dim": "epoch"},
-        "result": {"ref": "v162"}
-      },
-      {"call": "xr.concat.sortby", "args": ["epoch"], "kwargs": {}, "result": {"ref": "v164"}},
-      {"getitem": {"ref": "v164"}, "key": ["src_seq_ctr"], "result": {"ref": "v165"}},
-      {
-        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v167"}
-      },
-      {
-        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe.reset_index",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v169"}
-      },
-      {
-        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe.reset_index.drop_duplicates",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v171"}
-      },
-      {"getattr": "index", "object": {"ref": "v171"}, "result": {"ref": "v172"}},
-      {"getattr": "values", "object": {"ref": "v172"}, "result": {"ref": "v173"}},
-      {
-        "call": "xr.concat.sortby.isel",
-        "args": [],
-        "kwargs": {"epoch": {"ref": "v173"}},
-        "result": {"ref": "v175"}
-      },
-      {
-        "call": "COVERAGE_TOLERANCE.total_seconds",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v177"}
-      },
-      {"op": "mul", "left": {"ref": "v177"}, "right": 1000000000.0, "result": {"ref": "v178"}},
-      {"int": {"ref": "v178"}, "value": 2, "result": {"ref": "v179"}},
-      {"format": {"ref": "v13"}, "spec": "%Y%m%d", "result": {"ref": "v180"}},
-      {
-        "call": "str_yyyymmdd_to_ttj2000ns",
-        "args": ["<v180>"],
-        "kwargs": {},
-        "result": {"ref": "v181"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v182"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v182"}, "result": {"ref": "v183"}},
-      {"format": {"ref": "v183"}, "spec": "%Y%m%d", "result": {"ref": "v184"}},
-      {
-        "call": "str_yyyymmdd_to_ttj2000ns",
-        "args": ["<v184>"],
-        "kwargs": {},
-        "result": {"ref": "v185"}
-      },
-      {"op": "add", "left": {"ref": "v185"}, "right": 2, "result": {"ref": "v187"}},
-      {
-        "call": "xr.concat.sortby.isel.sel",
-        "args": [],
-        "kwargs": {"epoch": {"slice": [{"ref": "v181"}, {"ref": "v187"}, null]}},
-        "result": {"ref": "v188"}
-      },
-      {"getitem": {"ref": "v188"}, "key": "epoch", "result": {"ref": "v189"}},
-      {"getattr": "values", "object": {"ref": "v189"}, "result": {"ref": "v190"}},
-      {"getitem": {"ref": "v188"}, "key": "src_seq_ctr", "result": {"ref": "v191"}},
-      {"getattr": "values", "object": {"ref": "v191"}, "result": {"ref": "v192"}},
-      {"getattr": "int64", "object": {"ref": "np"}, "result": {"ref": "v194"}},
-      {
-        "call": "xr.concat.sortby.isel.sel[\"src_seq_ctr\"].values.astype",
-        "args": [{"ref": "v194"}],
-        "kwargs": {},
-        "result": {"ref": "v195"}
-      },
-      {"getattr": "size", "object": {"ref": "v190"}, "result": {"ref": "v196"}},
-      {"op": "eq", "left": {"ref": "v196"}, "right": 0, "result": {"ref": "v197"}},
-      {"bool": {"ref": "v197"}, "value": false, "result": {"ref": "v198"}},
-      {"getitem": {"ref": "v190"}, "key": 0, "result": {"ref": "v199"}},
-      {"op": "add", "left": {"ref": "v181"}, "right": 2, "result": {"ref": "v200"}},
-      {"op": "gt", "left": {"ref": "v199"}, "right": {"ref": "v200"}, "result": {"ref": "v201"}},
-      {"bool": {"ref": "v201"}, "value": false, "result": {"ref": "v202"}},
-      {"getitem": {"ref": "v190"}, "key": -1, "result": {"ref": "v203"}},
-      {"op": "lt", "left": {"ref": "v203"}, "right": {"ref": "v185"}, "result": {"ref": "v204"}},
-      {"bool": {"ref": "v204"}, "value": false, "result": {"ref": "v205"}},
-      {"call": "np.diff", "args": [{"ref": "v195"}], "kwargs": {}, "result": {"ref": "v208"}},
-      {"op": "mod", "left": {"ref": "v208"}, "right": 16384, "result": {"ref": "v209"}},
-      {"op": "ne", "left": {"ref": "v209"}, "right": 1, "result": {"ref": "v210"}},
-      {
-        "call": "np.flatnonzero",
-        "args": [{"ref": "v210"}],
-        "kwargs": {},
-        "result": {"ref": "v211"}
-      },
-      {"getattr": "size", "object": {"ref": "v211"}, "result": {"ref": "v212"}},
-      {"bool": {"ref": "v212"}, "value": false, "result": {"ref": "v213"}},
-      {
-        "call": "BOUNDARY_BUFFER.total_seconds",
-        "args": [],
-        "kwargs": {},
-        "result": {"ref": "v215"}
-      },
-      {"op": "mul", "left": {"ref": "v215"}, "right": 1000000000.0, "result": {"ref": "v216"}},
-      {"int": {"ref": "v216"}, "value": 2, "result": {"ref": "v217"}},
-      {"format": {"ref": "v13"}, "spec": "%Y%m%d", "result": {"ref": "v218"}},
-      {
-        "call": "str_yyyymmdd_to_ttj2000ns",
-        "args": ["<v218>"],
-        "kwargs": {},
-        "result": {"ref": "v219"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v220"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v220"}, "result": {"ref": "v221"}},
-      {"format": {"ref": "v221"}, "spec": "%Y%m%d", "result": {"ref": "v222"}},
-      {
-        "call": "str_yyyymmdd_to_ttj2000ns",
-        "args": ["<v222>"],
-        "kwargs": {},
-        "result": {"ref": "v223"}
-      },
-      {"op": "sub", "left": {"ref": "v219"}, "right": 2, "result": {"ref": "v225"}},
-      {"op": "add", "left": {"ref": "v223"}, "right": 2, "result": {"ref": "v226"}},
-      {
-        "call": "xr.concat.sortby.isel.sel",
-        "args": [],
-        "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
-        "result": {"ref": "v227"}
-      },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
-      {
-        "setitem": {"ref": "v228"},
-        "key": "DATA_DIR",
-        "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
-      },
-      {
-        "call": "datetime.strptime.strftime",
-        "args": ["%Y%m%d"],
-        "kwargs": {},
-        "result": {"ref": "v231"}
-      },
-      {
-        "call": "imap_data_access.query",
-        "args": [],
-        "kwargs": {
-          "table": "ancillary",
-          "instrument": "swe",
-          "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
-          "version": "latest"
-        },
-        "result": {"ref": "v233"}
-      },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
-      {
-        "call": "imap_data_access.query.get",
-        "args": ["end_date"],
-        "kwargs": {},
-        "result": {"ref": "v236"}
-      },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
-      {
-        "call": "imap_data_access.query.get",
-        "args": ["end_date"],
-        "kwargs": {},
-        "result": {"ref": "v243"}
-      },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
-      {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
-      {
-        "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
-        "kwargs": {},
-        "result": {"ref": "v258"}
-      },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
-      {
-        "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
-        "kwargs": {},
-        "result": {"ref": "v263"}
-      },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
-      {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {
-        "call": "datetime.strptime.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
-        "result": {"ref": "v275"}
-      },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"op": "lt", "left": {"ref": "v283"}, "right": {"ref": "v275"}, "result": {"ref": "v286"}},
-      {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
-      {
-        "call": "logger.info",
-        "args": ["[%s] results populated for [%s]", 2, "swe"],
-        "kwargs": {},
-        "result": {"ref": "v289"}
-      },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v291"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v293"}},
-      {"iter": {"ref": "v293"}, "index": 0, "result": {"ref": "v294"}},
-      {"iter": {"ref": "v294"}, "index": 0, "result": {"ref": "v295"}},
-      {"iter": {"ref": "v294"}, "index": 1, "result": {"ref": "v296"}},
-      {"iter": {"ref": "v293"}, "index": 1, "result": {"ref": "v297"}},
-      {"iter": {"ref": "v297"}, "index": 0, "result": {"ref": "v298"}},
-      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v299"}},
-      {"op": "eq", "left": {"ref": "v295"}, "right": {"ref": "v298"}, "result": {"ref": "v300"}},
-      {"bool": {"ref": "v300"}, "value": false, "result": {"ref": "v301"}},
-      {"op": "eq", "left": {"ref": "v295"}, "right": {"ref": "v298"}, "result": {"ref": "v302"}},
-      {"bool": {"ref": "v302"}, "value": true, "result": {"ref": "v303"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v304"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v305"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v307"}},
-      {"iter": {"ref": "v307"}, "index": 0, "result": {"ref": "v308"}},
-      {"iter": {"ref": "v308"}, "index": 0, "result": {"ref": "v309"}},
-      {"iter": {"ref": "v308"}, "index": 1, "result": {"ref": "v310"}},
-      {"iter": {"ref": "v307"}, "index": 1, "result": {"ref": "v311"}},
-      {"iter": {"ref": "v311"}, "index": 0, "result": {"ref": "v312"}},
-      {"iter": {"ref": "v311"}, "index": 1, "result": {"ref": "v313"}},
-      {"op": "eq", "left": {"ref": "v309"}, "right": {"ref": "v312"}, "result": {"ref": "v314"}},
-      {"bool": {"ref": "v314"}, "value": false, "result": {"ref": "v315"}},
-      {"op": "eq", "left": {"ref": "v309"}, "right": {"ref": "v312"}, "result": {"ref": "v316"}},
+      {"iter": {"ref": "v310"}, "index": 0, "result": {"ref": "v311"}},
+      {"iter": {"ref": "v310"}, "index": 1, "result": {"ref": "v312"}},
+      {"iter": {"ref": "v309"}, "index": 1, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v313"}, "index": 0, "result": {"ref": "v314"}},
+      {"iter": {"ref": "v313"}, "index": 1, "result": {"ref": "v315"}},
+      {"op": "eq", "left": {"ref": "v311"}, "right": {"ref": "v314"}, "result": {"ref": "v316"}},
       {"bool": {"ref": "v316"}, "value": true, "result": {"ref": "v317"}},
       {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v318"}},
       {
@@ -8960,9 +8327,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "swe#<v290>"],
-              ["time_utc", {"ref": "v291"}],
-              [{"ref": "v295"}, {"ref": "v299"}],
+              ["instrument_version", "swe#<v294>"],
+              ["time_utc", {"ref": "v295"}],
+              [{"ref": "v299"}, {"ref": "v303"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -8975,9 +8342,9 @@
         "kwargs": {
           "Item": {
             "mapping": [
-              ["instrument_version", "swe#<v304>"],
-              ["time_utc", {"ref": "v305"}],
-              [{"ref": "v309"}, {"ref": "v313"}],
+              ["instrument_version", "swe#<v306>"],
+              ["time_utc", {"ref": "v307"}],
+              [{"ref": "v311"}, {"ref": "v315"}],
               ["kernel_set_key", {"ref": "v90"}]
             ]
           }
@@ -8992,7 +8359,7 @@
             "instrument_version": "ancillary#<v318>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -9010,6 +8377,696 @@
         "args": ["Inserted %d %s items for %s %s", 4, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
         "result": {"ref": "v333"}
+      }
+    ]
+  },
+  {
+    "choices": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "result": null,
+    "error": null,
+    "steps": [
+      {"call": "json.dumps", "args": [{"ref": "event"}], "kwargs": {}, "result": {"ref": "v2"}},
+      {
+        "call": "logger.info",
+        "args": ["Received event: %s", {"ref": "v2"}],
+        "kwargs": {},
+        "result": {"ref": "v3"}
+      },
+      {
+        "getitem": {"ref": "environment"},
+        "key": "INSTRUMENT",
+        "value": "swe",
+        "result": {"ref": "v4"}
+      },
+      {"getitem": {"ref": "environment"}, "key": "IMAP_DATA_ACCESS_URL", "result": {"ref": "v5"}},
+      {"call": "boto3.resource", "args": ["dynamodb"], "kwargs": {}, "result": {"ref": "v7"}},
+      {"getitem": {"ref": "environment"}, "key": "SSR_TABLE", "result": {"ref": "v9"}},
+      {
+        "call": "boto3.resource.Table",
+        "args": [{"ref": "v9"}],
+        "kwargs": {},
+        "result": {"ref": "v10"}
+      },
+      {"getitem": {"ref": "event"}, "key": "day", "result": {"ref": "v12"}},
+      {
+        "call": "datetime.strptime",
+        "args": [{"ref": "v12"}, "%Y%m%d"],
+        "kwargs": {},
+        "result": {"ref": "v13"}
+      },
+      {"getitem": {"ref": "event"}, "key": "version", "result": {"ref": "v14"}},
+      {"call": "boto3.client", "args": ["ssm"], "kwargs": {}, "result": {"ref": "v16"}},
+      {"getitem": {"ref": "environment"}, "key": "SSM_API_KEY_PARAMETER", "result": {"ref": "v18"}},
+      {
+        "call": "boto3.client.get_parameter",
+        "args": [],
+        "kwargs": {"Name": {"ref": "v18"}, "WithDecryption": true},
+        "result": {"ref": "v19"}
+      },
+      {"getitem": {"ref": "v19"}, "key": "Parameter", "result": {"ref": "v20"}},
+      {"getitem": {"ref": "v20"}, "key": "Value", "result": {"ref": "v21"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v22"}},
+      {
+        "setitem": {"ref": "v22"},
+        "key": "API_KEY",
+        "value": {"ref": "v21"},
+        "result": {"ref": "v23"}
+      },
+      {
+        "call": "shutil.rmtree",
+        "args": [{"ref": "DOWNLOAD_DIR"}],
+        "kwargs": {"ignore_errors": true},
+        "result": {"ref": "v25"}
+      },
+      {
+        "call": "DOWNLOAD_DIR.mkdir",
+        "args": [],
+        "kwargs": {"parents": true},
+        "result": {"ref": "v27"}
+      },
+      {"call": "time.perf_counter", "args": [], "kwargs": {}, "result": {"ref": "v29"}},
+      {"op": "add", "left": {"ref": "v5"}, "right": "/metakernel", "result": {"ref": "v30"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v31"}},
+      {"op": "sub", "left": {"ref": "v13"}, "right": {"ref": "v31"}, "result": {"ref": "v32"}},
+      {"call": "v32.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v34"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 2}, "result": {"ref": "v35"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v35"}, "result": {"ref": "v36"}},
+      {"call": "v36.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v38"}},
+      {"format": {"ref": "v30"}, "spec": "", "result": {"ref": "v40"}},
+      {
+        "call": "logger.info",
+        "args": [
+          "Sending request to <v40> with params: {'start_time': <v34>, 'end_time': <v38>, 'list_files': 'True', 'file_types': 'leapseconds,spacecraft_clock'}"
+        ],
+        "kwargs": {},
+        "result": {"ref": "v41"}
+      },
+      {
+        "call": "requests.get",
+        "args": [{"ref": "v30"}],
+        "kwargs": {
+          "params": {
+            "start_time": {"ref": "v34"},
+            "end_time": {"ref": "v38"},
+            "list_files": "True",
+            "file_types": "leapseconds,spacecraft_clock"
+          },
+          "timeout": 10
+        },
+        "result": {"ref": "v43"}
+      },
+      {"call": "requests.get.raise_for_status", "args": [], "kwargs": {}, "result": {"ref": "v45"}},
+      {"call": "requests.get.json", "args": [], "kwargs": {}, "result": {"ref": "v47"}},
+      {"format": {"ref": "v47"}, "spec": "", "result": {"ref": "v49"}},
+      {
+        "call": "logger.info",
+        "args": ["Found metakernel files: <v49>. Adding to collection."],
+        "kwargs": {},
+        "result": {"ref": "v50"}
+      },
+      {"call": "ProcessingInputCollection", "args": [], "kwargs": {}, "result": {"ref": "v51"}},
+      {"len": {"ref": "v47"}, "value": 2, "result": {"ref": "v53"}},
+      {"iter": {"ref": "v47"}, "index": 0, "result": {"ref": "v54"}},
+      {"iter": {"ref": "v47"}, "index": 1, "result": {"ref": "v55"}},
+      {
+        "call": "SPICEInput",
+        "args": [{"ref": "v54"}, {"ref": "v55"}],
+        "kwargs": {},
+        "result": {"ref": "v56"}
+      },
+      {
+        "call": "ProcessingInputCollection.add",
+        "args": [{"ref": "v56"}],
+        "kwargs": {},
+        "result": {"ref": "v57"}
+      },
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v58"}},
+      {
+        "setitem": {"ref": "v58"},
+        "key": "DATA_DIR",
+        "value": {"ref": "DOWNLOAD_DIR"},
+        "result": {"ref": "v59"}
+      },
+      {
+        "call": "ProcessingInputCollection.download_all_files",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v61"}
+      },
+      {"getattr": "SPICE", "object": {"ref": "SPICESource"}, "result": {"ref": "v63"}},
+      {"getattr": "value", "object": {"ref": "v63"}, "result": {"ref": "v64"}},
+      {
+        "call": "ProcessingInputCollection.get_file_paths",
+        "args": [],
+        "kwargs": {"data_type": {"ref": "v64"}},
+        "result": {"ref": "v65"}
+      },
+      {"format": {"ref": "v65"}, "spec": "", "result": {"ref": "v67"}},
+      {
+        "call": "logger.info",
+        "args": ["Downloaded SPICE files: <v67>"],
+        "kwargs": {},
+        "result": {"ref": "v68"}
+      },
+      {"iter": {"ref": "v65"}, "index": 0, "result": {"ref": "v69"}},
+      {
+        "call": "ProcessingInputCollection.get_file_paths.stat",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v71"}
+      },
+      {"getattr": "st_size", "object": {"ref": "v71"}, "result": {"ref": "v72"}},
+      {"op": "add", "left": 0, "right": {"ref": "v72"}, "result": {"ref": "v73"}},
+      {"iter": {"ref": "v65"}, "index": 1, "result": {"ref": "v74"}},
+      {
+        "call": "ProcessingInputCollection.get_file_paths.stat",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v76"}
+      },
+      {"getattr": "st_size", "object": {"ref": "v76"}, "result": {"ref": "v77"}},
+      {"op": "add", "left": {"ref": "v73"}, "right": {"ref": "v77"}, "result": {"ref": "v78"}},
+      {"op": "truediv", "left": {"ref": "v78"}, "right": 1000000.0, "result": {"ref": "v79"}},
+      {"len": {"ref": "v65"}, "value": 2, "result": {"ref": "v81"}},
+      {"call": "time.perf_counter", "args": [], "kwargs": {}, "result": {"ref": "v83"}},
+      {"op": "sub", "left": {"ref": "v83"}, "right": {"ref": "v29"}, "result": {"ref": "v84"}},
+      {
+        "call": "logger.info",
+        "args": [
+          "Downloaded %d SPICE files (%.1f MB) in %.1f s",
+          2,
+          {"ref": "v79"},
+          {"ref": "v84"}
+        ],
+        "kwargs": {},
+        "result": {"ref": "v85"}
+      },
+      {"getattr": "utc", "object": {"ref": "timezone"}, "result": {"ref": "v87"}},
+      {"call": "datetime.now", "args": [{"ref": "v87"}], "kwargs": {}, "result": {"ref": "v88"}},
+      {
+        "call": "datetime.now.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S.%f"],
+        "kwargs": {},
+        "result": {"ref": "v90"}
+      },
+      {"iter": {"ref": "v65"}, "index": 0, "result": {"ref": "v92"}},
+      {"iter": {"ref": "v65"}, "index": 1, "result": {"ref": "v93"}},
+      {
+        "call": "spiceypy.KernelPool",
+        "args": [["<v92>", "<v93>"]],
+        "kwargs": {},
+        "result": {"ref": "v94"}
+      },
+      {"enter": {"ref": "v94"}, "result": {"ref": "v95"}},
+      {"call": "str_to_et", "args": [{"ref": "v90"}], "kwargs": {}, "result": {"ref": "v96"}},
+      {"call": "et_to_ttj2000ns", "args": [{"ref": "v96"}], "kwargs": {}, "result": {"ref": "v97"}},
+      {"int": {"ref": "v97"}, "value": 2, "result": {"ref": "v98"}},
+      {"getattr": "processing_input", "object": {"ref": "v51"}, "result": {"ref": "v99"}},
+      {"getitem": {"ref": "v99"}, "key": 0, "result": {"ref": "v100"}},
+      {"getattr": "imap_file_paths", "object": {"ref": "v100"}, "result": {"ref": "v101"}},
+      {"getattr": "filename_list", "object": {"ref": "v100"}, "result": {"ref": "v102"}},
+      {"iter": {"ref": "v101"}, "index": 0, "result": {"ref": "v103"}},
+      {"iter": {"ref": "v102"}, "index": 0, "result": {"ref": "v104"}},
+      {"getattr": "spice_metadata", "object": {"ref": "v103"}, "result": {"ref": "v105"}},
+      {"getitem": {"ref": "v105"}, "key": "type", "result": {"ref": "v106"}},
+      {"iter": {"ref": "v101"}, "index": 1, "result": {"ref": "v107"}},
+      {"iter": {"ref": "v102"}, "index": 1, "result": {"ref": "v108"}},
+      {"getattr": "spice_metadata", "object": {"ref": "v107"}, "result": {"ref": "v109"}},
+      {"getitem": {"ref": "v109"}, "key": "type", "result": {"ref": "v110"}},
+      {"op": "eq", "left": {"ref": "v106"}, "right": {"ref": "v110"}, "result": {"ref": "v111"}},
+      {"bool": {"ref": "v111"}, "value": true, "result": {"ref": "v112"}},
+      {"op": "eq", "left": {"ref": "v106"}, "right": {"ref": "v110"}, "result": {"ref": "v113"}},
+      {"bool": {"ref": "v113"}, "value": true, "result": {"ref": "v114"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v115"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": -1}, "result": {"ref": "v116"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v116"}, "result": {"ref": "v117"}},
+      {"call": "v117.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v119"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 0}, "result": {"ref": "v120"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v120"}, "result": {"ref": "v121"}},
+      {"call": "v121.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v123"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v124"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v124"}, "result": {"ref": "v125"}},
+      {"call": "v125.strftime", "args": ["%Y%m%d"], "kwargs": {}, "result": {"ref": "v127"}},
+      {
+        "call": "imap_data_access.query",
+        "args": [],
+        "kwargs": {
+          "table": "science",
+          "instrument": "ialirt",
+          "data_level": "l0",
+          "descriptor": "raw",
+          "start_date": {"ref": "v119"},
+          "end_date": {"ref": "v127"},
+          "version": "latest"
+        },
+        "result": {"ref": "v129"}
+      },
+      {"iter": {"ref": "v129"}, "index": 0, "result": {"ref": "v130"}},
+      {"getitem": {"ref": "v130"}, "key": "start_date", "result": {"ref": "v131"}},
+      {"iter": {"ref": "v129"}, "index": 1, "result": {"ref": "v132"}},
+      {"getitem": {"ref": "v132"}, "key": "start_date", "result": {"ref": "v133"}},
+      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v133"}, "result": {"ref": "v134"}},
+      {"bool": {"ref": "v134"}, "value": true, "result": {"ref": "v135"}},
+      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v119"}, "result": {"ref": "v136"}},
+      {"bool": {"ref": "v136"}, "value": true, "result": {"ref": "v137"}},
+      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v123"}, "result": {"ref": "v138"}},
+      {"bool": {"ref": "v138"}, "value": true, "result": {"ref": "v139"}},
+      {"op": "eq", "left": {"ref": "v131"}, "right": {"ref": "v127"}, "result": {"ref": "v140"}},
+      {"bool": {"ref": "v140"}, "value": true, "result": {"ref": "v141"}},
+      {"iter": {"ref": "v129"}, "index": 0, "result": {"ref": "v142"}},
+      {"getitem": {"ref": "v142"}, "key": "file_path", "result": {"ref": "v143"}},
+      {"iter": {"ref": "v129"}, "index": 1, "result": {"ref": "v144"}},
+      {"getitem": {"ref": "v144"}, "key": "file_path", "result": {"ref": "v145"}},
+      {
+        "call": "logger.info",
+        "args": ["Found I-ALiRT L0 files for [<v119>, <v123>, <v127>]: [<v143>, <v145>]"],
+        "kwargs": {},
+        "result": {"ref": "v147"}
+      },
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v148"}},
+      {
+        "setitem": {"ref": "v148"},
+        "key": "DATA_DIR",
+        "value": {"ref": "DOWNLOAD_DIR"},
+        "result": {"ref": "v149"}
+      },
+      {
+        "op": "truediv",
+        "left": {"ref": "imap_module_directory"},
+        "right": "ialirt",
+        "result": {"ref": "v150"}
+      },
+      {
+        "op": "truediv",
+        "left": {"ref": "v150"},
+        "right": "packet_definitions",
+        "result": {"ref": "v151"}
+      },
+      {"op": "truediv", "left": {"ref": "v151"}, "right": "ialirt.xml", "result": {"ref": "v152"}},
+      {
+        "call": "imap_data_access.download",
+        "args": [{"ref": "v143"}],
+        "kwargs": {},
+        "result": {"ref": "v154"}
+      },
+      {
+        "call": "packet_file_to_datasets",
+        "args": [{"ref": "v154"}, {"ref": "v152"}],
+        "kwargs": {"use_derived_value": false},
+        "result": {"ref": "v155"}
+      },
+      {"getitem": {"ref": "v155"}, "key": 478, "result": {"ref": "v156"}},
+      {
+        "call": "imap_data_access.download",
+        "args": [{"ref": "v145"}],
+        "kwargs": {},
+        "result": {"ref": "v158"}
+      },
+      {
+        "call": "packet_file_to_datasets",
+        "args": [{"ref": "v158"}, {"ref": "v152"}],
+        "kwargs": {"use_derived_value": false},
+        "result": {"ref": "v159"}
+      },
+      {"getitem": {"ref": "v159"}, "key": 478, "result": {"ref": "v160"}},
+      {
+        "call": "xr.concat",
+        "args": [[{"ref": "v156"}, {"ref": "v160"}]],
+        "kwargs": {"dim": "epoch"},
+        "result": {"ref": "v162"}
+      },
+      {"call": "xr.concat.sortby", "args": ["epoch"], "kwargs": {}, "result": {"ref": "v164"}},
+      {"getitem": {"ref": "v164"}, "key": ["src_seq_ctr"], "result": {"ref": "v165"}},
+      {
+        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v167"}
+      },
+      {
+        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe.reset_index",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v169"}
+      },
+      {
+        "call": "xr.concat.sortby[[\"src_seq_ctr\"]].to_dataframe.reset_index.drop_duplicates",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v171"}
+      },
+      {"getattr": "index", "object": {"ref": "v171"}, "result": {"ref": "v172"}},
+      {"getattr": "values", "object": {"ref": "v172"}, "result": {"ref": "v173"}},
+      {
+        "call": "xr.concat.sortby.isel",
+        "args": [],
+        "kwargs": {"epoch": {"ref": "v173"}},
+        "result": {"ref": "v175"}
+      },
+      {
+        "call": "COVERAGE_TOLERANCE.total_seconds",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v177"}
+      },
+      {"op": "mul", "left": {"ref": "v177"}, "right": 1000000000.0, "result": {"ref": "v178"}},
+      {"int": {"ref": "v178"}, "value": 2, "result": {"ref": "v179"}},
+      {"format": {"ref": "v13"}, "spec": "%Y%m%d", "result": {"ref": "v180"}},
+      {
+        "call": "str_yyyymmdd_to_ttj2000ns",
+        "args": ["<v180>"],
+        "kwargs": {},
+        "result": {"ref": "v181"}
+      },
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v182"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v182"}, "result": {"ref": "v183"}},
+      {"format": {"ref": "v183"}, "spec": "%Y%m%d", "result": {"ref": "v184"}},
+      {
+        "call": "str_yyyymmdd_to_ttj2000ns",
+        "args": ["<v184>"],
+        "kwargs": {},
+        "result": {"ref": "v185"}
+      },
+      {"op": "add", "left": {"ref": "v185"}, "right": 2, "result": {"ref": "v187"}},
+      {
+        "call": "xr.concat.sortby.isel.sel",
+        "args": [],
+        "kwargs": {"epoch": {"slice": [{"ref": "v181"}, {"ref": "v187"}, null]}},
+        "result": {"ref": "v188"}
+      },
+      {"getitem": {"ref": "v188"}, "key": "epoch", "result": {"ref": "v189"}},
+      {"getattr": "values", "object": {"ref": "v189"}, "result": {"ref": "v190"}},
+      {"getitem": {"ref": "v188"}, "key": "src_seq_ctr", "result": {"ref": "v191"}},
+      {"getattr": "values", "object": {"ref": "v191"}, "result": {"ref": "v192"}},
+      {"getattr": "int64", "object": {"ref": "np"}, "result": {"ref": "v194"}},
+      {
+        "call": "xr.concat.sortby.isel.sel[\"src_seq_ctr\"].values.astype",
+        "args": [{"ref": "v194"}],
+        "kwargs": {},
+        "result": {"ref": "v195"}
+      },
+      {"getattr": "size", "object": {"ref": "v190"}, "result": {"ref": "v196"}},
+      {"op": "eq", "left": {"ref": "v196"}, "right": 0, "result": {"ref": "v197"}},
+      {"bool": {"ref": "v197"}, "value": false, "result": {"ref": "v198"}},
+      {"getitem": {"ref": "v190"}, "key": 0, "result": {"ref": "v199"}},
+      {"op": "add", "left": {"ref": "v181"}, "right": 2, "result": {"ref": "v200"}},
+      {"op": "gt", "left": {"ref": "v199"}, "right": {"ref": "v200"}, "result": {"ref": "v201"}},
+      {"bool": {"ref": "v201"}, "value": false, "result": {"ref": "v202"}},
+      {"getitem": {"ref": "v190"}, "key": -1, "result": {"ref": "v203"}},
+      {"op": "lt", "left": {"ref": "v203"}, "right": {"ref": "v185"}, "result": {"ref": "v204"}},
+      {"bool": {"ref": "v204"}, "value": false, "result": {"ref": "v205"}},
+      {"call": "np.diff", "args": [{"ref": "v195"}], "kwargs": {}, "result": {"ref": "v208"}},
+      {"op": "mod", "left": {"ref": "v208"}, "right": 16384, "result": {"ref": "v209"}},
+      {"op": "ne", "left": {"ref": "v209"}, "right": 1, "result": {"ref": "v210"}},
+      {
+        "call": "np.flatnonzero",
+        "args": [{"ref": "v210"}],
+        "kwargs": {},
+        "result": {"ref": "v211"}
+      },
+      {"getattr": "size", "object": {"ref": "v211"}, "result": {"ref": "v212"}},
+      {"bool": {"ref": "v212"}, "value": false, "result": {"ref": "v213"}},
+      {
+        "call": "BOUNDARY_BUFFER.total_seconds",
+        "args": [],
+        "kwargs": {},
+        "result": {"ref": "v215"}
+      },
+      {"op": "mul", "left": {"ref": "v215"}, "right": 1000000000.0, "result": {"ref": "v216"}},
+      {"int": {"ref": "v216"}, "value": 2, "result": {"ref": "v217"}},
+      {"format": {"ref": "v13"}, "spec": "%Y%m%d", "result": {"ref": "v218"}},
+      {
+        "call": "str_yyyymmdd_to_ttj2000ns",
+        "args": ["<v218>"],
+        "kwargs": {},
+        "result": {"ref": "v219"}
+      },
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v220"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v220"}, "result": {"ref": "v221"}},
+      {"format": {"ref": "v221"}, "spec": "%Y%m%d", "result": {"ref": "v222"}},
+      {
+        "call": "str_yyyymmdd_to_ttj2000ns",
+        "args": ["<v222>"],
+        "kwargs": {},
+        "result": {"ref": "v223"}
+      },
+      {"op": "sub", "left": {"ref": "v219"}, "right": 2, "result": {"ref": "v225"}},
+      {"op": "add", "left": {"ref": "v223"}, "right": 2, "result": {"ref": "v226"}},
+      {
+        "call": "xr.concat.sortby.isel.sel",
+        "args": [],
+        "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
+        "result": {"ref": "v227"}
+      },
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
+      {
+        "setitem": {"ref": "v230"},
+        "key": "DATA_DIR",
+        "value": {"ref": "DOWNLOAD_DIR"},
+        "result": {"ref": "v231"}
+      },
+      {
+        "call": "datetime.strptime.strftime",
+        "args": ["%Y%m%d"],
+        "kwargs": {},
+        "result": {"ref": "v233"}
+      },
+      {
+        "call": "imap_data_access.query",
+        "args": [],
+        "kwargs": {
+          "table": "ancillary",
+          "instrument": "swe",
+          "descriptor": "l1b-in-flight-cal",
+          "end_date": {"ref": "v233"},
+          "version": "latest"
+        },
+        "result": {"ref": "v235"}
+      },
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
+      {
+        "call": "imap_data_access.query.get",
+        "args": ["end_date"],
+        "kwargs": {},
+        "result": {"ref": "v238"}
+      },
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
+      {
+        "call": "imap_data_access.query.get",
+        "args": ["end_date"],
+        "kwargs": {},
+        "result": {"ref": "v245"}
+      },
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
+      {
+        "call": "imap_data_access.download",
+        "args": [{"ref": "v259"}],
+        "kwargs": {},
+        "result": {"ref": "v260"}
+      },
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
+      {
+        "call": "logger.info",
+        "args": ["Downloaded ancillary file: <v262>"],
+        "kwargs": {},
+        "result": {"ref": "v263"}
+      },
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
+      {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
+      {
+        "call": "datetime.strptime.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v275"}
+      },
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v279"}, "result": {"ref": "v284"}},
+      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v287"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"bool": {"ref": "v288"}, "value": true, "result": {"ref": "v289"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v279"}, "result": {"ref": "v290"}},
+      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
+      {
+        "call": "logger.info",
+        "args": ["[%s] results populated for [%s]", 2, "swe"],
+        "kwargs": {},
+        "result": {"ref": "v293"}
+      },
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v295"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v297"}},
+      {"iter": {"ref": "v297"}, "index": 0, "result": {"ref": "v298"}},
+      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v299"}},
+      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v300"}},
+      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v301"}, "index": 0, "result": {"ref": "v302"}},
+      {"iter": {"ref": "v301"}, "index": 1, "result": {"ref": "v303"}},
+      {"op": "eq", "left": {"ref": "v299"}, "right": {"ref": "v302"}, "result": {"ref": "v304"}},
+      {"bool": {"ref": "v304"}, "value": false, "result": {"ref": "v305"}},
+      {"op": "eq", "left": {"ref": "v299"}, "right": {"ref": "v302"}, "result": {"ref": "v306"}},
+      {"bool": {"ref": "v306"}, "value": true, "result": {"ref": "v307"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v308"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v309"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v311"}},
+      {"iter": {"ref": "v311"}, "index": 0, "result": {"ref": "v312"}},
+      {"iter": {"ref": "v312"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v312"}, "index": 1, "result": {"ref": "v314"}},
+      {"iter": {"ref": "v311"}, "index": 1, "result": {"ref": "v315"}},
+      {"iter": {"ref": "v315"}, "index": 0, "result": {"ref": "v316"}},
+      {"iter": {"ref": "v315"}, "index": 1, "result": {"ref": "v317"}},
+      {"op": "eq", "left": {"ref": "v313"}, "right": {"ref": "v316"}, "result": {"ref": "v318"}},
+      {"bool": {"ref": "v318"}, "value": false, "result": {"ref": "v319"}},
+      {"op": "eq", "left": {"ref": "v313"}, "right": {"ref": "v316"}, "result": {"ref": "v320"}},
+      {"bool": {"ref": "v320"}, "value": true, "result": {"ref": "v321"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v322"}},
+      {
+        "exit": {"ref": "v94"},
+        "exception_type": null,
+        "exception": null,
+        "result": {"ref": "v323"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer",
+        "args": [],
+        "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
+        "result": {"ref": "v325"}
+      },
+      {"enter": {"ref": "v325"}, "result": {"ref": "v326"}},
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "spice#<v115>",
+            "time_utc": {"ref": "v90"},
+            "instrument": "spice",
+            "spice_kernels": {"mapping": [[{"ref": "v106"}, [{"ref": "v104"}, {"ref": "v108"}]]]},
+            "ttj2000ns": 2
+          }
+        },
+        "result": {"ref": "v328"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "mapping": [
+              ["instrument_version", "swe#<v294>"],
+              ["time_utc", {"ref": "v295"}],
+              [{"ref": "v299"}, {"ref": "v303"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v330"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "mapping": [
+              ["instrument_version", "swe#<v308>"],
+              ["time_utc", {"ref": "v309"}],
+              [{"ref": "v313"}, {"ref": "v317"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v332"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v322>",
+            "time_utc": {"ref": "v90"},
+            "instrument": "ancillary",
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
+            "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
+            "ttj2000ns": 2
+          }
+        },
+        "result": {"ref": "v334"}
+      },
+      {
+        "exit": {"ref": "v325"},
+        "exception_type": null,
+        "exception": null,
+        "result": {"ref": "v335"}
+      },
+      {
+        "call": "logger.info",
+        "args": ["Inserted %d %s items for %s %s", 4, "swe", {"ref": "v13"}, {"ref": "v14"}],
+        "kwargs": {},
+        "result": {"ref": "v337"}
       }
     ]
   },
@@ -9469,18 +9526,19 @@
         "kwargs": {"epoch": {"slice": [{"ref": "v225"}, {"ref": "v226"}, null]}},
         "result": {"ref": "v227"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v228"}},
+      {"call": "logger.info", "args": ["Processing SWE."], "kwargs": {}, "result": {"ref": "v229"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v230"}},
       {
-        "setitem": {"ref": "v228"},
+        "setitem": {"ref": "v230"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v229"}
+        "result": {"ref": "v231"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v231"}
+        "result": {"ref": "v233"}
       },
       {
         "call": "imap_data_access.query",
@@ -9489,140 +9547,146 @@
           "table": "ancillary",
           "instrument": "swe",
           "descriptor": "l1b-in-flight-cal",
-          "end_date": {"ref": "v231"},
+          "end_date": {"ref": "v233"},
           "version": "latest"
         },
-        "result": {"ref": "v233"}
+        "result": {"ref": "v235"}
       },
-      {"iter": {"ref": "v233"}, "index": 0, "result": {"ref": "v234"}},
+      {"iter": {"ref": "v235"}, "index": 0, "result": {"ref": "v236"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v236"}
+        "result": {"ref": "v238"}
       },
-      {"bool": {"ref": "v236"}, "value": true, "result": {"ref": "v237"}},
-      {"getitem": {"ref": "v234"}, "key": "end_date", "result": {"ref": "v238"}},
-      {"op": "ge", "left": {"ref": "v238"}, "right": {"ref": "v231"}, "result": {"ref": "v239"}},
-      {"bool": {"ref": "v239"}, "value": true, "result": {"ref": "v240"}},
-      {"iter": {"ref": "v233"}, "index": 1, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v238"}, "value": true, "result": {"ref": "v239"}},
+      {"getitem": {"ref": "v236"}, "key": "end_date", "result": {"ref": "v240"}},
+      {"op": "ge", "left": {"ref": "v240"}, "right": {"ref": "v233"}, "result": {"ref": "v241"}},
+      {"bool": {"ref": "v241"}, "value": true, "result": {"ref": "v242"}},
+      {"iter": {"ref": "v235"}, "index": 1, "result": {"ref": "v243"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v243"}
+        "result": {"ref": "v245"}
       },
-      {"bool": {"ref": "v243"}, "value": true, "result": {"ref": "v244"}},
-      {"getitem": {"ref": "v241"}, "key": "end_date", "result": {"ref": "v245"}},
-      {"op": "ge", "left": {"ref": "v245"}, "right": {"ref": "v231"}, "result": {"ref": "v246"}},
-      {"bool": {"ref": "v246"}, "value": true, "result": {"ref": "v247"}},
-      {"getitem": {"ref": "v234"}, "key": "start_date", "result": {"ref": "v248"}},
-      {"getitem": {"ref": "v234"}, "key": "version", "result": {"ref": "v249"}},
-      {"getitem": {"ref": "v241"}, "key": "start_date", "result": {"ref": "v250"}},
-      {"getitem": {"ref": "v241"}, "key": "version", "result": {"ref": "v251"}},
-      {"op": "eq", "left": {"ref": "v248"}, "right": {"ref": "v250"}, "result": {"ref": "v252"}},
-      {"bool": {"ref": "v252"}, "value": true, "result": {"ref": "v253"}},
-      {"op": "eq", "left": {"ref": "v249"}, "right": {"ref": "v251"}, "result": {"ref": "v254"}},
+      {"bool": {"ref": "v245"}, "value": true, "result": {"ref": "v246"}},
+      {"getitem": {"ref": "v243"}, "key": "end_date", "result": {"ref": "v247"}},
+      {"op": "ge", "left": {"ref": "v247"}, "right": {"ref": "v233"}, "result": {"ref": "v248"}},
+      {"bool": {"ref": "v248"}, "value": true, "result": {"ref": "v249"}},
+      {"getitem": {"ref": "v236"}, "key": "start_date", "result": {"ref": "v250"}},
+      {"getitem": {"ref": "v236"}, "key": "version", "result": {"ref": "v251"}},
+      {"getitem": {"ref": "v243"}, "key": "start_date", "result": {"ref": "v252"}},
+      {"getitem": {"ref": "v243"}, "key": "version", "result": {"ref": "v253"}},
+      {"op": "eq", "left": {"ref": "v250"}, "right": {"ref": "v252"}, "result": {"ref": "v254"}},
       {"bool": {"ref": "v254"}, "value": true, "result": {"ref": "v255"}},
-      {"getitem": {"ref": "v234"}, "key": "file_path", "result": {"ref": "v257"}},
+      {"op": "eq", "left": {"ref": "v251"}, "right": {"ref": "v253"}, "result": {"ref": "v256"}},
+      {"bool": {"ref": "v256"}, "value": true, "result": {"ref": "v257"}},
+      {"getitem": {"ref": "v236"}, "key": "file_path", "result": {"ref": "v259"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v257"}],
+        "args": [{"ref": "v259"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v260"}
       },
-      {"format": {"ref": "v258"}, "spec": "", "result": {"ref": "v260"}},
+      {"format": {"ref": "v260"}, "spec": "", "result": {"ref": "v262"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v260>"],
-        "kwargs": {},
-        "result": {"ref": "v261"}
-      },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
-      {
-        "call": "process_swe",
-        "args": [{"ref": "v227"}, [{"ref": "v258"}]],
+        "args": ["Downloaded ancillary file: <v262>"],
         "kwargs": {},
         "result": {"ref": "v263"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
-      {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
-      {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
+      {
+        "call": "logger.info",
+        "args": ["swe l1b-in-flight-cal: %s", {"ref": "v260"}],
+        "kwargs": {},
+        "result": {"ref": "v265"}
+      },
+      {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v266"}},
+      {
+        "call": "process_swe",
+        "args": [{"ref": "v227"}, [{"ref": "v260"}]],
+        "kwargs": {},
+        "result": {"ref": "v267"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v272"}},
+      {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y-%m-%dT%H:%M:%S"],
         "kwargs": {},
-        "result": {"ref": "v271"}
-      },
-      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v272"}},
-      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v272"}, "result": {"ref": "v273"}},
-      {
-        "call": "v273.strftime",
-        "args": ["%Y-%m-%dT%H:%M:%S"],
-        "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
-      {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
+      {"call": "timedelta", "args": [], "kwargs": {"days": 1}, "result": {"ref": "v276"}},
+      {"op": "add", "left": {"ref": "v13"}, "right": {"ref": "v276"}, "result": {"ref": "v277"}},
+      {
+        "call": "v277.strftime",
+        "args": ["%Y-%m-%dT%H:%M:%S"],
+        "kwargs": {},
+        "result": {"ref": "v279"}
+      },
+      {"iter": {"ref": "v267"}, "index": 0, "result": {"ref": "v280"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"op": "lt", "left": {"ref": "v281"}, "right": {"ref": "v279"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"op": "lt", "left": {"ref": "v283"}, "right": {"ref": "v275"}, "result": {"ref": "v286"}},
-      {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
+      {"iter": {"ref": "v267"}, "index": 1, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v287"}},
+      {"op": "le", "left": {"ref": "v275"}, "right": {"ref": "v287"}, "result": {"ref": "v288"}},
+      {"bool": {"ref": "v288"}, "value": true, "result": {"ref": "v289"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v279"}, "result": {"ref": "v290"}},
+      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
       {
         "call": "logger.info",
         "args": ["[%s] results populated for [%s]", 2, "swe"],
         "kwargs": {},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v293"}
       },
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v290"}},
-      {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v291"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v293"}},
-      {"iter": {"ref": "v293"}, "index": 0, "result": {"ref": "v294"}},
-      {"iter": {"ref": "v294"}, "index": 0, "result": {"ref": "v295"}},
-      {"iter": {"ref": "v294"}, "index": 1, "result": {"ref": "v296"}},
-      {"iter": {"ref": "v293"}, "index": 1, "result": {"ref": "v297"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v295"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v297"}},
       {"iter": {"ref": "v297"}, "index": 0, "result": {"ref": "v298"}},
-      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v299"}},
-      {"op": "eq", "left": {"ref": "v295"}, "right": {"ref": "v298"}, "result": {"ref": "v300"}},
-      {"bool": {"ref": "v300"}, "value": false, "result": {"ref": "v301"}},
-      {"op": "eq", "left": {"ref": "v295"}, "right": {"ref": "v298"}, "result": {"ref": "v302"}},
-      {"bool": {"ref": "v302"}, "value": false, "result": {"ref": "v303"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v304"}},
-      {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v305"}},
-      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v307"}},
-      {"iter": {"ref": "v307"}, "index": 0, "result": {"ref": "v308"}},
-      {"iter": {"ref": "v308"}, "index": 0, "result": {"ref": "v309"}},
-      {"iter": {"ref": "v308"}, "index": 1, "result": {"ref": "v310"}},
-      {"iter": {"ref": "v307"}, "index": 1, "result": {"ref": "v311"}},
+      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v299"}},
+      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v300"}},
+      {"iter": {"ref": "v297"}, "index": 1, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v301"}, "index": 0, "result": {"ref": "v302"}},
+      {"iter": {"ref": "v301"}, "index": 1, "result": {"ref": "v303"}},
+      {"op": "eq", "left": {"ref": "v299"}, "right": {"ref": "v302"}, "result": {"ref": "v304"}},
+      {"bool": {"ref": "v304"}, "value": false, "result": {"ref": "v305"}},
+      {"op": "eq", "left": {"ref": "v299"}, "right": {"ref": "v302"}, "result": {"ref": "v306"}},
+      {"bool": {"ref": "v306"}, "value": false, "result": {"ref": "v307"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v308"}},
+      {"getitem": {"ref": "v286"}, "key": "met_in_utc", "result": {"ref": "v309"}},
+      {"call": "process_swe.items", "args": [], "kwargs": {}, "result": {"ref": "v311"}},
       {"iter": {"ref": "v311"}, "index": 0, "result": {"ref": "v312"}},
-      {"iter": {"ref": "v311"}, "index": 1, "result": {"ref": "v313"}},
-      {"op": "eq", "left": {"ref": "v309"}, "right": {"ref": "v312"}, "result": {"ref": "v314"}},
-      {"bool": {"ref": "v314"}, "value": false, "result": {"ref": "v315"}},
-      {"op": "eq", "left": {"ref": "v309"}, "right": {"ref": "v312"}, "result": {"ref": "v316"}},
-      {"bool": {"ref": "v316"}, "value": false, "result": {"ref": "v317"}},
-      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v318"}},
+      {"iter": {"ref": "v312"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v312"}, "index": 1, "result": {"ref": "v314"}},
+      {"iter": {"ref": "v311"}, "index": 1, "result": {"ref": "v315"}},
+      {"iter": {"ref": "v315"}, "index": 0, "result": {"ref": "v316"}},
+      {"iter": {"ref": "v315"}, "index": 1, "result": {"ref": "v317"}},
+      {"op": "eq", "left": {"ref": "v313"}, "right": {"ref": "v316"}, "result": {"ref": "v318"}},
+      {"bool": {"ref": "v318"}, "value": false, "result": {"ref": "v319"}},
+      {"op": "eq", "left": {"ref": "v313"}, "right": {"ref": "v316"}, "result": {"ref": "v320"}},
+      {"bool": {"ref": "v320"}, "value": false, "result": {"ref": "v321"}},
+      {"format": {"ref": "v14"}, "spec": "", "result": {"ref": "v322"}},
       {
         "exit": {"ref": "v94"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v319"}
+        "result": {"ref": "v323"}
       },
       {
         "call": "boto3.resource.Table.batch_writer",
         "args": [],
         "kwargs": {"overwrite_by_pkeys": ["instrument_version", "time_utc"]},
-        "result": {"ref": "v321"}
+        "result": {"ref": "v325"}
       },
-      {"enter": {"ref": "v321"}, "result": {"ref": "v322"}},
+      {"enter": {"ref": "v325"}, "result": {"ref": "v326"}},
       {
         "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
         "args": [],
@@ -9635,38 +9699,6 @@
             "ttj2000ns": 2
           }
         },
-        "result": {"ref": "v324"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "swe#<v290>"],
-              ["time_utc", {"ref": "v291"}],
-              [{"ref": "v295"}, {"ref": "v296"}],
-              [{"ref": "v298"}, {"ref": "v299"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
-        "result": {"ref": "v326"}
-      },
-      {
-        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
-        "args": [],
-        "kwargs": {
-          "Item": {
-            "mapping": [
-              ["instrument_version", "swe#<v304>"],
-              ["time_utc", {"ref": "v305"}],
-              [{"ref": "v309"}, {"ref": "v310"}],
-              [{"ref": "v312"}, {"ref": "v313"}],
-              ["kernel_set_key", {"ref": "v90"}]
-            ]
-          }
-        },
         "result": {"ref": "v328"}
       },
       {
@@ -9674,27 +9706,59 @@
         "args": [],
         "kwargs": {
           "Item": {
-            "instrument_version": "ancillary#<v318>",
-            "time_utc": {"ref": "v90"},
-            "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
-            "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
-            "ttj2000ns": 2
+            "mapping": [
+              ["instrument_version", "swe#<v294>"],
+              ["time_utc", {"ref": "v295"}],
+              [{"ref": "v299"}, {"ref": "v300"}],
+              [{"ref": "v302"}, {"ref": "v303"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
           }
         },
         "result": {"ref": "v330"}
       },
       {
-        "exit": {"ref": "v321"},
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "mapping": [
+              ["instrument_version", "swe#<v308>"],
+              ["time_utc", {"ref": "v309"}],
+              [{"ref": "v313"}, {"ref": "v314"}],
+              [{"ref": "v316"}, {"ref": "v317"}],
+              ["kernel_set_key", {"ref": "v90"}]
+            ]
+          }
+        },
+        "result": {"ref": "v332"}
+      },
+      {
+        "call": "boto3.resource.Table.batch_writer.__enter__.put_item",
+        "args": [],
+        "kwargs": {
+          "Item": {
+            "instrument_version": "ancillary#<v322>",
+            "time_utc": {"ref": "v90"},
+            "instrument": "ancillary",
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v266"}},
+            "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
+            "ttj2000ns": 2
+          }
+        },
+        "result": {"ref": "v334"}
+      },
+      {
+        "exit": {"ref": "v325"},
         "exception_type": null,
         "exception": null,
-        "result": {"ref": "v331"}
+        "result": {"ref": "v335"}
       },
       {
         "call": "logger.info",
         "args": ["Inserted %d %s items for %s %s", 4, "swe", {"ref": "v13"}, {"ref": "v14"}],
         "kwargs": {},
-        "result": {"ref": "v333"}
+        "result": {"ref": "v337"}
       }
     ]
   }
