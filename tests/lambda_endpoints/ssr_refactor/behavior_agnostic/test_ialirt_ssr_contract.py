@@ -53,3 +53,5 @@ def test_lambda_dependency_contract(instrument):
         baseline.write_text(format_trace(actual, sort_keys=False) + "\n")
     assert baseline.exists(), f"Missing reviewed baseline: {baseline}"
     assert actual == json.loads(baseline.read_text())
+    # Dict equality ignores key order, so also compare the text.
+    assert format_trace(actual, sort_keys=False) + "\n" == baseline.read_text()
