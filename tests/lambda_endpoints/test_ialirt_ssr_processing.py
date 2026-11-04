@@ -118,19 +118,12 @@ def test_insert_formatted_data(instrument):
 
 
 def test_insert_formatted_data_missing_housekeeping():
-    """Retain prepared science items if MAG housekeeping formatting fails."""
+    """MAG housekeeping formatting fails before any items are appended."""
     product = {"met_in_utc": "2026-10-08T12:00:00", "instrument": "mag"}
     items = []
     with pytest.raises(KeyError, match="mag_hk_status"):
         insert_formatted_data([product], items, "mag", "v001", "kernels")
-    assert items == [
-        {
-            "instrument_version": "mag#v001",
-            "time_utc": product["met_in_utc"],
-            "instrument": "mag",
-            "kernel_set_key": "kernels",
-        }
-    ]
+    assert items == []
 
 
 def test_spice_item():
