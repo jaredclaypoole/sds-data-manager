@@ -17,10 +17,9 @@ from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     IalirtDataGapError,
     ancillary_item,
     check_day_coverage,
+    insert_formatted_data,
     lambda_handler,
-    mag_hk_items,
     process_spacecraft_status,
-    reformat_data,
     spacecraft_items,
     spice_item,
     trim_to_day,
@@ -75,45 +74,61 @@ def test_trim_to_day():
     ]
 
 
-def test_reformat_data():
-    """Test the DynamoDB item for a data product."""
-    result = [
+@pytest.mark.parametrize("instrument", ["mag", "hit"])
+def test_insert_formatted_data(instrument):
+    """Append science and optional MAG housekeeping without altering input records."""
+    kernel_set_key = "2026-10-19T12:00:00.000001"
+    product = {
+        "apid": 478,
+        "met": 1,
+        "met_in_utc": "2026-10-08T12:00:00",
+        "instrument": instrument,
+        "x": 5,
+        "mag_hk_status": {"hk": 1},
+    }
+    original = product.copy()
+    existing = {"instrument_version": "spice#v001"}
+    items = [existing]
+
+    insert_formatted_data([product], items, instrument, "v001", kernel_set_key)
+
+    expected = [
+        existing,
         {
-            "apid": 478,
-            "met": 1,
-            "met_in_utc": "2026-10-08T12:00:00",
-            "instrument": "mag",
+            "instrument_version": f"{instrument}#v001",
+            "time_utc": product["met_in_utc"],
+            "instrument": instrument,
             "x": 5,
-            "mag_hk_status": {"hk": 1},
-        }
+            "kernel_set_key": kernel_set_key,
+        },
     ]
+    if instrument == "mag":
+        expected.append(
+            {
+                "instrument_version": "mag_hk#v001",
+                "time_utc": product["met_in_utc"],
+                "instrument": "mag_hk",
+                "mag_hk_status": {"hk": 1},
+                "kernel_set_key": kernel_set_key,
+            }
+        )
+    assert items == expected
+    assert items[0] is existing
+    assert product == original
 
-    items = reformat_data(result, "mag", "v001", "2026-10-19T12:00:00.000001")
 
+def test_insert_formatted_data_missing_housekeeping():
+    """Retain prepared science items if MAG housekeeping formatting fails."""
+    product = {"met_in_utc": "2026-10-08T12:00:00", "instrument": "mag"}
+    items = []
+    with pytest.raises(KeyError, match="mag_hk_status"):
+        insert_formatted_data([product], items, "mag", "v001", "kernels")
     assert items == [
         {
             "instrument_version": "mag#v001",
-            "time_utc": "2026-10-08T12:00:00",
+            "time_utc": product["met_in_utc"],
             "instrument": "mag",
-            "x": 5,
-            "kernel_set_key": "2026-10-19T12:00:00.000001",
-        }
-    ]
-
-
-def test_mag_hk_items():
-    """Test the DynamoDB item for MAG housekeeping."""
-    result = [{"met_in_utc": "2026-10-08T12:00:00", "mag_hk_status": {"hk": 1}}]
-
-    items = mag_hk_items(result, "v001", "2026-10-19T12:00:00.000001")
-
-    assert items == [
-        {
-            "instrument_version": "mag_hk#v001",
-            "time_utc": "2026-10-08T12:00:00",
-            "instrument": "mag_hk",
-            "mag_hk_status": {"hk": 1},
-            "kernel_set_key": "2026-10-19T12:00:00.000001",
+            "kernel_set_key": "kernels",
         }
     ]
 
