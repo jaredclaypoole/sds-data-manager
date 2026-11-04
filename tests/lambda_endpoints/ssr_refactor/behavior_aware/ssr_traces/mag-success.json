@@ -103,6 +103,7 @@
       }
     ],
     ["imap_data_access.download", ["ialirt-calibration.cdf"], {}],
+    ["load_cdf", ["/ssr-fixture/ialirt-calibration.cdf"], {}],
     [
       "imap_data_access.query",
       [],
@@ -116,7 +117,6 @@
     ],
     ["imap_data_access.download", ["l1b-calibration.cdf"], {}],
     ["load_cdf", ["/ssr-fixture/l1b-calibration.cdf"], {}],
-    ["load_cdf", ["/ssr-fixture/ialirt-calibration.cdf"], {}],
     [
       "process_packet",
       [

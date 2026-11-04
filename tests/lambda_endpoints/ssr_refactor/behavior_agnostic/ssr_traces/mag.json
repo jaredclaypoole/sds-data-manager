@@ -3666,24 +3666,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -3692,68 +3693,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -4824,24 +4824,25 @@
         "kwargs": {},
         "result": {"ref": "v257"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v254"}], "kwargs": {}, "result": {"ref": "v258"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v254"}],
         "kwargs": {},
-        "result": {"ref": "v259"}
+        "result": {"ref": "v260"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v260"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v261"}},
       {
-        "setitem": {"ref": "v260"},
+        "setitem": {"ref": "v261"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v261"}
+        "result": {"ref": "v262"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v263"}
+        "result": {"ref": "v264"}
       },
       {
         "call": "imap_data_access.query",
@@ -4850,62 +4851,61 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v263"},
+          "end_date": {"ref": "v264"},
           "version": "latest"
         },
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v266"}, "index": 0, "result": {"ref": "v267"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v268"}
+        "result": {"ref": "v269"}
       },
-      {"bool": {"ref": "v268"}, "value": false, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
+      {"bool": {"ref": "v269"}, "value": false, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v266"}, "index": 1, "result": {"ref": "v271"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v272"}
+        "result": {"ref": "v273"}
       },
-      {"bool": {"ref": "v272"}, "value": false, "result": {"ref": "v273"}},
-      {"getitem": {"ref": "v266"}, "key": "start_date", "result": {"ref": "v274"}},
-      {"getitem": {"ref": "v266"}, "key": "version", "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v270"}, "key": "start_date", "result": {"ref": "v276"}},
-      {"getitem": {"ref": "v270"}, "key": "version", "result": {"ref": "v277"}},
-      {"op": "eq", "left": {"ref": "v274"}, "right": {"ref": "v276"}, "result": {"ref": "v278"}},
-      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
-      {"op": "eq", "left": {"ref": "v275"}, "right": {"ref": "v277"}, "result": {"ref": "v280"}},
-      {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"getitem": {"ref": "v266"}, "key": "file_path", "result": {"ref": "v283"}},
+      {"bool": {"ref": "v273"}, "value": false, "result": {"ref": "v274"}},
+      {"getitem": {"ref": "v267"}, "key": "start_date", "result": {"ref": "v275"}},
+      {"getitem": {"ref": "v267"}, "key": "version", "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v271"}, "key": "start_date", "result": {"ref": "v277"}},
+      {"getitem": {"ref": "v271"}, "key": "version", "result": {"ref": "v278"}},
+      {"op": "eq", "left": {"ref": "v275"}, "right": {"ref": "v277"}, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v279"}, "value": true, "result": {"ref": "v280"}},
+      {"op": "eq", "left": {"ref": "v276"}, "right": {"ref": "v278"}, "result": {"ref": "v281"}},
+      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
+      {"getitem": {"ref": "v267"}, "key": "file_path", "result": {"ref": "v284"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v283"}],
+        "args": [{"ref": "v284"}],
         "kwargs": {},
-        "result": {"ref": "v284"}
+        "result": {"ref": "v285"}
       },
-      {"format": {"ref": "v284"}, "spec": "", "result": {"ref": "v286"}},
+      {"format": {"ref": "v285"}, "spec": "", "result": {"ref": "v287"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v286>"],
+        "args": ["Downloaded ancillary file: <v287>"],
         "kwargs": {},
-        "result": {"ref": "v287"}
+        "result": {"ref": "v288"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v284"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v285"}],
         "kwargs": {},
-        "result": {"ref": "v289"}
+        "result": {"ref": "v290"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v284"}], "kwargs": {}, "result": {"ref": "v290"}},
-      {"call": "load_cdf", "args": [{"ref": "v254"}], "kwargs": {}, "result": {"ref": "v291"}},
+      {"call": "load_cdf", "args": [{"ref": "v285"}], "kwargs": {}, "result": {"ref": "v291"}},
       {"getattr": "name", "object": {"ref": "v254"}, "result": {"ref": "v292"}},
-      {"getattr": "name", "object": {"ref": "v284"}, "result": {"ref": "v293"}},
+      {"getattr": "name", "object": {"ref": "v285"}, "result": {"ref": "v293"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v290"}, {"ref": "v291"}],
+        "args": [{"ref": "v227"}, {"ref": "v291"}, {"ref": "v258"}],
         "kwargs": {},
         "result": {"ref": "v294"}
       },
@@ -6048,24 +6048,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -6074,68 +6075,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": false, "result": {"ref": "v291"}},
-      {"op": "lt", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": false, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": false, "result": {"ref": "v292"}},
+      {"op": "lt", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": false, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -6745,24 +6745,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -6771,68 +6772,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -7357,24 +7357,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -7383,68 +7384,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -7984,24 +7984,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -8010,68 +8011,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -8694,24 +8694,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -8720,68 +8721,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -9495,24 +9495,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -9521,68 +9522,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
@@ -10300,24 +10300,25 @@
         "kwargs": {},
         "result": {"ref": "v263"}
       },
+      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "logger.info",
         "args": ["mag ialirt-calibration: %s", {"ref": "v260"}],
         "kwargs": {},
-        "result": {"ref": "v265"}
+        "result": {"ref": "v266"}
       },
-      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v266"}},
+      {"getattr": "config", "object": {"ref": "imap_data_access"}, "result": {"ref": "v267"}},
       {
-        "setitem": {"ref": "v266"},
+        "setitem": {"ref": "v267"},
         "key": "DATA_DIR",
         "value": {"ref": "DOWNLOAD_DIR"},
-        "result": {"ref": "v267"}
+        "result": {"ref": "v268"}
       },
       {
         "call": "datetime.strptime.strftime",
         "args": ["%Y%m%d"],
         "kwargs": {},
-        "result": {"ref": "v269"}
+        "result": {"ref": "v270"}
       },
       {
         "call": "imap_data_access.query",
@@ -10326,68 +10327,67 @@
           "table": "ancillary",
           "instrument": "mag",
           "descriptor": "l1b-calibration",
-          "end_date": {"ref": "v269"},
+          "end_date": {"ref": "v270"},
           "version": "latest"
         },
-        "result": {"ref": "v271"}
+        "result": {"ref": "v272"}
       },
-      {"iter": {"ref": "v271"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v272"}, "index": 0, "result": {"ref": "v273"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v274"}
+        "result": {"ref": "v275"}
       },
-      {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
-      {"getitem": {"ref": "v272"}, "key": "end_date", "result": {"ref": "v276"}},
-      {"op": "ge", "left": {"ref": "v276"}, "right": {"ref": "v269"}, "result": {"ref": "v277"}},
-      {"bool": {"ref": "v277"}, "value": true, "result": {"ref": "v278"}},
-      {"iter": {"ref": "v271"}, "index": 1, "result": {"ref": "v279"}},
+      {"bool": {"ref": "v275"}, "value": true, "result": {"ref": "v276"}},
+      {"getitem": {"ref": "v273"}, "key": "end_date", "result": {"ref": "v277"}},
+      {"op": "ge", "left": {"ref": "v277"}, "right": {"ref": "v270"}, "result": {"ref": "v278"}},
+      {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
+      {"iter": {"ref": "v272"}, "index": 1, "result": {"ref": "v280"}},
       {
         "call": "imap_data_access.query.get",
         "args": ["end_date"],
         "kwargs": {},
-        "result": {"ref": "v281"}
+        "result": {"ref": "v282"}
       },
-      {"bool": {"ref": "v281"}, "value": true, "result": {"ref": "v282"}},
-      {"getitem": {"ref": "v279"}, "key": "end_date", "result": {"ref": "v283"}},
-      {"op": "ge", "left": {"ref": "v283"}, "right": {"ref": "v269"}, "result": {"ref": "v284"}},
-      {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
-      {"getitem": {"ref": "v272"}, "key": "start_date", "result": {"ref": "v286"}},
-      {"getitem": {"ref": "v272"}, "key": "version", "result": {"ref": "v287"}},
-      {"getitem": {"ref": "v279"}, "key": "start_date", "result": {"ref": "v288"}},
-      {"getitem": {"ref": "v279"}, "key": "version", "result": {"ref": "v289"}},
-      {"op": "eq", "left": {"ref": "v286"}, "right": {"ref": "v288"}, "result": {"ref": "v290"}},
-      {"bool": {"ref": "v290"}, "value": true, "result": {"ref": "v291"}},
-      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v292"}},
-      {"bool": {"ref": "v292"}, "value": true, "result": {"ref": "v293"}},
-      {"getitem": {"ref": "v272"}, "key": "file_path", "result": {"ref": "v295"}},
+      {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
+      {"getitem": {"ref": "v280"}, "key": "end_date", "result": {"ref": "v284"}},
+      {"op": "ge", "left": {"ref": "v284"}, "right": {"ref": "v270"}, "result": {"ref": "v285"}},
+      {"bool": {"ref": "v285"}, "value": true, "result": {"ref": "v286"}},
+      {"getitem": {"ref": "v273"}, "key": "start_date", "result": {"ref": "v287"}},
+      {"getitem": {"ref": "v273"}, "key": "version", "result": {"ref": "v288"}},
+      {"getitem": {"ref": "v280"}, "key": "start_date", "result": {"ref": "v289"}},
+      {"getitem": {"ref": "v280"}, "key": "version", "result": {"ref": "v290"}},
+      {"op": "eq", "left": {"ref": "v287"}, "right": {"ref": "v289"}, "result": {"ref": "v291"}},
+      {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
+      {"op": "eq", "left": {"ref": "v288"}, "right": {"ref": "v290"}, "result": {"ref": "v293"}},
+      {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
+      {"getitem": {"ref": "v273"}, "key": "file_path", "result": {"ref": "v296"}},
       {
         "call": "imap_data_access.download",
-        "args": [{"ref": "v295"}],
+        "args": [{"ref": "v296"}],
         "kwargs": {},
-        "result": {"ref": "v296"}
+        "result": {"ref": "v297"}
       },
-      {"format": {"ref": "v296"}, "spec": "", "result": {"ref": "v298"}},
+      {"format": {"ref": "v297"}, "spec": "", "result": {"ref": "v299"}},
       {
         "call": "logger.info",
-        "args": ["Downloaded ancillary file: <v298>"],
+        "args": ["Downloaded ancillary file: <v299>"],
         "kwargs": {},
-        "result": {"ref": "v299"}
+        "result": {"ref": "v300"}
       },
       {
         "call": "logger.info",
-        "args": ["mag l1b-calibration: %s", {"ref": "v296"}],
+        "args": ["mag l1b-calibration: %s", {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v301"}
+        "result": {"ref": "v302"}
       },
-      {"call": "load_cdf", "args": [{"ref": "v296"}], "kwargs": {}, "result": {"ref": "v302"}},
-      {"call": "load_cdf", "args": [{"ref": "v260"}], "kwargs": {}, "result": {"ref": "v303"}},
+      {"call": "load_cdf", "args": [{"ref": "v297"}], "kwargs": {}, "result": {"ref": "v303"}},
       {"getattr": "name", "object": {"ref": "v260"}, "result": {"ref": "v304"}},
-      {"getattr": "name", "object": {"ref": "v296"}, "result": {"ref": "v305"}},
+      {"getattr": "name", "object": {"ref": "v297"}, "result": {"ref": "v305"}},
       {
         "call": "process_packet",
-        "args": [{"ref": "v227"}, {"ref": "v302"}, {"ref": "v303"}],
+        "args": [{"ref": "v227"}, {"ref": "v303"}, {"ref": "v264"}],
         "kwargs": {},
         "result": {"ref": "v306"}
       },
