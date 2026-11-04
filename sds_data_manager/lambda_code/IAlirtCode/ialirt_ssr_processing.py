@@ -609,28 +609,7 @@ def reformat_data(
     version: str,
     kernel_set_key: str,
 ) -> list[dict]:
-    """Convert data products into SSR table items.
-
-    Parameters
-    ----------
-    data : list[dict]
-        Data products from processing.
-    instrument : str
-        The instrument name.
-    version : str
-        The data version, e.g. "v001".
-    kernel_set_key : str
-        time_utc of the spice and ancillary items used for processing.
-
-    Returns
-    -------
-    items : list[dict]
-        Items keyed by instrument_version and time_utc.
-
-    Notes
-    -----
-    Same fields as realtime, plus the instrument_version key.
-    """
+    """Format science records with SSR version and kernel provenance keys."""
     exclude_keys = {"apid", "met", "met_in_utc", "mag_hk_status"}
     return [
         {
@@ -658,41 +637,17 @@ def insert_formatted_data(
     science_data = reformat_data(data, instrument, version, kernel_set_key)
     items += science_data
     if instrument == "mag":
-        hk_data = mag_hk_items(data, version, kernel_set_key)
+        hk_data = [
+            {
+                "instrument_version": f"mag_hk#{version}",
+                "time_utc": item["met_in_utc"],
+                "instrument": "mag_hk",
+                "mag_hk_status": item["mag_hk_status"],
+                "kernel_set_key": kernel_set_key,
+            }
+            for item in data
+        ]
         items += hk_data
-
-
-def mag_hk_items(data: list[dict], version: str, kernel_set_key: str) -> list[dict]:
-    """Convert MAG data products into MAG housekeeping items.
-
-    Parameters
-    ----------
-    data : list[dict]
-        MAG data products from processing.
-    version : str
-        The data version, e.g. "v001".
-    kernel_set_key : str
-        time_utc of the spice and ancillary items used for processing.
-
-    Returns
-    -------
-    items : list[dict]
-        Items keyed by instrument_version and time_utc.
-
-    Notes
-    -----
-    Same fields as realtime, plus the instrument_version key.
-    """
-    return [
-        {
-            "instrument_version": f"mag_hk#{version}",
-            "time_utc": item["met_in_utc"],
-            "instrument": "mag_hk",
-            "mag_hk_status": item["mag_hk_status"],
-            "kernel_set_key": kernel_set_key,
-        }
-        for item in data
-    ]
 
 
 def to_decimal(values: np.ndarray) -> list[Decimal]:
