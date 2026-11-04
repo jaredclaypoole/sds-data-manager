@@ -526,6 +526,7 @@ def process_algorithms(
     def get_ancillary(the_instrument, name):
         return get_ancillary_ssr(the_instrument, name, day, DOWNLOAD_DIR)
 
+    # These `if True` blocks reduce the diff with corresponding realtime processing code
     if True:
         if True:
             if instrument == "swe":
@@ -590,10 +591,12 @@ def process_algorithms(
                 ancillary_files = {"swapi_esa-unit-conversion": download_path.name}
             elif instrument == "hit":
                 # HIT has no ancillary files.
-                result, ancillary_files = process_func(combined), {}
+                ancillary_files = {}
+                result = process_func(combined)
             else:
                 # Spacecraft status has no ancillary files.
-                result, ancillary_files = process_func(combined), {}
+                ancillary_files = {}
+                result = process_func(combined)
             if not (any(result) and all(result)):
                 logger.info("No %s products for %s %s", instrument, day, version)
                 return
@@ -744,6 +747,7 @@ def spice_item(
         if kernel_type not in spice_kernels:
             spice_kernels[kernel_type] = []
         spice_kernels[kernel_type].append(filename)
+
     kernel_item = {
         "instrument_version": f"spice#{version}",
         "time_utc": kernel_set_key,
