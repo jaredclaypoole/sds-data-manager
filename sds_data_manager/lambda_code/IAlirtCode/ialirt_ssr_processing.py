@@ -199,12 +199,14 @@ def get_latest_spice_kernels(
     """
     # The end date is exclusive (midnight), so day - 1 to day + 2 covers
     # day - 1, day and day + 1.
+    file_types = ",".join(kernel_types)
     metakernel_url = url + "/metakernel"
+
     params = {
         "start_time": (day - timedelta(days=1)).strftime("%Y%m%d"),
         "end_time": (day + timedelta(days=2)).strftime("%Y%m%d"),
         "list_files": "True",
-        "file_types": ",".join(kernel_types),
+        "file_types": file_types,
     }
 
     logger.info(f"Sending request to {metakernel_url} with params: {params}")
@@ -220,13 +222,13 @@ def get_latest_spice_kernels(
 
 
 def download_spice_file(
-    dependency_inputs: ProcessingInputCollection, download_dir: Path
+    dependencies: ProcessingInputCollection, download_dir: Path
 ) -> list[Path]:
     """Download SPICE kernel files from the IMAP data archive.
 
     Parameters
     ----------
-    dependency_inputs : ProcessingInputCollection
+    dependencies : ProcessingInputCollection
         A collection containing a SPICEInput object with the list of kernel
         filenames returned from the metakernel API.
     download_dir : Path
@@ -245,9 +247,9 @@ def download_spice_file(
     to /tmp and loads them later in lambda_handler.
     """
     imap_data_access.config["DATA_DIR"] = download_dir
-    dependency_inputs.download_all_files()
+    dependencies.download_all_files()
 
-    spice_files = dependency_inputs.get_file_paths(data_type=SPICESource.SPICE.value)
+    spice_files = dependencies.get_file_paths(data_type=SPICESource.SPICE.value)
     logger.info(f"Downloaded SPICE files: {spice_files}")
 
     return spice_files
@@ -330,15 +332,14 @@ def parse_packets(
     xtce_ialirt_path = (
         imap_module_directory / "ialirt" / "packet_definitions" / "ialirt.xml"
     )
+    datasets = []
 
-    datasets = tuple(
-        packet_file_to_datasets(
-            imap_data_access.download(filename),
-            xtce_ialirt_path,
-            use_derived_value=False,
+    for filename in filenames:
+        local_path = imap_data_access.download(filename)
+        xarray_data = packet_file_to_datasets(
+            local_path, xtce_ialirt_path, use_derived_value=False
         )[apid]
-        for filename in filenames
-    )
+        datasets.append(xarray_data)
 
     combined = xr.concat(datasets, dim="epoch").sortby("epoch")
 
