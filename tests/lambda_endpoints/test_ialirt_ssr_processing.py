@@ -19,6 +19,7 @@ from sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing import (
     check_day_coverage,
     insert_formatted_data,
     lambda_handler,
+    process_day,
     process_spacecraft_status,
     spacecraft_items,
     spice_item,
@@ -195,6 +196,43 @@ def test_spacecraft_items(mock_imap_state, mock_str_to_et, mock_et_to_ttj2000ns)
     assert len(items) == 1440
     assert items[0]["time_utc"] == "2026-10-08T00:00:00"
     assert items[0]["kernel_set_key"] == "2026-10-19T12:00:00"
+
+
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.str_to_et")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.process_hit")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.trim_packets")
+@patch(
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.check_day_coverage"
+)
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.parse_packets")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.query_filenames")
+@patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.spiceypy")
+@patch(
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.download_spice_file"
+)
+@patch(
+    "sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.get_latest_spice_kernels"
+)
+def test_process_day_empty_product(
+    mock_get_kernels,
+    mock_download_spice,
+    mock_spiceypy,
+    mock_query,
+    mock_parse,
+    mock_check,
+    mock_trim,
+    mock_process_hit,
+    mock_str_to_et,
+    mock_et_to_ttj2000ns,
+):
+    """Test that nothing is written if a product is empty."""
+    mock_process_hit.return_value = [{"met_in_utc": "2026-10-08T12:00:00"}, {}]
+    table = MagicMock()
+
+    process_day("hit", datetime(2026, 10, 8), "v001", "https://url", table)
+
+    table.batch_writer.assert_not_called()
 
 
 @patch("sds_data_manager.lambda_code.IAlirtCode.ialirt_ssr_processing.et_to_ttj2000ns")
