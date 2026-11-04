@@ -167,7 +167,7 @@ def get_ancillary(
 def get_ancillary_ssr(*args, **kwargs):
     """Define a convenience alias for get_ancillary.
 
-    Needed to `process_algorithms` can locally define `get_ancillary`
+    Needed so `process_algorithms` can locally define `get_ancillary`
     while still calling the original implementation.
     """
     return get_ancillary(*args, **kwargs)
