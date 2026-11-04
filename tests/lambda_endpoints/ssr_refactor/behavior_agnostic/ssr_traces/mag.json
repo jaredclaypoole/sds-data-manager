@@ -3736,19 +3736,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -3764,13 +3764,13 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": true, "result": {"ref": "v316"}},
       {"op": "lt", "left": {"ref": "v314"}, "right": {"ref": "v312"}, "result": {"ref": "v317"}},
       {"bool": {"ref": "v317"}, "value": false, "result": {"ref": "v318"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v319"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v319"}},
       {"getitem": {"ref": "v319"}, "key": "met_in_utc", "result": {"ref": "v320"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v320"}, "result": {"ref": "v321"}},
       {"bool": {"ref": "v321"}, "value": true, "result": {"ref": "v322"}},
@@ -3819,8 +3819,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -4875,19 +4875,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v280"}], "kwargs": {}, "result": {"ref": "v284"}},
       {"call": "load_cdf", "args": [{"ref": "v252"}], "kwargs": {}, "result": {"ref": "v285"}},
+      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v286"}},
+      {"getattr": "name", "object": {"ref": "v280"}, "result": {"ref": "v287"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v284"}, {"ref": "v285"}],
         "kwargs": {},
-        "result": {"ref": "v286"}
+        "result": {"ref": "v288"}
       },
-      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v287"}},
-      {"getattr": "name", "object": {"ref": "v280"}, "result": {"ref": "v288"}},
-      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v289"}},
+      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v289"}},
       {"bool": {"ref": "v289"}, "value": true, "result": {"ref": "v290"}},
-      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v291"}},
+      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v291"}},
       {"bool": {"ref": "v291"}, "value": true, "result": {"ref": "v292"}},
-      {"iter": {"ref": "v286"}, "index": 1, "result": {"ref": "v293"}},
+      {"iter": {"ref": "v288"}, "index": 1, "result": {"ref": "v293"}},
       {"bool": {"ref": "v293"}, "value": true, "result": {"ref": "v294"}},
       {
         "call": "datetime.strptime.strftime",
@@ -4903,13 +4903,13 @@
         "kwargs": {},
         "result": {"ref": "v300"}
       },
-      {"iter": {"ref": "v286"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v288"}, "index": 0, "result": {"ref": "v301"}},
       {"getitem": {"ref": "v301"}, "key": "met_in_utc", "result": {"ref": "v302"}},
       {"op": "le", "left": {"ref": "v296"}, "right": {"ref": "v302"}, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
       {"op": "lt", "left": {"ref": "v302"}, "right": {"ref": "v300"}, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": false, "result": {"ref": "v306"}},
-      {"iter": {"ref": "v286"}, "index": 1, "result": {"ref": "v307"}},
+      {"iter": {"ref": "v288"}, "index": 1, "result": {"ref": "v307"}},
       {"getitem": {"ref": "v307"}, "key": "met_in_utc", "result": {"ref": "v308"}},
       {"op": "le", "left": {"ref": "v296"}, "right": {"ref": "v308"}, "result": {"ref": "v309"}},
       {"bool": {"ref": "v309"}, "value": true, "result": {"ref": "v310"}},
@@ -4958,8 +4958,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v287"},
-              "mag_l1b-calibration": {"ref": "v288"}
+              "mag_ialirt-calibration": {"ref": "v286"},
+              "mag_l1b-calibration": {"ref": "v287"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -6091,19 +6091,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -6119,13 +6119,13 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": true, "result": {"ref": "v316"}},
       {"op": "lt", "left": {"ref": "v314"}, "right": {"ref": "v312"}, "result": {"ref": "v317"}},
       {"bool": {"ref": "v317"}, "value": false, "result": {"ref": "v318"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v319"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v319"}},
       {"getitem": {"ref": "v319"}, "key": "met_in_utc", "result": {"ref": "v320"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v320"}, "result": {"ref": "v321"}},
       {"bool": {"ref": "v321"}, "value": true, "result": {"ref": "v322"}},
@@ -6174,8 +6174,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -6775,17 +6775,17 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": false, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": false, "result": {"ref": "v304"}},
       {
         "call": "logger.info",
@@ -7374,17 +7374,17 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": false, "result": {"ref": "v304"}},
       {
         "call": "logger.info",
@@ -7988,19 +7988,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8016,11 +8016,11 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": false, "result": {"ref": "v316"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v317"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v317"}},
       {"getitem": {"ref": "v317"}, "key": "met_in_utc", "result": {"ref": "v318"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v318"}, "result": {"ref": "v319"}},
       {"bool": {"ref": "v319"}, "value": false, "result": {"ref": "v320"}},
@@ -8067,8 +8067,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -8685,19 +8685,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8713,13 +8713,13 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": true, "result": {"ref": "v316"}},
       {"op": "lt", "left": {"ref": "v314"}, "right": {"ref": "v312"}, "result": {"ref": "v317"}},
       {"bool": {"ref": "v317"}, "value": true, "result": {"ref": "v318"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v319"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v319"}},
       {"getitem": {"ref": "v319"}, "key": "met_in_utc", "result": {"ref": "v320"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v320"}, "result": {"ref": "v321"}},
       {"bool": {"ref": "v321"}, "value": true, "result": {"ref": "v322"}},
@@ -8854,8 +8854,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -9473,19 +9473,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -9501,13 +9501,13 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": true, "result": {"ref": "v316"}},
       {"op": "lt", "left": {"ref": "v314"}, "right": {"ref": "v312"}, "result": {"ref": "v317"}},
       {"bool": {"ref": "v317"}, "value": true, "result": {"ref": "v318"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v319"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v319"}},
       {"getitem": {"ref": "v319"}, "key": "met_in_utc", "result": {"ref": "v320"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v320"}, "result": {"ref": "v321"}},
       {"bool": {"ref": "v321"}, "value": true, "result": {"ref": "v322"}},
@@ -9646,8 +9646,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -10265,19 +10265,19 @@
       },
       {"call": "load_cdf", "args": [{"ref": "v292"}], "kwargs": {}, "result": {"ref": "v296"}},
       {"call": "load_cdf", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v297"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v298"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v299"}},
       {
         "call": "process_packet",
         "args": [{"ref": "v227"}, {"ref": "v296"}, {"ref": "v297"}],
         "kwargs": {},
-        "result": {"ref": "v298"}
+        "result": {"ref": "v300"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v299"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v300"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v301"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v301"}},
       {"bool": {"ref": "v301"}, "value": true, "result": {"ref": "v302"}},
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v303"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v303"}},
       {"bool": {"ref": "v303"}, "value": true, "result": {"ref": "v304"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v305"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v305"}},
       {"bool": {"ref": "v305"}, "value": true, "result": {"ref": "v306"}},
       {
         "call": "datetime.strptime.strftime",
@@ -10293,13 +10293,13 @@
         "kwargs": {},
         "result": {"ref": "v312"}
       },
-      {"iter": {"ref": "v298"}, "index": 0, "result": {"ref": "v313"}},
+      {"iter": {"ref": "v300"}, "index": 0, "result": {"ref": "v313"}},
       {"getitem": {"ref": "v313"}, "key": "met_in_utc", "result": {"ref": "v314"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v314"}, "result": {"ref": "v315"}},
       {"bool": {"ref": "v315"}, "value": true, "result": {"ref": "v316"}},
       {"op": "lt", "left": {"ref": "v314"}, "right": {"ref": "v312"}, "result": {"ref": "v317"}},
       {"bool": {"ref": "v317"}, "value": true, "result": {"ref": "v318"}},
-      {"iter": {"ref": "v298"}, "index": 1, "result": {"ref": "v319"}},
+      {"iter": {"ref": "v300"}, "index": 1, "result": {"ref": "v319"}},
       {"getitem": {"ref": "v319"}, "key": "met_in_utc", "result": {"ref": "v320"}},
       {"op": "le", "left": {"ref": "v308"}, "right": {"ref": "v320"}, "result": {"ref": "v321"}},
       {"bool": {"ref": "v321"}, "value": true, "result": {"ref": "v322"}},
@@ -10440,8 +10440,8 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "mag_ialirt-calibration": {"ref": "v299"},
-              "mag_l1b-calibration": {"ref": "v300"}
+              "mag_ialirt-calibration": {"ref": "v298"},
+              "mag_l1b-calibration": {"ref": "v299"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2

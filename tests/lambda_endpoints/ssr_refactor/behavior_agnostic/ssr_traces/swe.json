@@ -3665,18 +3665,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -3692,13 +3692,13 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
       {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
@@ -3746,7 +3746,7 @@
             "instrument_version": "ancillary#<v290>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -4735,18 +4735,18 @@
         "kwargs": {},
         "result": {"ref": "v255"}
       },
+      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v256"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v252"}]],
         "kwargs": {},
-        "result": {"ref": "v256"}
+        "result": {"ref": "v257"}
       },
-      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v257"}},
-      {"iter": {"ref": "v256"}, "index": 0, "result": {"ref": "v258"}},
+      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v258"}},
       {"bool": {"ref": "v258"}, "value": true, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v256"}, "index": 0, "result": {"ref": "v260"}},
+      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v260"}},
       {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v256"}, "index": 1, "result": {"ref": "v262"}},
+      {"iter": {"ref": "v257"}, "index": 1, "result": {"ref": "v262"}},
       {"bool": {"ref": "v262"}, "value": true, "result": {"ref": "v263"}},
       {
         "call": "datetime.strptime.strftime",
@@ -4762,13 +4762,13 @@
         "kwargs": {},
         "result": {"ref": "v269"}
       },
-      {"iter": {"ref": "v256"}, "index": 0, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v257"}, "index": 0, "result": {"ref": "v270"}},
       {"getitem": {"ref": "v270"}, "key": "met_in_utc", "result": {"ref": "v271"}},
       {"op": "le", "left": {"ref": "v265"}, "right": {"ref": "v271"}, "result": {"ref": "v272"}},
       {"bool": {"ref": "v272"}, "value": true, "result": {"ref": "v273"}},
       {"op": "lt", "left": {"ref": "v271"}, "right": {"ref": "v269"}, "result": {"ref": "v274"}},
       {"bool": {"ref": "v274"}, "value": false, "result": {"ref": "v275"}},
-      {"iter": {"ref": "v256"}, "index": 1, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v257"}, "index": 1, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v265"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
@@ -4816,7 +4816,7 @@
             "instrument_version": "ancillary#<v284>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v257"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v256"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -5876,18 +5876,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -5903,13 +5903,13 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
       {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
@@ -5957,7 +5957,7 @@
             "instrument_version": "ancillary#<v290>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -6485,16 +6485,16 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": false, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": false, "result": {"ref": "v267"}},
       {
         "call": "logger.info",
@@ -7012,16 +7012,16 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": false, "result": {"ref": "v267"}},
       {
         "call": "logger.info",
@@ -7554,18 +7554,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -7581,11 +7581,11 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": false, "result": {"ref": "v279"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v280"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v280"}},
       {"getitem": {"ref": "v280"}, "key": "met_in_utc", "result": {"ref": "v281"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v281"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": false, "result": {"ref": "v283"}},
@@ -7631,7 +7631,7 @@
             "instrument_version": "ancillary#<v286>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -8176,18 +8176,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8203,13 +8203,13 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
       {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
@@ -8309,7 +8309,7 @@
             "instrument_version": "ancillary#<v314>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -8855,18 +8855,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8882,13 +8882,13 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
       {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
@@ -8992,7 +8992,7 @@
             "instrument_version": "ancillary#<v318>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -9538,18 +9538,18 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
       {
         "call": "process_swe",
         "args": [{"ref": "v227"}, [{"ref": "v258"}]],
         "kwargs": {},
-        "result": {"ref": "v262"}
+        "result": {"ref": "v263"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
       {
         "call": "datetime.strptime.strftime",
@@ -9565,13 +9565,13 @@
         "kwargs": {},
         "result": {"ref": "v275"}
       },
-      {"iter": {"ref": "v262"}, "index": 0, "result": {"ref": "v276"}},
+      {"iter": {"ref": "v263"}, "index": 0, "result": {"ref": "v276"}},
       {"getitem": {"ref": "v276"}, "key": "met_in_utc", "result": {"ref": "v277"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v277"}, "result": {"ref": "v278"}},
       {"bool": {"ref": "v278"}, "value": true, "result": {"ref": "v279"}},
       {"op": "lt", "left": {"ref": "v277"}, "right": {"ref": "v275"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v262"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v263"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v271"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": true, "result": {"ref": "v285"}},
@@ -9677,7 +9677,7 @@
             "instrument_version": "ancillary#<v318>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v263"}},
+            "ancillary_files": {"swe_l1b-in-flight-cal": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }

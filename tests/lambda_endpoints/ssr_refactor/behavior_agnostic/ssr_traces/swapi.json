@@ -3665,19 +3665,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -3693,13 +3693,13 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
       {"op": "lt", "left": {"ref": "v279"}, "right": {"ref": "v277"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": false, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v284"}},
       {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
       {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
@@ -3747,7 +3747,7 @@
             "instrument_version": "ancillary#<v292>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -4736,19 +4736,19 @@
         "kwargs": {},
         "result": {"ref": "v255"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v252"}], "kwargs": {}, "result": {"ref": "v257"}},
+      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v256"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v252"}], "kwargs": {}, "result": {"ref": "v258"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v257"}],
+        "args": [{"ref": "v227"}, {"ref": "v258"}],
         "kwargs": {},
-        "result": {"ref": "v258"}
+        "result": {"ref": "v259"}
       },
-      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v259"}},
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v260"}},
+      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v260"}},
       {"bool": {"ref": "v260"}, "value": true, "result": {"ref": "v261"}},
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v262"}},
+      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v262"}},
       {"bool": {"ref": "v262"}, "value": true, "result": {"ref": "v263"}},
-      {"iter": {"ref": "v258"}, "index": 1, "result": {"ref": "v264"}},
+      {"iter": {"ref": "v259"}, "index": 1, "result": {"ref": "v264"}},
       {"bool": {"ref": "v264"}, "value": true, "result": {"ref": "v265"}},
       {
         "call": "datetime.strptime.strftime",
@@ -4764,13 +4764,13 @@
         "kwargs": {},
         "result": {"ref": "v271"}
       },
-      {"iter": {"ref": "v258"}, "index": 0, "result": {"ref": "v272"}},
+      {"iter": {"ref": "v259"}, "index": 0, "result": {"ref": "v272"}},
       {"getitem": {"ref": "v272"}, "key": "met_in_utc", "result": {"ref": "v273"}},
       {"op": "le", "left": {"ref": "v267"}, "right": {"ref": "v273"}, "result": {"ref": "v274"}},
       {"bool": {"ref": "v274"}, "value": true, "result": {"ref": "v275"}},
       {"op": "lt", "left": {"ref": "v273"}, "right": {"ref": "v271"}, "result": {"ref": "v276"}},
       {"bool": {"ref": "v276"}, "value": false, "result": {"ref": "v277"}},
-      {"iter": {"ref": "v258"}, "index": 1, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v259"}, "index": 1, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v267"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
@@ -4818,7 +4818,7 @@
             "instrument_version": "ancillary#<v286>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v259"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v256"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -5878,19 +5878,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -5906,13 +5906,13 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
       {"op": "lt", "left": {"ref": "v279"}, "right": {"ref": "v277"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": false, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v284"}},
       {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
       {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
@@ -5960,7 +5960,7 @@
             "instrument_version": "ancillary#<v292>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -6488,17 +6488,17 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": false, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": false, "result": {"ref": "v269"}},
       {
         "call": "logger.info",
@@ -7016,17 +7016,17 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": false, "result": {"ref": "v269"}},
       {
         "call": "logger.info",
@@ -7559,19 +7559,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -7587,11 +7587,11 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": false, "result": {"ref": "v281"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v282"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v282"}},
       {"getitem": {"ref": "v282"}, "key": "met_in_utc", "result": {"ref": "v283"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v283"}, "result": {"ref": "v284"}},
       {"bool": {"ref": "v284"}, "value": false, "result": {"ref": "v285"}},
@@ -7637,7 +7637,7 @@
             "instrument_version": "ancillary#<v288>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -8182,19 +8182,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8210,13 +8210,13 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
       {"op": "lt", "left": {"ref": "v279"}, "right": {"ref": "v277"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v284"}},
       {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
       {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
@@ -8316,7 +8316,7 @@
             "instrument_version": "ancillary#<v316>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -8862,19 +8862,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8890,13 +8890,13 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
       {"op": "lt", "left": {"ref": "v279"}, "right": {"ref": "v277"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v284"}},
       {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
       {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
@@ -9000,7 +9000,7 @@
             "instrument_version": "ancillary#<v320>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }
@@ -9546,19 +9546,19 @@
         "kwargs": {},
         "result": {"ref": "v261"}
       },
-      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v263"}},
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v262"}},
+      {"call": "pd.read_csv", "args": [{"ref": "v258"}], "kwargs": {}, "result": {"ref": "v264"}},
       {
         "call": "process_swapi_ialirt",
-        "args": [{"ref": "v227"}, {"ref": "v263"}],
+        "args": [{"ref": "v227"}, {"ref": "v264"}],
         "kwargs": {},
-        "result": {"ref": "v264"}
+        "result": {"ref": "v265"}
       },
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v265"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v266"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v266"}},
       {"bool": {"ref": "v266"}, "value": true, "result": {"ref": "v267"}},
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v268"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v268"}},
       {"bool": {"ref": "v268"}, "value": true, "result": {"ref": "v269"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v270"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v270"}},
       {"bool": {"ref": "v270"}, "value": true, "result": {"ref": "v271"}},
       {
         "call": "datetime.strptime.strftime",
@@ -9574,13 +9574,13 @@
         "kwargs": {},
         "result": {"ref": "v277"}
       },
-      {"iter": {"ref": "v264"}, "index": 0, "result": {"ref": "v278"}},
+      {"iter": {"ref": "v265"}, "index": 0, "result": {"ref": "v278"}},
       {"getitem": {"ref": "v278"}, "key": "met_in_utc", "result": {"ref": "v279"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v279"}, "result": {"ref": "v280"}},
       {"bool": {"ref": "v280"}, "value": true, "result": {"ref": "v281"}},
       {"op": "lt", "left": {"ref": "v279"}, "right": {"ref": "v277"}, "result": {"ref": "v282"}},
       {"bool": {"ref": "v282"}, "value": true, "result": {"ref": "v283"}},
-      {"iter": {"ref": "v264"}, "index": 1, "result": {"ref": "v284"}},
+      {"iter": {"ref": "v265"}, "index": 1, "result": {"ref": "v284"}},
       {"getitem": {"ref": "v284"}, "key": "met_in_utc", "result": {"ref": "v285"}},
       {"op": "le", "left": {"ref": "v273"}, "right": {"ref": "v285"}, "result": {"ref": "v286"}},
       {"bool": {"ref": "v286"}, "value": true, "result": {"ref": "v287"}},
@@ -9686,7 +9686,7 @@
             "instrument_version": "ancillary#<v320>",
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
-            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v265"}},
+            "ancillary_files": {"swapi_esa-unit-conversion": {"ref": "v262"}},
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
           }

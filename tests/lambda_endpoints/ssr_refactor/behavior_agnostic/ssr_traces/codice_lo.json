@@ -3803,22 +3803,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -3834,13 +3834,13 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": true, "result": {"ref": "v351"}},
       {"op": "lt", "left": {"ref": "v349"}, "right": {"ref": "v347"}, "result": {"ref": "v352"}},
       {"bool": {"ref": "v352"}, "value": false, "result": {"ref": "v353"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v354"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v354"}},
       {"getitem": {"ref": "v354"}, "key": "met_in_utc", "result": {"ref": "v355"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v355"}, "result": {"ref": "v356"}},
       {"bool": {"ref": "v356"}, "value": true, "result": {"ref": "v357"}},
@@ -3889,9 +3889,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -5007,22 +5007,22 @@
         "kwargs": {},
         "result": {"ref": "v311"}
       },
+      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v312"}},
+      {"getattr": "name", "object": {"ref": "v280"}, "result": {"ref": "v313"}},
+      {"getattr": "name", "object": {"ref": "v308"}, "result": {"ref": "v314"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v252"}, {"ref": "v280"}, "codice_lo", {"ref": "v308"}],
         "kwargs": {},
-        "result": {"ref": "v312"}
+        "result": {"ref": "v315"}
       },
-      {"iter": {"ref": "v312"}, "index": 0, "result": {"ref": "v313"}},
-      {"iter": {"ref": "v312"}, "index": 1, "result": {"ref": "v314"}},
-      {"getattr": "name", "object": {"ref": "v252"}, "result": {"ref": "v315"}},
-      {"getattr": "name", "object": {"ref": "v280"}, "result": {"ref": "v316"}},
-      {"getattr": "name", "object": {"ref": "v308"}, "result": {"ref": "v317"}},
-      {"iter": {"ref": "v313"}, "index": 0, "result": {"ref": "v318"}},
+      {"iter": {"ref": "v315"}, "index": 0, "result": {"ref": "v316"}},
+      {"iter": {"ref": "v315"}, "index": 1, "result": {"ref": "v317"}},
+      {"iter": {"ref": "v316"}, "index": 0, "result": {"ref": "v318"}},
       {"bool": {"ref": "v318"}, "value": true, "result": {"ref": "v319"}},
-      {"iter": {"ref": "v313"}, "index": 0, "result": {"ref": "v320"}},
+      {"iter": {"ref": "v316"}, "index": 0, "result": {"ref": "v320"}},
       {"bool": {"ref": "v320"}, "value": true, "result": {"ref": "v321"}},
-      {"iter": {"ref": "v313"}, "index": 1, "result": {"ref": "v322"}},
+      {"iter": {"ref": "v316"}, "index": 1, "result": {"ref": "v322"}},
       {"bool": {"ref": "v322"}, "value": true, "result": {"ref": "v323"}},
       {
         "call": "datetime.strptime.strftime",
@@ -5038,13 +5038,13 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
-      {"iter": {"ref": "v313"}, "index": 0, "result": {"ref": "v330"}},
+      {"iter": {"ref": "v316"}, "index": 0, "result": {"ref": "v330"}},
       {"getitem": {"ref": "v330"}, "key": "met_in_utc", "result": {"ref": "v331"}},
       {"op": "le", "left": {"ref": "v325"}, "right": {"ref": "v331"}, "result": {"ref": "v332"}},
       {"bool": {"ref": "v332"}, "value": true, "result": {"ref": "v333"}},
       {"op": "lt", "left": {"ref": "v331"}, "right": {"ref": "v329"}, "result": {"ref": "v334"}},
       {"bool": {"ref": "v334"}, "value": false, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v313"}, "index": 1, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v316"}, "index": 1, "result": {"ref": "v336"}},
       {"getitem": {"ref": "v336"}, "key": "met_in_utc", "result": {"ref": "v337"}},
       {"op": "le", "left": {"ref": "v325"}, "right": {"ref": "v337"}, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
@@ -5093,9 +5093,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v315"},
-              "codice_l2-lo-efficiency": {"ref": "v316"},
-              "codice_l2-lo-gfactor": {"ref": "v317"}
+              "codice_l1a-sci-lut": {"ref": "v312"},
+              "codice_l2-lo-efficiency": {"ref": "v313"},
+              "codice_l2-lo-gfactor": {"ref": "v314"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -6294,22 +6294,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -6325,13 +6325,13 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": true, "result": {"ref": "v351"}},
       {"op": "lt", "left": {"ref": "v349"}, "right": {"ref": "v347"}, "result": {"ref": "v352"}},
       {"bool": {"ref": "v352"}, "value": false, "result": {"ref": "v353"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v354"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v354"}},
       {"getitem": {"ref": "v354"}, "key": "met_in_utc", "result": {"ref": "v355"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v355"}, "result": {"ref": "v356"}},
       {"bool": {"ref": "v356"}, "value": true, "result": {"ref": "v357"}},
@@ -6380,9 +6380,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -7049,20 +7049,20 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": false, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": false, "result": {"ref": "v339"}},
       {
         "call": "logger.info",
@@ -7718,20 +7718,20 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": false, "result": {"ref": "v339"}},
       {
         "call": "logger.info",
@@ -8402,22 +8402,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -8433,11 +8433,11 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": false, "result": {"ref": "v351"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v352"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v352"}},
       {"getitem": {"ref": "v352"}, "key": "met_in_utc", "result": {"ref": "v353"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v353"}, "result": {"ref": "v354"}},
       {"bool": {"ref": "v354"}, "value": false, "result": {"ref": "v355"}},
@@ -8484,9 +8484,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -9170,22 +9170,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -9201,13 +9201,13 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": true, "result": {"ref": "v351"}},
       {"op": "lt", "left": {"ref": "v349"}, "right": {"ref": "v347"}, "result": {"ref": "v352"}},
       {"bool": {"ref": "v352"}, "value": true, "result": {"ref": "v353"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v354"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v354"}},
       {"getitem": {"ref": "v354"}, "key": "met_in_utc", "result": {"ref": "v355"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v355"}, "result": {"ref": "v356"}},
       {"bool": {"ref": "v356"}, "value": true, "result": {"ref": "v357"}},
@@ -9308,9 +9308,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -9995,22 +9995,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -10026,13 +10026,13 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": true, "result": {"ref": "v351"}},
       {"op": "lt", "left": {"ref": "v349"}, "right": {"ref": "v347"}, "result": {"ref": "v352"}},
       {"bool": {"ref": "v352"}, "value": true, "result": {"ref": "v353"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v354"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v354"}},
       {"getitem": {"ref": "v354"}, "key": "met_in_utc", "result": {"ref": "v355"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v355"}, "result": {"ref": "v356"}},
       {"bool": {"ref": "v356"}, "value": true, "result": {"ref": "v357"}},
@@ -10137,9 +10137,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
@@ -10824,22 +10824,22 @@
         "kwargs": {},
         "result": {"ref": "v329"}
       },
+      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v330"}},
+      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v331"}},
+      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v332"}},
       {
         "call": "process_codice",
         "args": [{"ref": "v227"}, {"ref": "v258"}, {"ref": "v292"}, "codice_lo", {"ref": "v326"}],
         "kwargs": {},
-        "result": {"ref": "v330"}
+        "result": {"ref": "v333"}
       },
-      {"iter": {"ref": "v330"}, "index": 0, "result": {"ref": "v331"}},
-      {"iter": {"ref": "v330"}, "index": 1, "result": {"ref": "v332"}},
-      {"getattr": "name", "object": {"ref": "v258"}, "result": {"ref": "v333"}},
-      {"getattr": "name", "object": {"ref": "v292"}, "result": {"ref": "v334"}},
-      {"getattr": "name", "object": {"ref": "v326"}, "result": {"ref": "v335"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v336"}},
+      {"iter": {"ref": "v333"}, "index": 0, "result": {"ref": "v334"}},
+      {"iter": {"ref": "v333"}, "index": 1, "result": {"ref": "v335"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v336"}},
       {"bool": {"ref": "v336"}, "value": true, "result": {"ref": "v337"}},
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v338"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v338"}},
       {"bool": {"ref": "v338"}, "value": true, "result": {"ref": "v339"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v340"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v340"}},
       {"bool": {"ref": "v340"}, "value": true, "result": {"ref": "v341"}},
       {
         "call": "datetime.strptime.strftime",
@@ -10855,13 +10855,13 @@
         "kwargs": {},
         "result": {"ref": "v347"}
       },
-      {"iter": {"ref": "v331"}, "index": 0, "result": {"ref": "v348"}},
+      {"iter": {"ref": "v334"}, "index": 0, "result": {"ref": "v348"}},
       {"getitem": {"ref": "v348"}, "key": "met_in_utc", "result": {"ref": "v349"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v349"}, "result": {"ref": "v350"}},
       {"bool": {"ref": "v350"}, "value": true, "result": {"ref": "v351"}},
       {"op": "lt", "left": {"ref": "v349"}, "right": {"ref": "v347"}, "result": {"ref": "v352"}},
       {"bool": {"ref": "v352"}, "value": true, "result": {"ref": "v353"}},
-      {"iter": {"ref": "v331"}, "index": 1, "result": {"ref": "v354"}},
+      {"iter": {"ref": "v334"}, "index": 1, "result": {"ref": "v354"}},
       {"getitem": {"ref": "v354"}, "key": "met_in_utc", "result": {"ref": "v355"}},
       {"op": "le", "left": {"ref": "v343"}, "right": {"ref": "v355"}, "result": {"ref": "v356"}},
       {"bool": {"ref": "v356"}, "value": true, "result": {"ref": "v357"}},
@@ -10968,9 +10968,9 @@
             "time_utc": {"ref": "v90"},
             "instrument": "ancillary",
             "ancillary_files": {
-              "codice_l1a-sci-lut": {"ref": "v333"},
-              "codice_l2-lo-efficiency": {"ref": "v334"},
-              "codice_l2-lo-gfactor": {"ref": "v335"}
+              "codice_l1a-sci-lut": {"ref": "v330"},
+              "codice_l2-lo-efficiency": {"ref": "v331"},
+              "codice_l2-lo-gfactor": {"ref": "v332"}
             },
             "software_versions": {"imap_processing": "1.0.38", "imap_data_access": "1.3.0"},
             "ttj2000ns": 2
