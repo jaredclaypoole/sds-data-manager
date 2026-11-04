@@ -382,11 +382,12 @@ def process_algorithms(  # noqa: PLR0915
             elif instrument == "mag":
                 logger.info("Processing MAG.")
                 ialirt_cal_path = get_ancillary(instrument, "ialirt-calibration")
+                ialirt_calibration_data = load_cdf(ialirt_cal_path)
+
                 logger.info("mag ialirt-calibration: %s", ialirt_cal_path)
                 l1b_cal_path = get_ancillary(instrument, "l1b-calibration")
                 logger.info("mag l1b-calibration: %s", l1b_cal_path)
                 l1b_calibration_data = load_cdf(l1b_cal_path)
-                ialirt_calibration_data = load_cdf(ialirt_cal_path)
                 ancillary_files = {
                     "mag_ialirt-calibration": ialirt_cal_path.name,
                     "mag_l1b-calibration": l1b_cal_path.name,
