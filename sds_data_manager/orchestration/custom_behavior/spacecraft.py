@@ -28,7 +28,7 @@ from sds_data_manager.orchestration.job_handler_registry import JobBuilderRegist
 class SpacecraftPointingAttitudeJob(imap_job.IMAPJobHandler):
     """Overriding parts of the spacecraft processing pipeline."""
 
-    def get_science_files_inputs(self, context, target_start, target_end):
+    def get_science_files_inputs(self, target_start, target_end, repointing=None):
         """Override default behavior to return nothing."""
         return []
 
@@ -222,7 +222,6 @@ class SpacecraftPointingAttitudeJob(imap_job.IMAPJobHandler):
             minimum_interval_seconds=self.sensor_run_frequency,
         )
         def _sensor(context: SensorEvaluationContext):
-
             # Create a unique suffix for this sensor trigger. Shared across
             # both phases below so that a partition considered by both phases
             # in the same tick collapses to a single RunRequest (identical

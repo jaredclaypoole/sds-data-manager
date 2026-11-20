@@ -1,15 +1,20 @@
 """Dependency gathering shared by IMAP job handlers."""
 
+from __future__ import annotations
+
+import copy
 import datetime
+import logging
 import os
 import re
+from typing import TYPE_CHECKING, Self
 
-from dagster import AssetExecutionContext
 from imap_data_access import processing_input
-from sqlalchemy import and_, func, or_
 
-from sds_data_manager.lambda_code.SDSCode.database import models
-from sds_data_manager.orchestration import repoint_file, spice, spin
+from sds_data_manager.orchestration.dependency_metadata import DependencySource
+
+if TYPE_CHECKING:
+    from sds_data_manager.orchestration.types import ProcessingJobNode
 
 
 class MissingDependenciesError(Exception):
@@ -21,9 +26,29 @@ class MissingDependenciesError(Exception):
 class JobDependencyHandler:
     """Gather dependencies using the owning handler's job_config."""
 
+    def __init__(
+        self,
+        job_config: ProcessingJobNode,
+        source: DependencySource,
+        logger: logging.Logger | None = None,
+    ) -> None:
+        """Configure dependency selection without a database or Dagster context."""
+        self.job_config = job_config
+        self.dependency_source = source
+        self.dependency_logger = logger or logging.getLogger(__name__)
+
+    def with_dependency_source(
+        self, source: DependencySource, logger: logging.Logger | None = None
+    ) -> Self:
+        """Bind a run-local copy, preserving custom subclass overrides."""
+        handler = copy.copy(self)
+        handler.dependency_source = source
+        handler.dependency_logger = logger or logging.getLogger(__name__)
+        return handler
+
     def get_ancillary_files_inputs(
-        self, session, target_start: datetime.datetime, target_end: datetime.datetime
-    ) -> list[str]:
+        self, target_start: datetime.datetime, target_end: datetime.datetime
+    ) -> list[processing_input.AncillaryInput]:
         """Get the ancillary file dependencies needed to cover a time range."""
         # Query for ancillary files where the start_date is less than or equal to
         # the input end_date, and the end_date is either greater than or equal to the
@@ -33,38 +58,8 @@ class JobDependencyHandler:
         anc_processing_inputs = []
         for input in self.job_config.inputs:
             if input.data_type == "ancillary":
-                table = models.AncillaryFiles
-                type_specific_conditions = []
-                type_specific_conditions.append(
-                    and_(
-                        table.start_date < target_end,
-                        or_(table.end_date >= target_start, table.end_date.is_(None)),
-                    )
-                )
-                filter_conditions = [
-                    table.instrument == input.source,
-                    table.descriptor == input.descriptor,
-                    *type_specific_conditions,
-                ]
-                max_version_query = (
-                    session.query(
-                        table.start_date,
-                        func.max(table.version).label("latest_version"),
-                    )
-                    .filter(*filter_conditions)
-                    .group_by(table.start_date)
-                    .subquery()
-                )
-                # Query records
-                records = (
-                    session.query(table)
-                    .join(
-                        max_version_query,
-                        (table.start_date == max_version_query.c.start_date)
-                        & (table.version == max_version_query.c.latest_version),
-                    )
-                    .filter(*filter_conditions)
-                    .all()
+                records = self.dependency_source.ancillary_records(
+                    input, target_start, target_end
                 )
                 records = sorted(records, key=lambda x: x.start_date, reverse=True)[0:1]
                 # Check requirement here if needed or not
@@ -81,11 +76,11 @@ class JobDependencyHandler:
         return anc_processing_inputs
 
     def get_spin_files_inputs(
-        self, session, target_start: datetime.datetime, target_end: datetime.datetime
-    ) -> list[str]:
+        self, target_start: datetime.datetime, target_end: datetime.datetime
+    ) -> list[str] | None:
         """Return the spin file dependencies needed to cover a time range."""
-        spin_files = spin.get_upstream_dependency_inputs_spin(
-            target_start.replace(hour=0, minute=0, second=0), target_end, False, session
+        spin_files = self.dependency_source.spin_files(
+            target_start.replace(hour=0, minute=0, second=0), target_end
         )
         if not spin_files and self.job_config.spin_input.required:
             raise MissingDependenciesError(
@@ -95,11 +90,11 @@ class JobDependencyHandler:
             )
         return spin_files
 
-    def get_repoint_file_inputs(self, session, target_start, target_end):
+    def get_repoint_file_inputs(
+        self, target_start: datetime.datetime, target_end: datetime.datetime
+    ) -> list[str] | None:
         """Return the repoint file needed to cover a time range."""
-        file = repoint_file.get_upstream_dependency_inputs_repoint(
-            target_start, target_end, session
-        )
+        file = self.dependency_source.repoint_files(target_start, target_end)
         if not file and self.job_config.repoint_input.required:
             raise MissingDependenciesError(
                 f"""Missing dependency for
@@ -109,9 +104,11 @@ class JobDependencyHandler:
 
         return file
 
-    def get_spice_file_inputs(self, session, target_start, target_end):
+    def get_spice_file_inputs(
+        self, target_start: datetime.datetime, target_end: datetime.datetime
+    ) -> list[str]:
         """Return the spice files needed to cover a time range."""
-        spice_files, missing_kernel_types = spice.get_upstream_dependency_inputs_spice(
+        spice_files, missing_kernel_types = self.dependency_source.spice_files(
             self.job_config.spice_types, target_start, target_end
         )
         if (
@@ -137,29 +134,26 @@ class JobDependencyHandler:
 
         return spice_files
 
-    def get_science_files_inputs(self, context, target_start, target_end):
+    def get_science_files_inputs(
+        self,
+        target_start: datetime.datetime,
+        target_end: datetime.datetime,
+        repointing: int | None = None,
+    ) -> list[processing_input.ScienceInput]:
         """Return the science file dependencies needed to cover a time range."""
         science_processing_inputs = []
         for input in self.job_config.science_inputs:
             dep_name = input.to_dagster_name()
             found_dep = False
-            metadata_list = input.get_all_files_in_time_range(
-                context, target_start, target_end
+            file_groups = self.dependency_source.science_files(
+                input, target_start, target_end
             )
             science_files = []
-            for metadata in metadata_list:
-                if "file_names" in metadata:
-                    found_dep = (
-                        True  # We can finally say we have found at least one dependency
-                    )
-                    # Dagster wraps metadata in a MetadataValue object,
-                    # so we call .value
-                    file_names = metadata["file_names"].value
-                    # Handle both single strings and lists of files safely
-                    if isinstance(file_names, str):
-                        file_names = [file_names]
+            for file_names in file_groups:
+                if file_names is not None:
+                    found_dep = True
                     if file_names:
-                        context.log.info(
+                        self.dependency_logger.info(
                             f"The file names of the matching partition: {file_names}"
                         )
                     science_files.extend(file_names)
@@ -190,21 +184,22 @@ class JobDependencyHandler:
 
     def get_dependencies(
         self,
-        session,
-        context: AssetExecutionContext,
         target_start: datetime.datetime,
         target_end: datetime.datetime,
-    ):
+        repointing: int | None = None,
+    ) -> processing_input.ProcessingInputCollection:
         """Get the dependencies for the job using the DependencyResolver."""
         # Iterate through each upstream dependency
         processing_inputs = processing_input.ProcessingInputCollection()
-        context.log.info(
+        self.dependency_logger.info(
             f"""Checking for all dependencies existing between
             {target_start} and {target_end}"""
         )
 
         # Get Science files
-        science_files = self.get_science_files_inputs(context, target_start, target_end)
+        science_files = self.get_science_files_inputs(
+            target_start, target_end, repointing
+        )
         for inputs in science_files:
             # TODO: ADD IN THE MAJOR VERSION NUMBER HANDLING WHEN CONSTRUCTING
             # ProcessingInputs.
@@ -212,28 +207,26 @@ class JobDependencyHandler:
 
         # Get Ancillary files
         if self.job_config.ancillary_inputs:
-            ancillary_files = self.get_ancillary_files_inputs(
-                session, target_start, target_end
-            )
+            ancillary_files = self.get_ancillary_files_inputs(target_start, target_end)
             if ancillary_files:
                 for inputs in ancillary_files:
                     processing_inputs.add(inputs)
 
         # Get the Repoint file
         if self.job_config.repoint_input:
-            repoint = self.get_repoint_file_inputs(session, target_start, target_end)
+            repoint = self.get_repoint_file_inputs(target_start, target_end)
             if repoint:
                 processing_inputs.add(processing_input.RepointInput(repoint[0]))
 
         # Get SPICE files
         if self.job_config.spice_inputs:
-            spice_files = self.get_spice_file_inputs(session, target_start, target_end)
+            spice_files = self.get_spice_file_inputs(target_start, target_end)
             if spice_files:
                 processing_inputs.add(processing_input.SPICEInput(*spice_files))
 
         # Get Spin files
         if self.job_config.spin_input:
-            spin_files = self.get_spin_files_inputs(session, target_start, target_end)
+            spin_files = self.get_spin_files_inputs(target_start, target_end)
             if spin_files:
                 processing_inputs.add(processing_input.SpinInput(*spin_files))
 

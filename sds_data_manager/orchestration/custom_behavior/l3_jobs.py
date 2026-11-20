@@ -10,7 +10,7 @@ from dagster import (
     sensor,
 )
 
-from sds_data_manager.orchestration import dagster_utilities, imap_job, repoint_file
+from sds_data_manager.orchestration import dagster_utilities, imap_job
 from sds_data_manager.orchestration.job_handler_registry import JobBuilderRegistry
 
 
@@ -35,7 +35,6 @@ class L3CronHandler(imap_job.IMAPJobHandler):
             minimum_interval_seconds=86400,
         )
         def _sensor(context: SensorEvaluationContext):
-
             # Create a unique suffix for this sensor trigger
             job_suffix = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -62,16 +61,14 @@ class L3CronHandler(imap_job.IMAPJobHandler):
 
         return _sensor
 
-    def get_science_files_inputs(self, context, target_start, target_end):
+    def get_science_files_inputs(self, target_start, target_end, repointing=None):
         """Return no science files without an error."""
         return []
 
-    def get_repoint_file_inputs(self, session, target_start, target_end):
+    def get_repoint_file_inputs(self, target_start, target_end):
         """Return the repoint file needed to cover a time range."""
         min_python_date = datetime.datetime(1, 1, 1)
-        file = repoint_file.get_upstream_dependency_inputs_repoint(
-            min_python_date, min_python_date, session
-        )
+        file = self.dependency_source.repoint_files(min_python_date, min_python_date)
         return file
 
     def _dependency_hash(

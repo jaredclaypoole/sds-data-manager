@@ -44,6 +44,7 @@ from sds_data_manager.orchestration import (
 )
 from sds_data_manager.orchestration.dagster_utilities import get_materialization_result
 from sds_data_manager.orchestration.dependency import DependencyConfigReader
+from sds_data_manager.orchestration.dependency_source import DagsterDatabaseSource
 from sds_data_manager.orchestration.job_dependencies import (
     JobDependencyHandler,
     MissingDependenciesError,
@@ -217,8 +218,11 @@ class IMAPJobHandler(JobDependencyHandler):
         # Get Dependencies
         with db.Session() as session:
             try:
-                dependency_inputs = self.get_dependencies(
-                    session, context, target_start, target_end
+                dependency_handler = self.with_dependency_source(
+                    DagsterDatabaseSource(session, context), context.log
+                )
+                dependency_inputs = dependency_handler.get_dependencies(
+                    target_start, target_end, target_pointing_number
                 )
             except MissingDependenciesError as e:
                 context.log.info(f"Skipping job: {e}")

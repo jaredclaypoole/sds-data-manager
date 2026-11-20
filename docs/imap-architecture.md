@@ -118,11 +118,24 @@ Jobs and assets are **not** hand-written per data product — they are generated
 **To change behavior for one product, subclass the handler in `custom_behavior/` and register it — do not special-case inside the generic handler.** Existing examples: `mag.py`, `hi.py`, `idex.py`, `spacecraft.py`, `l3_jobs.py`, `l2_map_jobs.py`.
 
 `IMAPJobHandler` inherits dependency gathering from `job_dependencies.py::JobDependencyHandler`.
-The base uses the handler's `job_config` and the existing session/context arguments;
-custom overrides and `super()` calls still apply. `MissingDependenciesError` is defined
-there and remains importable from `imap_job.py`. Version selection, readiness checks,
-and job submission remain in `IMAPJobHandler`.
+The base accepts `job_config`, a metadata source, and a logger. Dependency selection
+methods take start/end times and, where needed, a repoint number, without a database
+session or Dagster context. `MissingDependenciesError` remains importable from
+`imap_job.py`. Version selection and job submission remain in `IMAPJobHandler`.
 
+`dependency_source.py::DagsterDatabaseSource` holds the production session/context
+and retains the existing SQLAlchemy queries and Dagster lookups. It returns plain
+ancillary records and filename groups, unwrapping Dagster metadata at the source.
+Science groups preserve partition order and distinguish missing metadata (`None`)
+from present-but-empty file lists (`[]`). Spin, repoint, and SPICE retain the existing
+helper selection and failure behavior. No HTTP adapter is introduced.
+
+`run_job` binds a shallow copy of the registered handler with
+`with_dependency_source(source, logger)` for each run, preserving custom overrides
+without mutating shared handlers. MAG, Hi, L3, and spacecraft dependency methods use
+that source. Hi's available/running repoint and pointing-existence queries also live
+in the production source; its waiting rules are unchanged. Sensor and other
+Dagster readiness logic remain in the orchestration handlers.
 
 ### Runtime model
 

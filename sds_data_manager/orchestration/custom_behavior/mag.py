@@ -23,10 +23,9 @@ FINAL_RETRY_NUMBER = 10
 class MagL1DJob(imap_job.IMAPJobHandler):
     """Query SPICE for the padded MAG L1D processing window."""
 
-    def get_spice_file_inputs(self, session, target_start, target_end):
+    def get_spice_file_inputs(self, target_start, target_end):
         """Include the 30-minute buffer on either side of the science day."""
         return super().get_spice_file_inputs(
-            session,
             target_start - datetime.timedelta(minutes=30),
             target_end + datetime.timedelta(minutes=30),
         )
@@ -153,10 +152,10 @@ class MagL1CJob(imap_job.IMAPJobHandler):
             run.asset_selection or ()
         )
 
-    def get_science_files_inputs(self, context, target_start, target_end):
+    def get_science_files_inputs(self, target_start, target_end, repointing=None):
         """Return the base science inputs plus the previous day's L1C, if any."""
         science_processing_inputs = super().get_science_files_inputs(
-            context, target_start, target_end
+            target_start, target_end, repointing
         )
 
         previous_day_l1c = types.DependencyNode(
@@ -170,29 +169,28 @@ class MagL1CJob(imap_job.IMAPJobHandler):
         # check in get_all_files_in_time_range cannot match the current day's
         # own partition, which starts exactly at target_start. The job never
         # receives its own output as input.
-        metadata_list = previous_day_l1c.get_all_files_in_time_range(
-            context, target_start - datetime.timedelta(days=1), target_start
+        file_groups = self.dependency_source.science_files(
+            previous_day_l1c,
+            target_start - datetime.timedelta(days=1),
+            target_start,
         )
 
-        if not metadata_list:
-            context.log.info(
+        if not file_groups:
+            self.dependency_logger.info(
                 "No previous day L1C found; MAG L1C processes this day alone."
             )
             return science_processing_inputs
 
-        # get_all_files_in_time_range returns the latest materialization of
-        # each overlapping partition, and this one-day window can only overlap
-        # the previous day's partition, so there is exactly one entry. Science
-        # materializations carry a single file in file_names (find_outputs),
-        # wrapped in a Dagster MetadataValue.
-        previous_day_file = metadata_list[0]["file_names"].value[0]
+        # This one-day window can only overlap the previous day's partition,
+        # whose latest materialization carries a single file.
+        previous_day_file = file_groups[0][0]
 
         # Apply the same version-renaming strategy as
         # IMAPJobHandler.get_science_files_inputs so the previous day's file is
         # named consistently with the base science inputs.
         pattern = re.compile(r"v(\d{3})\.(cdf|pkts)$")
         renamed_previous_day_file = pattern.sub(r"v001.0\1.\2", previous_day_file)
-        context.log.info(
+        self.dependency_logger.info(
             f"MAG L1C adding the previous day's L1C: {renamed_previous_day_file}"
         )
         science_processing_inputs.append(

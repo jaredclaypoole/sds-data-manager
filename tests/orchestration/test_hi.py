@@ -21,6 +21,7 @@ from sds_data_manager.orchestration.custom_behavior.hi import HiGoodtimesJob
 from sds_data_manager.orchestration.dagster_utilities import (
     parse_dates_from_partition_key,
 )
+from sds_data_manager.orchestration.dependency_source import DagsterDatabaseSource
 from sds_data_manager.orchestration.imap_dagster import job_handlers
 
 TARGET_REPOINT = 3
@@ -152,7 +153,9 @@ def test_hi_goodtimes_waits_when_future_pointing_unknown(
     with pytest.raises(
         imap_job.MissingDependenciesError, match="pointing 11 does not exist yet"
     ):
-        job.get_science_files_inputs(context, target_start, target_end)
+        job.with_dependency_source(
+            DagsterDatabaseSource(mock_db_session, context), context.log
+        ).get_science_files_inputs(target_start, target_end, target_repoint)
 
 
 @pytest.mark.parametrize(("sensor", "dagster_job_name"), SENSOR_JOBS)
@@ -191,7 +194,9 @@ def test_hi_goodtimes_proceeds_when_no_more_data_expected(
     context = build_asset_context(partition_key=partition, instance=ephemeral_instance)
     target_start, target_end = parse_dates_from_partition_key(partition)
 
-    result = job.get_science_files_inputs(context, target_start, target_end)
+    result = job.with_dependency_source(
+        DagsterDatabaseSource(mock_db_session, context), context.log
+    ).get_science_files_inputs(target_start, target_end, target_repoint)
 
     neighbor_files = {
         f
@@ -239,4 +244,6 @@ def test_hi_goodtimes_waits_for_inprogress_neighbor(
     target_start, target_end = parse_dates_from_partition_key(TARGET_PARTITION)
 
     with pytest.raises(imap_job.MissingDependenciesError, match="in progress"):
-        job.get_science_files_inputs(context, target_start, target_end)
+        job.with_dependency_source(
+            DagsterDatabaseSource(mock_db_session, context), context.log
+        ).get_science_files_inputs(target_start, target_end, TARGET_REPOINT)

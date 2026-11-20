@@ -45,6 +45,7 @@ from sds_data_manager.orchestration.custom_behavior.mag import (
 from sds_data_manager.orchestration.dagster_utilities import (
     parse_dates_from_partition_key,
 )
+from sds_data_manager.orchestration.dependency_source import DagsterDatabaseSource
 from sds_data_manager.orchestration.imap_dagster import job_handlers
 from tests.orchestration.conftest import _insert_spice_file
 
@@ -197,7 +198,9 @@ def test_mag_l1c_adds_previous_day_l1c(ephemeral_instance):
     )
     target_start, target_end = parse_dates_from_partition_key(TARGET_PARTITION)
 
-    result = job.get_science_files_inputs(context, target_start, target_end)
+    result = job.with_dependency_source(
+        DagsterDatabaseSource(None, context), context.log
+    ).get_science_files_inputs(target_start, target_end)
 
     filenames = _science_filenames(result)
     assert _renamed_l1c_filename(TARGET_DAY - 1) in filenames
@@ -226,7 +229,9 @@ def test_mag_l1c_never_uses_its_own_day(ephemeral_instance):
     )
     target_start, target_end = parse_dates_from_partition_key(TARGET_PARTITION)
 
-    result = job.get_science_files_inputs(context, target_start, target_end)
+    result = job.with_dependency_source(
+        DagsterDatabaseSource(None, context), context.log
+    ).get_science_files_inputs(target_start, target_end)
 
     assert not any("l1c" in f for f in _science_filenames(result))
 
@@ -242,7 +247,9 @@ def test_mag_l1c_proceeds_without_previous_day(ephemeral_instance):
     )
     target_start, target_end = parse_dates_from_partition_key(TARGET_PARTITION)
 
-    result = job.get_science_files_inputs(context, target_start, target_end)
+    result = job.with_dependency_source(
+        DagsterDatabaseSource(None, context), context.log
+    ).get_science_files_inputs(target_start, target_end)
 
     filenames = _science_filenames(result)
     assert not any("l1c" in f for f in filenames)
@@ -464,9 +471,9 @@ def test_mag_l1d_queries_spice_across_the_buffered_day():
     with patch.object(
         spice, "get_upstream_dependency_inputs_spice", return_value=(["kernel.bc"], [])
     ) as query:
-        assert job.get_spice_file_inputs(None, target_start, target_end) == [
-            "kernel.bc"
-        ]
+        assert job.with_dependency_source(
+            DagsterDatabaseSource(None, None)
+        ).get_spice_file_inputs(target_start, target_end) == ["kernel.bc"]
 
     query.assert_called_once_with(
         job.job_config.spice_types,
@@ -490,10 +497,11 @@ def test_mag_l1d_receives_kernels_covering_only_the_buffers(mock_db_session):
     _insert_spice_file(mock_db_session, after, [[end_et, end_et + 1800]])
 
     with patch.object(job.job_config, "spice_types", ["pointing_attitude"]):
+        bound = job.with_dependency_source(DagsterDatabaseSource(mock_db_session, None))
         generic = imap_job.IMAPJobHandler.get_spice_file_inputs(
-            job, mock_db_session, target_start, target_end
+            bound, target_start, target_end
         )
-        buffered = job.get_spice_file_inputs(mock_db_session, target_start, target_end)
+        buffered = bound.get_spice_file_inputs(target_start, target_end)
 
     assert generic == [day_of]
     assert set(buffered) == {before, day_of, after}
