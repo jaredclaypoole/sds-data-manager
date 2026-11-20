@@ -9,6 +9,7 @@ from sqlalchemy import and_
 
 from sds_data_manager.lambda_code.SDSCode.database import database as db
 from sds_data_manager.lambda_code.SDSCode.database import models
+from sds_data_manager.orchestration.dependency_file_selection import select_spin_records
 
 # Logger setup
 logger = logging.getLogger(__name__)
@@ -97,53 +98,6 @@ def verify_spin_coverage(
     return True
 
 
-def _is_superseded(
-    record,
-    records: list,
-    start_day: datetime.date,
-    end_day: datetime.date,
-) -> bool:
-    """Check whether higher-version spin files cover a record within a window.
-
-    A spin file is superseded when every day it covers inside the window is
-    also covered by a spin file with a higher version. Newer deliveries do not
-    always split days the same way as older ones (e.g. ``imap_2025_360_2025_360_01``
-    is replaced by ``imap_2025_359_2025_360_10`` and ``imap_2025_360_2025_361_10``),
-    so this cannot be decided by matching identical date ranges.
-
-    Parameters
-    ----------
-    record : Row
-        The SpinFiles record to check.
-    records : list
-        All candidate SpinFiles records overlapping the window.
-    start_day : datetime.date
-        First day of the window.
-    end_day : datetime.date
-        Last day of the window.
-
-    Returns
-    -------
-    bool
-        True if the record is fully covered by higher-version records.
-    """
-    newer_ranges = [
-        (other.start_date.date(), other.end_date.date())
-        for other in records
-        if int(other.version) > int(record.version)
-    ]
-    if not newer_ranges:
-        return False
-
-    day = max(record.start_date.date(), start_day)
-    last_day = min(record.end_date.date(), end_day)
-    while day <= last_day:
-        if not any(start <= day <= end for start, end in newer_ranges):
-            return False
-        day += datetime.timedelta(days=1)
-    return True
-
-
 def get_spin_files(
     session,
     start_date: datetime,
@@ -189,17 +143,7 @@ def get_spin_files(
         .all()
     )
 
-    start_day = start_date.date()
-    end_day = end_date.date()
-    records = [
-        record
-        for record in candidates
-        if not _is_superseded(record, candidates, start_day, end_day)
-    ]
-    # imap_processing gives the last file the highest priority. The sort is
-    # stable, so ingestion order breaks ties in version and start date.
-    records.sort(key=lambda record: (int(record.version), record.start_date))
-    return records
+    return select_spin_records(candidates, start_date, end_date)
 
 
 def get_upstream_dependency_inputs_spin(

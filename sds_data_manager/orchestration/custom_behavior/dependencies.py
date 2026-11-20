@@ -54,7 +54,7 @@ class HiGoodtimesDependencies(JobDependencyHandler):
 
             num_future = np.sum(np.array(repoint_list) > target_pointing_number)
             min_future_repoints = HI_GOODTIMES_NUM_NEAREST_REPOINTS // 2
-            if num_future < min_future_repoints:
+            if self.wait_for_dependencies and num_future < min_future_repoints:
                 # With data every repoint the window is +/- 4, so wait only
                 # for its future edge. Once that pointing is in
                 # PointingTable, missing Hi DE means Hi has no data there.
@@ -129,6 +129,8 @@ class HiGoodtimesDependencies(JobDependencyHandler):
         # Also get inprogress repoints from running jobs
         inprogress_repoints = np.array(
             self.dependency_source.inprogress_repoints(dependency)
+            if self.wait_for_dependencies
+            else []
         )
         all_repoints = np.union1d(available_repoints, inprogress_repoints)
 

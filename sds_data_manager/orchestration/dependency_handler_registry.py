@@ -49,6 +49,8 @@ class DependencyHandlerRegistry:
         job_config: ProcessingJobNode,
         source: DependencySource,
         logger: logging.Logger | None = None,
+        *,
+        wait_for_dependencies: bool = True,
     ) -> JobDependencyHandler:
         """Construct a registered handler without building assets, sensors, or jobs."""
         from sds_data_manager.orchestration.custom_behavior import (  # noqa: PLC0415
@@ -57,4 +59,6 @@ class DependencyHandlerRegistry:
 
         key = (job_config.source, job_config.data_type, job_config.descriptor)
         handler = cls._registry.get(key, JobDependencyHandler)
-        return handler(job_config, source, logger)
+        return handler(
+            job_config, source, logger, wait_for_dependencies=wait_for_dependencies
+        )

@@ -151,7 +151,7 @@ Configuration validation imports the canonical kernel categories from
 existing consumers. The node methods that need Dagster and the dependency-file
 upload helper import their runtime dependencies only when called. Loading YAML,
 validating nodes, and constructing dependency handlers need no AWS credentials or
-Dagster initialization. An API source and local CLI remain separate follow-up work.
+Dagster initialization. For the API source and local CLI, see [local-processing.md](local-processing.md).
 
 ### Runtime model
 

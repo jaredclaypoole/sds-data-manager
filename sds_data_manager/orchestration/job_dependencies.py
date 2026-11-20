@@ -26,13 +26,18 @@ class MissingDependenciesError(Exception):
 class JobDependencyHandler:
     """Gather dependencies using the owning handler's job_config."""
 
+    wait_for_dependencies: bool = True
+
     def __init__(
         self,
         job_config: ProcessingJobNode,
         source: DependencySource,
         logger: logging.Logger | None = None,
+        *,
+        wait_for_dependencies: bool = True,
     ) -> None:
         """Configure dependency selection without a database or Dagster context."""
+        self.wait_for_dependencies = wait_for_dependencies
         self.job_config = job_config
         self.dependency_source = source
         self.dependency_logger = logger or logging.getLogger(__name__)
