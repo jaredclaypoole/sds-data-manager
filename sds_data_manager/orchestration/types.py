@@ -1,19 +1,17 @@
 """Common types for pipeline lambdas."""
 
+from __future__ import annotations
+
 import datetime
 from dataclasses import asdict, dataclass, field
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import imap_data_access
-from dagster import (
-    AssetExecutionContext,
-    AssetKey,
-    DagsterEventType,
-    EventRecordsFilter,
-)
 
-from sds_data_manager.lambda_code.SDSCode import spice_utilities
-from sds_data_manager.orchestration import dagster_utilities
+from sds_data_manager.lambda_code.SDSCode.spice_types import KernelCollection
+
+if TYPE_CHECKING:
+    from dagster import AssetExecutionContext, AssetKey
 
 # Date range validation constants
 NEAREST_OPTIONS = ("nd", "np")
@@ -43,7 +41,7 @@ class DataSource:
             "spin",
             "repoint",
             "spice",
-            *spice_utilities.KernelCollection().file_types,
+            *KernelCollection().file_types,
             *imap_data_access.VALID_INSTRUMENTS,
         ]
 
@@ -124,7 +122,7 @@ class TimeRange:
         end_time_string: str,
         pointing_number_start: int | None = None,
         pointing_number_end: int | None = None,
-    ) -> "TimeRange":
+    ) -> TimeRange:
         """Create a TimeRange from yyyymmdd formatted strings.
 
         Parameters
@@ -225,6 +223,8 @@ class Node:
 
     def to_dagster_asset(self) -> AssetKey:
         """Return the dagster AssetKey."""
+        from dagster import AssetKey  # noqa: PLC0415
+
         return AssetKey(self.to_dagster_name())
 
 
@@ -358,6 +358,10 @@ class DependencyNode(Node):
         end_dt: datetime.datetime,
     ) -> list:
         """Return the metadata of all assets between start_dt and end_dt."""
+        from dagster import DagsterEventType, EventRecordsFilter  # noqa: PLC0415
+
+        from sds_data_manager.orchestration import dagster_utilities  # noqa: PLC0415
+
         metadata = []
 
         # Fetch a list of all partition keys that have EVER been materialized
@@ -375,9 +379,10 @@ class DependencyNode(Node):
 
         # Loop through the partitions to determine if they span the time range
         for partition in materialized_partitions:
-            partition_start, partition_end = (
-                dagster_utilities.parse_dates_from_partition_key(partition)
-            )
+            (
+                partition_start,
+                partition_end,
+            ) = dagster_utilities.parse_dates_from_partition_key(partition)
 
             if not partition_start or not partition_end:
                 continue
@@ -401,6 +406,8 @@ class DependencyNode(Node):
 
     def get_all_files_by_repoint_numbers(self, context, target_repoints: list[int]):
         """Return all metadata of materialized assets for the list of repoints."""
+        from dagster import DagsterEventType, EventRecordsFilter  # noqa: PLC0415
+
         metadata = []
         materialized_partitions = context.instance.get_materialized_partitions(
             self.to_dagster_asset()

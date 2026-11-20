@@ -11,18 +11,12 @@ from dagster import (
 )
 
 from sds_data_manager.orchestration import dagster_utilities, imap_job
+from sds_data_manager.orchestration.custom_behavior.dependencies import L3Dependencies
 from sds_data_manager.orchestration.job_handler_registry import JobBuilderRegistry
 
 
-@JobBuilderRegistry.register("lo", "l3", "all-maps")
-@JobBuilderRegistry.register("hi", "l3", "sp-maps")
-@JobBuilderRegistry.register("hi", "l3", "hic-maps")
-@JobBuilderRegistry.register("glows", "l3b", "ion-rate-profile")
-@JobBuilderRegistry.register("ultra", "l3", "u45-maps")
-@JobBuilderRegistry.register("ultra", "l3", "u90-maps")
-@JobBuilderRegistry.register("ultra", "l3", "ulc-sp-maps")
-@JobBuilderRegistry.register("ultra", "l3", "ulc-nsp-maps")
-class L3CronHandler(imap_job.IMAPJobHandler):
+@JobBuilderRegistry.register_dependencies(L3Dependencies)
+class L3CronHandler(L3Dependencies, imap_job.IMAPJobHandler):
     """Handle IMAP job dependencies and submission."""
 
     def build_sensor(self):
@@ -60,16 +54,6 @@ class L3CronHandler(imap_job.IMAPJobHandler):
             yield RunRequest(partition_key=target_partition, run_key=run_key)
 
         return _sensor
-
-    def get_science_files_inputs(self, target_start, target_end, repointing=None):
-        """Return no science files without an error."""
-        return []
-
-    def get_repoint_file_inputs(self, target_start, target_end):
-        """Return the repoint file needed to cover a time range."""
-        min_python_date = datetime.datetime(1, 1, 1)
-        file = self.dependency_source.repoint_files(min_python_date, min_python_date)
-        return file
 
     def _dependency_hash(
         self, serialized_dependencies: str, output_versions: dict[str, dict[str, int]]

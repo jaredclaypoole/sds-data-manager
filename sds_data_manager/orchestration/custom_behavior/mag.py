@@ -1,12 +1,14 @@
 """Override behavior for MAG processing."""
 
 import datetime
-import re
 
 from dagster import DagsterRunStatus, RunsFilter
-from imap_data_access import processing_input
 
-from sds_data_manager.orchestration import imap_job, types
+from sds_data_manager.orchestration import imap_job
+from sds_data_manager.orchestration.custom_behavior.dependencies import (
+    MagL1CDependencies,
+    MagL1DDependencies,
+)
 from sds_data_manager.orchestration.dagster_utilities import (
     parse_dates_from_partition_key,
 )
@@ -19,21 +21,13 @@ from sds_data_manager.orchestration.job_handler_registry import JobBuilderRegist
 FINAL_RETRY_NUMBER = 10
 
 
-@JobBuilderRegistry.register("mag", "l1d", "norm-srf")
-class MagL1DJob(imap_job.IMAPJobHandler):
+@JobBuilderRegistry.register_dependencies(MagL1DDependencies)
+class MagL1DJob(MagL1DDependencies, imap_job.IMAPJobHandler):
     """Query SPICE for the padded MAG L1D processing window."""
 
-    def get_spice_file_inputs(self, target_start, target_end):
-        """Include the 30-minute buffer on either side of the science day."""
-        return super().get_spice_file_inputs(
-            target_start - datetime.timedelta(minutes=30),
-            target_end + datetime.timedelta(minutes=30),
-        )
 
-
-@JobBuilderRegistry.register("mag", "l1c", "norm-mago")
-@JobBuilderRegistry.register("mag", "l1c", "norm-magi")
-class MagL1CJob(imap_job.IMAPJobHandler):
+@JobBuilderRegistry.register_dependencies(MagL1CDependencies)
+class MagL1CJob(MagL1CDependencies, imap_job.IMAPJobHandler):
     """Deliver the previous day's L1C to MAG L1C processing.
 
     MAG L1C continues the previous day's L1C timeline across the day boundary
@@ -151,50 +145,3 @@ class MagL1CJob(imap_job.IMAPJobHandler):
         return run.job_name == self.dagster_job_name or own_asset in (
             run.asset_selection or ()
         )
-
-    def get_science_files_inputs(self, target_start, target_end, repointing=None):
-        """Return the base science inputs plus the previous day's L1C, if any."""
-        science_processing_inputs = super().get_science_files_inputs(
-            target_start, target_end, repointing
-        )
-
-        previous_day_l1c = types.DependencyNode(
-            source="mag",
-            data_type="l1c",
-            descriptor=self.job_config.descriptor,
-            required=False,
-            trigger_job=False,
-        )
-        # The query window ends at target_start so that the strict overlap
-        # check in get_all_files_in_time_range cannot match the current day's
-        # own partition, which starts exactly at target_start. The job never
-        # receives its own output as input.
-        file_groups = self.dependency_source.science_files(
-            previous_day_l1c,
-            target_start - datetime.timedelta(days=1),
-            target_start,
-        )
-
-        if not file_groups:
-            self.dependency_logger.info(
-                "No previous day L1C found; MAG L1C processes this day alone."
-            )
-            return science_processing_inputs
-
-        # This one-day window can only overlap the previous day's partition,
-        # whose latest materialization carries a single file.
-        previous_day_file = file_groups[0][0]
-
-        # Apply the same version-renaming strategy as
-        # IMAPJobHandler.get_science_files_inputs so the previous day's file is
-        # named consistently with the base science inputs.
-        pattern = re.compile(r"v(\d{3})\.(cdf|pkts)$")
-        renamed_previous_day_file = pattern.sub(r"v001.0\1.\2", previous_day_file)
-        self.dependency_logger.info(
-            f"MAG L1C adding the previous day's L1C: {renamed_previous_day_file}"
-        )
-        science_processing_inputs.append(
-            processing_input.ScienceInput(renamed_previous_day_file)
-        )
-
-        return science_processing_inputs

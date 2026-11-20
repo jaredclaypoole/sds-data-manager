@@ -9,7 +9,6 @@ import requests
 import yaml
 from imap_data_access import VALID_INSTRUMENTS
 
-from ..lambda_code.SDSCode.api_lambdas import upload_api
 from .types import DependencyNode, ProcessingJobNode
 
 # Logger setup
@@ -418,6 +417,8 @@ def upload_dependency_file(dependency_file_path: Path, serialized_dependencies: 
     serialized_dependencies : str
         The serialized upstream dependencies to upload.
     """
+    from ..lambda_code.SDSCode.api_lambdas import upload_api  # noqa: PLC0415
+
     # Check if the file already exists
     if os.path.isfile(dependency_file_path):
         raise KeyError(

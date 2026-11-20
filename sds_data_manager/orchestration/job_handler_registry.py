@@ -1,10 +1,15 @@
 """Contains a registry of default job information."""
 
 import re
+from collections.abc import Callable
+from typing import TypeVar
 
 from sds_data_manager.orchestration.dependency import DependencyConfigReader
 from sds_data_manager.orchestration.imap_job import IMAPJobHandler
+from sds_data_manager.orchestration.job_dependencies import JobDependencyHandler
 from sds_data_manager.orchestration.types import ProcessingJobNode
+
+ProductionHandlerType = TypeVar("ProductionHandlerType", bound=type[IMAPJobHandler])
 
 
 class JobBuilderRegistry:
@@ -21,6 +26,27 @@ class JobBuilderRegistry:
             return wrapped_class
 
         return wrapper
+
+    @classmethod
+    def register_dependencies(
+        cls, dependency_handler: type[JobDependencyHandler]
+    ) -> Callable[[ProductionHandlerType], ProductionHandlerType]:
+        """Reuse shared product keys for a Dagster handler's registration."""
+        from sds_data_manager.orchestration.dependency_handler_registry import (  # noqa: PLC0415
+            DependencyHandlerRegistry,
+        )
+
+        def decorate(handler: ProductionHandlerType) -> ProductionHandlerType:
+            keys = DependencyHandlerRegistry.keys_for(dependency_handler)
+            if not keys:
+                raise ValueError(
+                    f"No dependency keys registered for {dependency_handler}"
+                )
+            for key in keys:
+                cls.register(*key)(handler)
+            return handler
+
+        return decorate
 
     @classmethod
     def register_descriptor_pattern(

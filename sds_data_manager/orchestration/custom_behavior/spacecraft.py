@@ -17,6 +17,9 @@ from sds_data_manager.lambda_code.SDSCode.database import models
 from sds_data_manager.orchestration import (
     imap_job,
 )
+from sds_data_manager.orchestration.custom_behavior.dependencies import (
+    PointingAttitudeDependencies,
+)
 from sds_data_manager.orchestration.dagster_utilities import (
     get_materialization_result,
     parse_dates_from_partition_key,
@@ -24,13 +27,11 @@ from sds_data_manager.orchestration.dagster_utilities import (
 from sds_data_manager.orchestration.job_handler_registry import JobBuilderRegistry
 
 
-@JobBuilderRegistry.register("spacecraft", "l1a", "pointing-attitude")
-class SpacecraftPointingAttitudeJob(imap_job.IMAPJobHandler):
+@JobBuilderRegistry.register_dependencies(PointingAttitudeDependencies)
+class SpacecraftPointingAttitudeJob(
+    PointingAttitudeDependencies, imap_job.IMAPJobHandler
+):
     """Overriding parts of the spacecraft processing pipeline."""
-
-    def get_science_files_inputs(self, target_start, target_end, repointing=None):
-        """Override default behavior to return nothing."""
-        return []
 
     def _determine_output_versions(
         self,

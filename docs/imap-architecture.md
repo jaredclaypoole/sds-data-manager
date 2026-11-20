@@ -137,6 +137,22 @@ that source. Hi's available/running repoint and pointing-existence queries also 
 in the production source; its waiting rules are unchanged. Sensor and other
 Dagster readiness logic remain in the orchestration handlers.
 
+For construction without the orchestration runtime, load `DependencyConfigReader`
+and call `DependencyHandlerRegistry.get_handler(job_config, source, logger)` from
+`dependency_handler_registry.py`. Product selection classes live in
+`custom_behavior/dependencies.py`. They extend `JobDependencyHandler` and import
+neither Dagster nor AWS code. Production custom handlers inherit these classes;
+`JobBuilderRegistry.register_dependencies` reuses their registered product keys,
+so each dependency rule and its key list have one definition. Jobs with only custom
+scheduling (such as L2 maps) use the default dependency handler locally.
+
+Configuration validation imports the canonical kernel categories from
+`SDSCode/spice_types.py`. `spice_utilities.py` re-exports those same classes for
+existing consumers. The node methods that need Dagster and the dependency-file
+upload helper import their runtime dependencies only when called. Loading YAML,
+validating nodes, and constructing dependency handlers need no AWS credentials or
+Dagster initialization. An API source and local CLI remain separate follow-up work.
+
 ### Runtime model
 
 - **Kickoff Sensors & Assets**: Each processing job has a "kickoff" sensor that monitors upstream asset materializations/dependency tables and yields a `RunRequest` when enough new data has arrived to attempt a run. Dependencies are complex, so a run is easily triggered but reports an `AssetObservation` (not a failure) if data actually turns out to be missing. When an upstream science asset shares the target's dynamic partition definition, its event stays unconsumed until that exact partition is registered, allowing the partition-maintenance sensor to catch up without losing the kickoff. Interval fallback matching uses strict overlap, so partitions that only meet at a boundary are adjacent, not matches.
