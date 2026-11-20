@@ -117,6 +117,13 @@ Jobs and assets are **not** hand-written per data product — they are generated
 
 **To change behavior for one product, subclass the handler in `custom_behavior/` and register it — do not special-case inside the generic handler.** Existing examples: `mag.py`, `hi.py`, `idex.py`, `spacecraft.py`, `l3_jobs.py`, `l2_map_jobs.py`.
 
+`IMAPJobHandler` inherits dependency gathering from `job_dependencies.py::JobDependencyHandler`.
+The base uses the handler's `job_config` and the existing session/context arguments;
+custom overrides and `super()` calls still apply. `MissingDependenciesError` is defined
+there and remains importable from `imap_job.py`. Version selection, readiness checks,
+and job submission remain in `IMAPJobHandler`.
+
+
 ### Runtime model
 
 - **Kickoff Sensors & Assets**: Each processing job has a "kickoff" sensor that monitors upstream asset materializations/dependency tables and yields a `RunRequest` when enough new data has arrived to attempt a run. Dependencies are complex, so a run is easily triggered but reports an `AssetObservation` (not a failure) if data actually turns out to be missing. When an upstream science asset shares the target's dynamic partition definition, its event stays unconsumed until that exact partition is registered, allowing the partition-maintenance sensor to catch up without losing the kickoff. Interval fallback matching uses strict overlap, so partitions that only meet at a boundary are adjacent, not matches.
